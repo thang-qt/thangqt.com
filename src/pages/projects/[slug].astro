@@ -1,0 +1,70 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const projects = {
+  'ecommerce-platform': {
+    title: 'E-commerce Platform',
+    date: '2025',
+    content: `
+      <p>A modern e-commerce platform built with Next.js, Stripe, and Sanity CMS.</p>
+      
+      <h2>Technologies Used</h2>
+      <p>Next.js 14, TypeScript, Tailwind CSS, Stripe, Sanity CMS, Vercel</p>
+      
+      <h2>Key Features</h2>
+      <p>Server-side rendering, optimistic UI updates, comprehensive product search, and secure payment processing.</p>
+      
+      <h2>Results</h2>
+      <p>Achieved 95+ Lighthouse scores across all metrics.</p>
+    `
+  },
+  'design-system': {
+    title: 'Design System Library',
+    date: '2024',
+    content: `
+      <p>A comprehensive design system for a Fortune 500 company.</p>
+      
+      <h2>Scope</h2>
+      <p>Design tokens, component library, documentation site, Figma integration.</p>
+      
+      <h2>Impact</h2>
+      <p>Reduced design-to-development time by 40%.</p>
+    `
+  },
+  'portfolio-site': {
+    title: 'Portfolio Website',
+    date: '2024',
+    content: `
+      <p>A minimalist portfolio site built with Astro.</p>
+      
+      <h2>Features</h2>
+      <p>Custom cursor animations, dark mode, interactive project showcases.</p>
+      
+      <h2>Performance</h2>
+      <p>100 Lighthouse score, sub-second load times.</p>
+    `
+  },
+};
+
+export function getStaticPaths() {
+  return [
+    { params: { slug: 'ecommerce-platform' } },
+    { params: { slug: 'design-system' } },
+    { params: { slug: 'portfolio-site' } },
+  ];
+}
+
+const { slug } = Astro.params;
+const project = projects[slug];
+---
+
+<Layout title={`${project.title} - ThangQT`} description={project.title}>
+  <section class="col-main">
+    <h1 class="post-page-title">{project.title}</h1>
+    <p class="post-page-meta">{project.date}</p>
+  </section>
+
+  <aside class="col-sidebar post-body">
+    <article set:html={project.content} />
+  </aside>
+</Layout>

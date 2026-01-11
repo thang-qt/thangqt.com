@@ -1,0 +1,70 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const posts = {
+  'building-with-astro': {
+    title: 'Building Modern Web Apps with Astro',
+    date: 'Jan 10, 2026',
+    content: `
+      <p>Astro has revolutionized how we build websites by introducing a new paradigm: ship less JavaScript.</p>
+      
+      <h2>What is Astro?</h2>
+      <p>Astro is a modern static site builder that allows you to build faster websites with less client-side JavaScript. It supports multiple frameworks and has a unique islands architecture.</p>
+      
+      <h2>Why Choose Astro?</h2>
+      <p>The main benefits include better performance, flexibility with framework choice, and an excellent developer experience.</p>
+      
+      <h2>Getting Started</h2>
+      <p>To get started with Astro, simply run <code>npm create astro@latest</code> and follow the prompts.</p>
+    `
+  },
+  'design-systems': {
+    title: 'Design Systems That Scale',
+    date: 'Jan 5, 2026',
+    content: `
+      <p>Creating a design system that can grow with your organization is crucial for long-term success.</p>
+      
+      <h2>Foundation First</h2>
+      <p>Start with design tokens: colors, typography, spacing. These are the building blocks of your system.</p>
+      
+      <h2>Component Library</h2>
+      <p>Build reusable components that implement your design tokens. Document everything thoroughly.</p>
+    `
+  },
+  'future-of-web': {
+    title: 'The Future of Web Development',
+    date: 'Dec 28, 2025',
+    content: `
+      <p>Web development is evolving rapidly. Here are the trends shaping the future of our industry.</p>
+      
+      <h2>Server Components</h2>
+      <p>React Server Components and similar technologies are changing how we think about rendering.</p>
+      
+      <h2>Edge Computing</h2>
+      <p>Moving computation closer to users with edge functions and distributed systems.</p>
+    `
+  },
+};
+
+export function getStaticPaths() {
+  return [
+    { params: { slug: 'building-with-astro' } },
+    { params: { slug: 'design-systems' } },
+    { params: { slug: 'future-of-web' } },
+  ];
+}
+
+const { slug } = Astro.params;
+const post = posts[slug];
+---
+
+<Layout title={`${post.title} - ThangQT`} description={post.title}>
+  <section class="col-main">
+    <h1 class="post-page-title">{post.title}</h1>
+    <p class="post-page-meta">{post.date}</p>
+  </section>
+
+  <aside class="col-sidebar post-body">
+    <article set:html={post.content} />
+  </aside>
+</Layout>

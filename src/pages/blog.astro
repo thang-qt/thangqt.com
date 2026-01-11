@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const posts = [
+  { slug: 'building-with-astro', title: 'Building Modern Web Apps with Astro', date: 'Jan 10, 2026' },
+  { slug: 'design-systems', title: 'Design Systems That Scale', date: 'Jan 5, 2026' },
+  { slug: 'future-of-web', title: 'The Future of Web Development', date: 'Dec 28, 2025' },
+];
+---
+
+<Layout title="Blog - ThangQT" description="Thoughts on design and development">
+  <section class="col-main">
+    {posts.map((post) => (
+      <article class="post-item">
+        <a href={`/blog/${post.slug}`}>
+          <h2 class="post-title">{post.title}</h2>
+          <p class="post-meta">{post.date}</p>
+        </a>
+      </article>
+    ))}
+  </section>
+
+  <aside class="col-sidebar">
+    <div class="is-visible">
+      <h2>Blog</h2>
+    </div>
+  </aside>
+</Layout>

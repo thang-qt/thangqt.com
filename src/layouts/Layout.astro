@@ -1,0 +1,178 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import '../styles/main.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = 'ThangQT', 
+  description = 'Designer and Developer' 
+} = Astro.props;
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'About', href: '/about' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ViewTransitions />
+  </head>
+
+  <body class="ly-default">
+    <!-- Mobile Header (hidden on desktop) -->
+    <header class="mobile-header" transition:persist>
+      <a href="/" class="site-logo">ThangQT</a>
+      
+      <div class="mobile-header-actions">
+        <button class="theme-toggle" id="theme-toggle-mobile" aria-label="Toggle theme">
+          <span class="visually-hidden">Toggle theme</span>
+        </button>
+        
+        <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" transition:persist>
+      <ul>
+        {navItems.map(({ label, href }) => (
+          <li>
+            <a href={href} aria-current={currentPath === href ? 'page' : undefined}>
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Column 1: Nav column (desktop only) -->
+    <div class="col-nav" transition:persist>
+      <div class="col-nav-top">
+        <a href="/" class="site-logo">ThangQT</a>
+        <button class="theme-toggle" id="theme-toggle-desktop" aria-label="Toggle theme">
+          <span class="visually-hidden">Toggle theme</span>
+        </button>
+      </div>
+      
+      <nav class="col-nav-bottom desktop-nav" aria-label="Main navigation">
+        <ul>
+          {navItems.map(({ label, href }) => (
+            <li>
+              <a href={href} aria-current={currentPath === href ? 'page' : undefined}>
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Column 2 & 3: Main content -->
+    <main>
+      <slot />
+    </main>
+
+    <div class="js-cursor" transition:persist></div>
+
+    <script>
+      import { customCursor } from '../scripts/cursor-original.js';
+      import { themeToggle } from '../scripts/theme-original.js';
+
+      function initMobileMenu() {
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        
+        if (!menuToggle || !mobileNav) return;
+
+        // Remove old listeners by cloning
+        const newMenuToggle = menuToggle.cloneNode(true);
+        menuToggle.parentNode?.replaceChild(newMenuToggle, menuToggle);
+
+        newMenuToggle.addEventListener('click', () => {
+          const isOpen = newMenuToggle.getAttribute('aria-expanded') === 'true';
+          newMenuToggle.setAttribute('aria-expanded', String(!isOpen));
+          newMenuToggle.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
+          mobileNav.classList.toggle('is-open', !isOpen);
+        });
+
+        // Close menu when clicking nav links
+        mobileNav.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            newMenuToggle.setAttribute('aria-expanded', 'false');
+            newMenuToggle.setAttribute('aria-label', 'Open menu');
+            mobileNav.classList.remove('is-open');
+          });
+        });
+      }
+
+      function initThemeToggles() {
+        // Handle both mobile and desktop theme toggles
+        const toggles = document.querySelectorAll('.theme-toggle');
+        
+        toggles.forEach(toggle => {
+          const newToggle = toggle.cloneNode(true);
+          toggle.parentNode?.replaceChild(newToggle, toggle);
+          
+          newToggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+          });
+        });
+
+        // Apply saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+      }
+
+      function updateActiveLinks() {
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.mobile-nav a, .desktop-nav a').forEach(link => {
+          const href = link.getAttribute('href');
+          if (href === currentPath || (href === '/' && currentPath === '/')) {
+            link.setAttribute('aria-current', 'page');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      }
+
+      // Initialize on first load
+      document.addEventListener('DOMContentLoaded', function() {
+        customCursor();
+        initThemeToggles();
+        initMobileMenu();
+      });
+
+      // Re-init after view transitions
+      document.addEventListener('astro:after-swap', function() {
+        initThemeToggles();
+        initMobileMenu();
+        updateActiveLinks();
+      });
+    </script>
+  </body>
+</html>
