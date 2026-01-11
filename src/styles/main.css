@@ -412,10 +412,40 @@ main {
     border-right: 1px solid var(--fg-color-light);
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
     padding-bottom: calc(var(--margin) * 2);
   }
+  
+  /* Push content to bottom, but allow scroll when overflow */
+  .col-main::before {
+    content: '';
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+}
+
+/* Custom scrollbar for main content */
+.col-main::-webkit-scrollbar {
+  width: 6px;
+}
+
+.col-main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.col-main::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+.col-main::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+.col-main {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }
 
 /* ===========================================
@@ -645,7 +675,18 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  flex: 1;
+}
+
+@media (min-width: 1200px) {
+  .col-main.post-header {
+    padding-bottom: calc(var(--margin) * 2); /* Match nav bottom padding */
+  }
+  
+  /* Remove the ::before spacer for post-header since we use justify-content */
+  .col-main.post-header::before {
+    display: none;
+  }
 }
 
 .back-link {
@@ -657,6 +698,7 @@ main {
   font-size: var(--fs-caption);
   transition: color 0.2s ease;
   padding: 0.5rem 0;
+  align-self: flex-start;
 }
 
 .back-link:hover {
@@ -708,16 +750,16 @@ main {
 }
 
 .post-page-title {
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   margin: 0;
-  line-height: 1;
+  line-height: 1.1;
   letter-spacing: -0.03em;
 }
 
 @media (min-width: 1200px) {
   .post-page-title {
-    font-size: clamp(4rem, 6vw, 7rem);
+    font-size: clamp(2.5rem, 4vw, 4rem);
   }
   
   .post-page-date {
