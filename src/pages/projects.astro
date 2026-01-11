@@ -1,20 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-const projects = [
-  { slug: 'ecommerce-platform', title: 'E-commerce Platform', date: '2025' },
-  { slug: 'design-system', title: 'Design System Library', date: '2024' },
-  { slug: 'portfolio-site', title: 'Portfolio Website', date: '2024' },
-];
+const projects = await getCollection('projects');
+// Sort by year descending
+const sortedProjects = projects.sort((a, b) => parseInt(b.data.year) - parseInt(a.data.year));
 ---
 
 <Layout title="Projects - ThangQT" description="Selected works and projects">
   <section class="col-main">
-    {projects.map((project) => (
+    {sortedProjects.map((project) => (
       <article class="project-item">
         <a href={`/projects/${project.slug}`} class="list-link">
-          <h2 class="project-title">{project.title}</h2>
-          <p class="project-meta">{project.date}</p>
+          <h2 class="project-title">{project.data.title}</h2>
+          <p class="project-meta">{project.data.year}</p>
         </a>
       </article>
     ))}

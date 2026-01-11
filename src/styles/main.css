@@ -31,6 +31,25 @@
   --accent-color-hover: color-mix(in srgb, var(--fg-color) 60%, var(--bg-color));
 }
 
+/* Shiki dual theme support - Astro uses .astro-code class */
+[data-theme="light"] .astro-code,
+[data-theme="light"] .astro-code span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+  font-style: var(--shiki-light-font-style) !important;
+  font-weight: var(--shiki-light-font-weight) !important;
+  text-decoration: var(--shiki-light-text-decoration) !important;
+}
+
+[data-theme="dark"] .astro-code,
+[data-theme="dark"] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
 *,
 *::before,
 *::after {
@@ -236,7 +255,8 @@ a {
    MAIN GRID LAYOUT
    =========================================== */
 .ly-default {
-  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
   padding-top: calc(var(--margin) * 3 + 21px); /* Space for mobile header */
   display: grid;
   grid-template-columns: var(--margin) 1fr var(--margin);
@@ -403,6 +423,7 @@ main {
    =========================================== */
 .col-sidebar {
   padding-top: var(--margin);
+  overflow-y: auto;
 }
 
 @media (min-width: 1200px) {
@@ -412,7 +433,8 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
   }
 }
 
@@ -446,6 +468,11 @@ main {
 .col-sidebar figure,
 .col-sidebar img {
   display: none;
+}
+
+.col-sidebar.post-body figure,
+.col-sidebar.post-body img {
+  display: block;
 }
 
 /* ===========================================
@@ -670,36 +697,324 @@ main {
 /* Post Body Content */
 .post-body {
   padding: var(--margin);
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
 }
 
 @media (min-width: 1200px) {
   .post-body {
     padding: calc(var(--margin) * 2);
-    align-items: flex-start;
-    justify-content: flex-start;
   }
 }
 
-.post-body article {
+/* ===========================================
+   PROSE - Markdown Typography Styles
+   =========================================== */
+.prose {
   max-width: 65ch;
-}
-
-.post-body h2 {
-  font-size: var(--fs-body-m);
-  font-weight: 500;
-  margin-top: calc(var(--margin) * 2);
-  margin-bottom: var(--margin);
-}
-
-.post-body p {
   font-size: var(--fs-body);
-  line-height: 160%;
-  margin-bottom: var(--margin);
+  line-height: 1.7;
+  color: var(--fg-color);
 }
 
-.post-body code {
-  font-family: monospace;
+/* Headings */
+.prose h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.prose h2 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin-top: 3.5rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.prose h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.prose h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.prose h1:first-child,
+.prose h2:first-child,
+.prose h3:first-child,
+.prose h4:first-child {
+  margin-top: 0;
+}
+
+/* Paragraphs */
+.prose p {
+  margin-bottom: 1.5rem;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* Links */
+.prose a {
+  color: var(--fg-color);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  transition: opacity 0.2s ease;
+}
+
+.prose a:hover {
+  opacity: 0.7;
+}
+
+/* Bold and Italic */
+.prose strong {
+  font-weight: 700;
+}
+
+.prose em {
+  font-style: italic;
+}
+
+/* Lists */
+.prose ul,
+.prose ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.prose li::marker {
+  color: var(--fg-color-medium);
+}
+
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Blockquotes */
+.prose blockquote {
+  margin: 2.5rem 0;
+  padding: 0 0 0 1.5rem;
+  border-left: 2px solid var(--fg-color-medium);
+  color: var(--fg-color-medium);
+}
+
+.prose blockquote p {
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.prose blockquote blockquote {
+  margin: 1rem 0;
+}
+
+/* Inline Code */
+.prose code {
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+  font-size: 0.875em;
   background: var(--fg-color-light);
   padding: 0.2em 0.4em;
   border-radius: 4px;
+}
+
+/* Code Blocks - Shiki provides syntax highlighting */
+.prose pre {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  border-radius: 0;
+}
+
+/* Horizontal Rules */
+.prose hr {
+  margin: 3rem 0;
+  border: none;
+  border-top: 1px solid var(--fg-color-light);
+}
+
+/* Tables */
+.prose table {
+  width: 100%;
+  margin: 2.5rem 0;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.prose th,
+.prose td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--fg-color-light);
+}
+
+.prose th {
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fg-color-medium);
+}
+
+.prose tr:last-child td {
+  border-bottom: none;
+}
+
+.prose tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.prose tbody tr:hover {
+  background-color: var(--fg-color-light);
+}
+
+/* Images */
+.prose img {
+  max-width: 100%;
+  height: auto;
+  margin: 2rem 0;
+  border-radius: 8px;
+}
+
+/* Task Lists */
+.prose ul:has(input[type="checkbox"]) {
+  list-style: none;
+  padding-left: 0;
+}
+
+.prose li:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.prose input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15rem;
+  border: 2px solid var(--fg-color);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.prose input[type="checkbox"]:checked {
+  background-color: var(--fg-color);
+}
+
+.prose input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--bg-color);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.prose li:has(input[type="checkbox"]:checked) {
+  color: var(--fg-color-medium);
+}
+
+/* Strikethrough */
+.prose del {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* Definition Lists */
+.prose dl {
+  margin: 1.5rem 0;
+}
+
+.prose dt {
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.prose dd {
+  margin-left: 1.5rem;
+  margin-top: 0.25rem;
+  color: var(--fg-color-medium);
+}
+
+/* Footnotes */
+.prose .footnotes {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--fg-color-light);
+  font-size: 0.875rem;
+}
+
+.prose .footnotes ol {
+  padding-left: 1.25rem;
+}
+
+.prose sup a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* First paragraph after heading - no top margin */
+.prose h1 + p,
+.prose h2 + p,
+.prose h3 + p,
+.prose h4 + p {
+  margin-top: 0;
 }

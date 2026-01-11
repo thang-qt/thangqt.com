@@ -1,64 +1,20 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-const projects = {
-  'ecommerce-platform': {
-    title: 'E-commerce Platform',
-    date: '2025',
-    content: `
-      <p>A modern e-commerce platform built with Next.js, Stripe, and Sanity CMS.</p>
-      
-      <h2>Technologies Used</h2>
-      <p>Next.js 14, TypeScript, Tailwind CSS, Stripe, Sanity CMS, Vercel</p>
-      
-      <h2>Key Features</h2>
-      <p>Server-side rendering, optimistic UI updates, comprehensive product search, and secure payment processing.</p>
-      
-      <h2>Results</h2>
-      <p>Achieved 95+ Lighthouse scores across all metrics.</p>
-    `
-  },
-  'design-system': {
-    title: 'Design System Library',
-    date: '2024',
-    content: `
-      <p>A comprehensive design system for a Fortune 500 company.</p>
-      
-      <h2>Scope</h2>
-      <p>Design tokens, component library, documentation site, Figma integration.</p>
-      
-      <h2>Impact</h2>
-      <p>Reduced design-to-development time by 40%.</p>
-    `
-  },
-  'portfolio-site': {
-    title: 'Portfolio Website',
-    date: '2024',
-    content: `
-      <p>A minimalist portfolio site built with Astro.</p>
-      
-      <h2>Features</h2>
-      <p>Custom cursor animations, dark mode, interactive project showcases.</p>
-      
-      <h2>Performance</h2>
-      <p>100 Lighthouse score, sub-second load times.</p>
-    `
-  },
-};
-
-export function getStaticPaths() {
-  return [
-    { params: { slug: 'ecommerce-platform' } },
-    { params: { slug: 'design-system' } },
-    { params: { slug: 'portfolio-site' } },
-  ];
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
 }
 
-const { slug } = Astro.params;
-const project = projects[slug];
+const { project } = Astro.props;
+const { Content } = await project.render();
 ---
 
-<Layout title={`${project.title} - ThangQT`} description={project.title}>
+<Layout title={`${project.data.title} - ThangQT`} description={project.data.description || project.data.title}>
   <section class="col-main post-header">
     <a href="/projects" class="back-link" aria-label="Back to projects">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -68,12 +24,14 @@ const project = projects[slug];
       <span>Back</span>
     </a>
     <div class="post-header-content">
-      <p class="post-page-date">{project.date}</p>
-      <h1 class="post-page-title">{project.title}</h1>
+      <p class="post-page-date">{project.data.year}</p>
+      <h1 class="post-page-title">{project.data.title}</h1>
     </div>
   </section>
 
   <aside class="col-sidebar post-body">
-    <article set:html={project.content} />
+    <article class="prose">
+      <Content />
+    </article>
   </aside>
 </Layout>
