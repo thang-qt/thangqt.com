@@ -1,72 +1,206 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-// Sample projects - replace with your own
-const projects = [
-  {
-    title: 'Project One',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800',
-  },
-  {
-    title: 'Project Two',
-    image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800',
-  },
-  {
-    title: 'Project Three',
-    image: 'https://images.unsplash.com/photo-1615789591457-74a63395c990?w=800',
-  },
-];
 ---
 
-<Layout title="ThangQT - Designer & Developer" description="Designer and Developer">
+<Layout title="ThangQT - Open Source & Linux" description="Open-source developer and Linux enthusiast">
   <section class="col-main">
     <p>
-      Hey, I'm ThangQT and I'm a designer and developer.
+      Hello there! Welcome to my personal corner of the internet.
     </p>
     <p>
-      I specialize in creating beautiful, functional web experiences using modern 
-      technologies. I believe in clean design, thoughtful interactions, and building 
-      things that make a difference.
+      I'm Thang, an undergraduate student majoring in computer science. I love
+      open-source software and Linux in general. Becoming a full-time open-source
+      developer/contributor is my goal.
     </p>
     <p>
-      Check out some of my work, or explore my blog and projects.
+      Besides computing, I enjoy listening to music 24 hours a day. This space is
+      where I share notes, experiments, and small wins as I learn.
     </p>
   </section>
 
-  <aside class="col-sidebar">
-    {projects.map((project) => (
-      <div>
-        <h2>{project.title}</h2>
-        <figure>
-          <picture>
-            <img src={project.image} alt={project.title} loading="lazy" />
-          </picture>
-        </figure>
-      </div>
-    ))}
+  <aside class="col-sidebar home-sidebar">
+    <div class="is-visible">
+      <pre
+        class="ascii-anim"
+        aria-hidden="true"
+      ></pre>
+    </div>
   </aside>
 </Layout>
 
 <script>
-  // Random project display
-  function initRandomProject() {
-    const sidebar = document.querySelector('.col-sidebar');
-    if (sidebar) {
-      const projectDivs = sidebar.querySelectorAll('div');
-      if (projectDivs.length > 0) {
-        const randomIndex = Math.floor(Math.random() * projectDivs.length);
-        projectDivs[randomIndex].classList.add('is-visible');
-        
-        // Remove other projects
-        projectDivs.forEach((div, index) => {
-          if (index !== randomIndex) {
-            div.remove();
-          }
+  function initAsciiAnim() {
+    const el = document.querySelector('.ascii-anim');
+    if (!el) return;
+
+    if (window.__homeAsciiCleanup) {
+      window.__homeAsciiCleanup();
+      window.__homeAsciiCleanup = null;
+    }
+
+    let tick = 0;
+    let lastPointer = { x: -1, y: -1 };
+    let pointer = { x: -1, y: -1, active: false };
+
+    function seededRandom(seed) {
+      const x = Math.sin(seed * 127.1) * 43758.5453;
+      return x - Math.floor(x);
+    }
+
+    // Background stars
+    let stars = [];
+    // Trail sparks from cursor
+    let sparks = [];
+    let meteor = null;
+
+    function initStars(cols, rows) {
+      stars = [];
+      const count = Math.floor(cols * rows * 0.05);
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.floor(seededRandom(i * 3.7) * cols),
+          y: Math.floor(seededRandom(i * 7.1) * rows),
+          phase: seededRandom(i * 11.3) * Math.PI * 2,
+          speed: 0.015 + seededRandom(i * 13.7) * 0.02,
+          brightness: 0.3 + seededRandom(i * 17.1) * 0.5,
         });
       }
     }
+
+    function measureGrid() {
+      const probe = document.createElement('span');
+      probe.textContent = 'M';
+      probe.style.position = 'absolute';
+      probe.style.visibility = 'hidden';
+      probe.style.font = getComputedStyle(el).font;
+      el.appendChild(probe);
+      const { width, height } = probe.getBoundingClientRect();
+      probe.remove();
+      const cols = Math.max(18, Math.floor(el.clientWidth / Math.max(1, width)));
+      const rows = Math.max(8, Math.floor(el.clientHeight / Math.max(1, height)));
+      return { cols, rows };
+    }
+
+    let grid = measureGrid();
+    initStars(grid.cols, grid.rows);
+
+    function render() {
+      const rows = grid.rows;
+      const cols = grid.cols;
+      const canvas = Array.from({ length: rows }, () => Array(cols).fill(' '));
+
+      // Draw background stars with twinkle + subtle ripple
+      stars.forEach((s) => {
+        const twinkle = Math.sin(tick * s.speed + s.phase) * 0.5 + 0.5;
+        let ripple = 0;
+        if (pointer.active) {
+          const dx = s.x - pointer.x;
+          const dy = s.y - pointer.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          ripple = Math.sin(dist * 0.35 - tick * 0.08) * 0.12;
+        }
+        const b = Math.max(0, Math.min(1, s.brightness * twinkle + ripple));
+
+        let char = ' ';
+        if (b > 0.6) char = '*';
+        else if (b > 0.4) char = '+';
+        else if (b > 0.25) char = '·';
+        else if (b > 0.12) char = '.';
+
+        if (char !== ' ' && s.x >= 0 && s.x < cols && s.y >= 0 && s.y < rows) {
+          canvas[s.y][s.x] = char;
+        }
+      });
+
+      // Update and draw cursor sparks
+      sparks = sparks.filter((sp) => sp.life > 0);
+      sparks.forEach((sp) => {
+        sp.life -= 1;
+        const fade = sp.life / sp.maxLife;
+        let char = '.';
+        if (fade > 0.7) char = '*';
+        else if (fade > 0.4) char = '+';
+        else if (fade > 0.2) char = '·';
+
+        if (sp.x >= 0 && sp.x < cols && sp.y >= 0 && sp.y < rows) {
+          canvas[sp.y][sp.x] = char;
+        }
+      });
+
+      // Meteor logic
+      if (!meteor && Math.random() < 0.0012) {
+        meteor = {
+          x: Math.random() * cols * 0.4,
+          y: Math.random() * rows * 0.15,
+          progress: 0,
+          length: 8 + Math.floor(Math.random() * 5),
+          speed: 0.4 + Math.random() * 0.2,
+          vx: 2.6 + Math.random() * 0.6,
+          vy: 1.1 + Math.random() * 0.4,
+        };
+      }
+
+      if (meteor) {
+        for (let i = 0; i < meteor.length; i++) {
+          const t = meteor.progress - i * 0.15;
+          if (t < 0) continue;
+          const mx = Math.round(meteor.x + t * meteor.vx);
+          const my = Math.round(meteor.y + t * meteor.vy);
+          if (mx >= 0 && mx < cols && my >= 0 && my < rows) {
+            const fade = 1 - i / meteor.length;
+            if (fade > 0.8) canvas[my][mx] = '✶';
+            else if (fade > 0.55) canvas[my][mx] = '*';
+            else if (fade > 0.35) canvas[my][mx] = '/';
+            else if (fade > 0.2) canvas[my][mx] = '-';
+            else canvas[my][mx] = '·';
+          }
+        }
+        meteor.progress += meteor.speed;
+        if (meteor.x + meteor.progress * meteor.vx > cols + 5) meteor = null;
+      }
+
+      el.textContent = canvas.map((row) => row.join('')).join('\n');
+      tick += 1;
+    }
+
+    render();
+    const timer = setInterval(render, 80);
+    const onResize = () => {
+      grid = measureGrid();
+      initStars(grid.cols, grid.rows);
+      sparks = [];
+    };
+    window.addEventListener('resize', onResize);
+
+    const onPointerMove = (event) => {
+      const rect = el.getBoundingClientRect();
+      const x = Math.floor(((event.clientX - rect.left) / rect.width) * grid.cols);
+      const y = Math.floor(((event.clientY - rect.top) / rect.height) * grid.rows);
+
+      // Spawn spark if moved to new cell
+      if (x !== lastPointer.x || y !== lastPointer.y) {
+        if (x >= 0 && x < grid.cols && y >= 0 && y < grid.rows) {
+          sparks.push({ x, y, life: 12, maxLife: 12 });
+        }
+        lastPointer = { x, y };
+      }
+      pointer = { x, y, active: true };
+    };
+    const onPointerLeave = () => {
+      lastPointer = { x: -1, y: -1 };
+      pointer = { x: -1, y: -1, active: false };
+    };
+    el.addEventListener('pointermove', onPointerMove);
+    el.addEventListener('pointerleave', onPointerLeave);
+
+    window.__homeAsciiCleanup = () => {
+      clearInterval(timer);
+      window.removeEventListener('resize', onResize);
+      el.removeEventListener('pointermove', onPointerMove);
+      el.removeEventListener('pointerleave', onPointerLeave);
+    };
   }
 
-  document.addEventListener('DOMContentLoaded', initRandomProject);
-  document.addEventListener('astro:after-swap', initRandomProject);
+  document.addEventListener('DOMContentLoaded', initAsciiAnim);
+  document.addEventListener('astro:after-swap', initAsciiAnim);
 </script>

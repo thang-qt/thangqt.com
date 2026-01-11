@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('writing');
+const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+---
+
+<Layout title="Writing - ThangQT" description="Thoughts on design and development">
+  <section class="col-main">
+    <div class="list-mobile-header">
+      <h1 class="list-page-title">Writing</h1>
+    </div>
+    {sortedPosts.map((post) => (
+      <article class="post-item">
+        <a href={`/writing/${post.slug}`} class="list-link">
+          <h2 class="post-title">{post.data.title}</h2>
+          <p class="post-meta">{formatDate(post.data.date)}</p>
+        </a>
+      </article>
+    ))}
+  </section>
+
+  <aside class="col-sidebar">
+    <div class="is-visible">
+      <h2>Writing</h2>
+    </div>
+  </aside>
+</Layout>
