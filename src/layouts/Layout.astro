@@ -6,12 +6,14 @@ interface Props {
   title?: string;
   description?: string;
   bodyClass?: string;
+  bodyStyle?: string;
 }
 
 const { 
   title = 'ThangQT', 
   description = 'Designer and Developer',
   bodyClass = '',
+  bodyStyle = '',
 } = Astro.props;
 
 const navItems = [
@@ -35,7 +37,7 @@ const currentPath = Astro.url.pathname;
     <ViewTransitions />
   </head>
 
-  <body class={`ly-default ${bodyClass}`.trim()}>
+  <body class={`ly-default ${bodyClass}`.trim()} style={bodyStyle || undefined}>
     <!-- Mobile Header (hidden on desktop) -->
     <header class="mobile-header" transition:persist>
       <a href="/" class="site-logo">ThangQT</a>

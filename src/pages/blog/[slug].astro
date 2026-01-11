@@ -12,6 +12,26 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+const coverMode = post.data.coverMode ?? 'inline';
+const contentBackground = post.data.contentBackground;
+const themeColor = post.data.themeColor;
+const themeColorDark = post.data.themeColorDark;
+
+const bodyClass = [
+  'page-post',
+  contentBackground ? 'has-content-bg' : '',
+  themeColor ? 'has-theme-bg' : '',
+]
+  .filter(Boolean)
+  .join(' ');
+
+const bodyStyle = [
+  contentBackground ? `--post-content-bg-url: url('${contentBackground}')` : '',
+  themeColor ? `--post-theme-bg: ${themeColor}` : '',
+  themeColorDark ? `--post-theme-bg-dark: ${themeColorDark}` : '',
+]
+  .filter(Boolean)
+  .join('; ');
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -21,9 +41,13 @@ function formatDate(date: Date): string {
 <Layout
   title={`${post.data.title} - ThangQT`}
   description={post.data.description || post.data.title}
-  bodyClass="page-post"
+  bodyClass={bodyClass}
+  bodyStyle={bodyStyle || undefined}
 >
-  <section class="col-main post-header">
+  <section
+    class:list={['col-main post-header', coverMode === 'title-background' ? 'has-title-bg' : '']}
+    style={coverMode === 'title-background' && post.data.cover ? `--post-cover-url: url('${post.data.cover}')` : undefined}
+  >
     <a href="/blog" class="back-link" aria-label="Back to blog">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -37,11 +61,19 @@ function formatDate(date: Date): string {
     </div>
   </section>
 
-  <aside class="col-sidebar post-body">
+  <aside
+    class:list={['col-sidebar post-body', contentBackground ? 'has-content-bg' : '']}
+    style={contentBackground ? `--post-content-bg-url: url('${contentBackground}')` : undefined}
+  >
     <div class="post-mobile-header">
       <p class="post-page-date">{formatDate(post.data.date)}</p>
       <h1 class="post-page-title">{post.data.title}</h1>
     </div>
+    {post.data.cover && (
+      <figure class="post-cover">
+        <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+      </figure>
+    )}
     <article class="prose">
       <Content />
     </article>

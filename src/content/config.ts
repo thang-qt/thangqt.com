@@ -6,6 +6,11 @@ const blog = defineCollection({
     title: z.string(),
     date: z.date(),
     description: z.string().optional(),
+    cover: z.string().optional(),
+    coverMode: z.enum(['inline', 'title-background']).optional(),
+    contentBackground: z.string().optional(),
+    themeColor: z.string().optional(),
+    themeColorDark: z.string().optional(),
   }),
 });
 
