@@ -12,7 +12,7 @@ const projects = [
   <section class="col-main">
     {projects.map((project) => (
       <article class="project-item">
-        <a href={`/projects/${project.slug}`}>
+        <a href={`/projects/${project.slug}`} class="list-link">
           <h2 class="project-title">{project.title}</h2>
           <p class="project-meta">{project.date}</p>
         </a>

@@ -218,8 +218,12 @@ a {
 }
 
 .mobile-nav a[aria-current="page"] {
-  color: var(--fg-color-medium);
+  color: var(--fg-color);
   pointer-events: none;
+}
+
+.mobile-nav a[aria-current="page"]::after {
+  transform: scaleX(1);
 }
 
 @media (min-width: 1200px) {
@@ -313,8 +317,12 @@ a {
   }
 
   .desktop-nav a[aria-current="page"] {
-    color: var(--fg-color-medium);
+    color: var(--fg-color);
     pointer-events: none;
+  }
+
+  .desktop-nav a[aria-current="page"]::after {
+    transform: scaleX(1);
   }
 }
 
@@ -485,9 +493,26 @@ main {
   margin-bottom: 0;
 }
 
-.col-main a:not(.back-link) {
-  text-decoration: underline;
-  text-underline-offset: .25rem;
+.col-main a:not(.back-link):not(.list-link) {
+  text-decoration: none;
+  position: relative;
+}
+
+.col-main a:not(.back-link):not(.list-link)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.col-main a:not(.back-link):not(.list-link):hover::after {
+  transform: scaleX(1);
 }
 
 /* ===========================================
@@ -495,7 +520,7 @@ main {
    =========================================== */
 .post-item,
 .project-item {
-  padding: var(--margin) 0;
+  padding: calc(var(--margin) / 2) 0;
 }
 
 .post-item a,
@@ -503,12 +528,16 @@ main {
   display: block;
   text-decoration: none;
   color: var(--fg-color);
-  transition: opacity 150ms;
+}
+
+.post-item a::after,
+.project-item a::after {
+  display: none;
 }
 
 .post-item a:hover,
 .project-item a:hover {
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .post-item:first-child,
@@ -522,6 +551,27 @@ main {
   font-weight: 500;
   margin: 0;
   margin-bottom: calc(var(--margin) / 4);
+  position: relative;
+  display: inline;
+}
+
+.post-title::after,
+.project-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.post-item a:hover .post-title::after,
+.project-item a:hover .project-title::after {
+  transform: scaleX(1);
 }
 
 .post-meta,
