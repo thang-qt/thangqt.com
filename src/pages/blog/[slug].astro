@@ -59,9 +59,18 @@ const post = posts[slug];
 ---
 
 <Layout title={`${post.title} - ThangQT`} description={post.title}>
-  <section class="col-main">
-    <h1 class="post-page-title">{post.title}</h1>
-    <p class="post-page-meta">{post.date}</p>
+  <section class="col-main post-header">
+    <a href="/blog" class="back-link" aria-label="Back to blog">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Back</span>
+    </a>
+    <div class="post-header-content">
+      <p class="post-page-date">{post.date}</p>
+      <h1 class="post-page-title">{post.title}</h1>
+    </div>
   </section>
 
   <aside class="col-sidebar post-body">
