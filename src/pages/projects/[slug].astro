@@ -14,7 +14,11 @@ const { project } = Astro.props;
 const { Content } = await project.render();
 ---
 
-<Layout title={`${project.data.title} - ThangQT`} description={project.data.description || project.data.title}>
+<Layout
+  title={`${project.data.title} - ThangQT`}
+  description={project.data.description || project.data.title}
+  bodyClass="page-post"
+>
   <section class="col-main post-header">
     <a href="/projects" class="back-link" aria-label="Back to projects">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
