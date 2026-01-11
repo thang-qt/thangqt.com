@@ -12,6 +12,9 @@ function formatDate(date: Date): string {
 
 <Layout title="Blog - ThangQT" description="Thoughts on design and development">
   <section class="col-main">
+    <div class="list-mobile-header">
+      <h1 class="list-page-title">Blog</h1>
+    </div>
     {sortedPosts.map((post) => (
       <article class="post-item">
         <a href={`/blog/${post.slug}`} class="list-link">

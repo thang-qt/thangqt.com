@@ -9,6 +9,9 @@ const sortedProjects = projects.sort((a, b) => parseInt(b.data.year) - parseInt(
 
 <Layout title="Projects - ThangQT" description="Selected works and projects">
   <section class="col-main">
+    <div class="list-mobile-header">
+      <h1 class="list-page-title">Projects</h1>
+    </div>
     {sortedProjects.map((project) => (
       <article class="project-item">
         <a href={`/projects/${project.slug}`} class="list-link">

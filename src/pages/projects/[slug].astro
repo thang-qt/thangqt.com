@@ -30,6 +30,10 @@ const { Content } = await project.render();
   </section>
 
   <aside class="col-sidebar post-body">
+    <div class="post-mobile-header">
+      <p class="post-page-date">{project.data.year}</p>
+      <h1 class="post-page-title">{project.data.title}</h1>
+    </div>
     <article class="prose">
       <Content />
     </article>

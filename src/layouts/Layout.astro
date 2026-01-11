@@ -5,11 +5,13 @@ import '../styles/main.css';
 interface Props {
   title?: string;
   description?: string;
+  bodyClass?: string;
 }
 
 const { 
   title = 'ThangQT', 
-  description = 'Designer and Developer' 
+  description = 'Designer and Developer',
+  bodyClass = '',
 } = Astro.props;
 
 const navItems = [
@@ -33,7 +35,7 @@ const currentPath = Astro.url.pathname;
     <ViewTransitions />
   </head>
 
-  <body class="ly-default">
+  <body class={`ly-default ${bodyClass}`.trim()}>
     <!-- Mobile Header (hidden on desktop) -->
     <header class="mobile-header" transition:persist>
       <a href="/" class="site-logo">ThangQT</a>
@@ -112,6 +114,7 @@ const currentPath = Astro.url.pathname;
           newMenuToggle.setAttribute('aria-expanded', String(!isOpen));
           newMenuToggle.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
           mobileNav.classList.toggle('is-open', !isOpen);
+          document.body.classList.toggle('is-mobile-nav-open', !isOpen);
         });
 
         // Close menu when clicking nav links
@@ -120,6 +123,7 @@ const currentPath = Astro.url.pathname;
             newMenuToggle.setAttribute('aria-expanded', 'false');
             newMenuToggle.setAttribute('aria-label', 'Open menu');
             mobileNav.classList.remove('is-open');
+            document.body.classList.remove('is-mobile-nav-open');
           });
         });
       }
