@@ -13,9 +13,11 @@ export function customCursor() {
   const IS_HIDDEN = 'is-hidden';
   const IS_HOVER = 'is-hover';
   const IS_INACTIVE = 'is-inactive';
+  const IS_READY = 'is-ready';
   
   const INACTIVITY_DELAY = 2000; // Hide after 2 seconds of inactivity
   let inactivityTimeout = null;
+  let isFirstMove = true;
 
   function isTouchDevice() {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
@@ -39,6 +41,19 @@ export function customCursor() {
   function onMouseMove(e) {
     aimX = e.clientX;
     aimY = e.clientY;
+    
+    // On first move, snap position instantly then reveal
+    if (isFirstMove) {
+      isFirstMove = false;
+      currentX = aimX;
+      currentY = aimY;
+      cursor.style.transform = `translate(${currentX - 15}px, ${currentY - 15}px)`;
+      // Small delay to ensure position is set before revealing
+      requestAnimationFrame(() => {
+        cursor.classList.add(IS_READY);
+      });
+    }
+    
     resetInactivityTimer();
   }
 
@@ -92,8 +107,8 @@ export function customCursor() {
     addHoverListeners();
     updateCursorPosition();
     
-    // Start inactivity timer
-    resetInactivityTimer();
+    // Don't start inactivity timer until first move
+    // (cursor is hidden anyway until then)
   }
 
   init();
