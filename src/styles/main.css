@@ -725,8 +725,8 @@ main {
 .col-main p {
   font-size: var(--fs-body);
   line-height: 160%;
-  text-wrap: auto;
-  hyphens: auto;
+  text-wrap: wrap;
+  hyphens: none;
   margin: 0;
   margin-bottom: var(--margin);
 }
