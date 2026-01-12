@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="About - ThangQT" description="About me and what I do">
-  <section class="col-main">
+  <section class="col-main" transition:name="col-main" transition:animate="fade">
     <h2 style="font-size: var(--fs-body-m); margin-bottom: var(--margin);">About Me</h2>
     
     <p>
@@ -48,7 +48,7 @@ import Layout from '../layouts/Layout.astro';
     </p>
   </section>
 
-  <aside class="col-sidebar">
+  <aside class="col-sidebar" transition:name="col-sidebar" transition:animate="fade">
     <div class="is-visible">
       <h2>About</h2>
     </div>

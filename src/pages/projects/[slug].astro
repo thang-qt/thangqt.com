@@ -19,7 +19,7 @@ const { Content } = await project.render();
   description={project.data.description || project.data.title}
   bodyClass="page-post"
 >
-  <section class="col-main post-header">
+  <section class="col-main post-header" transition:name="col-main" transition:animate="fade">
     <a href="/projects" class="back-link" aria-label="Back to projects">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -33,7 +33,7 @@ const { Content } = await project.render();
     </div>
   </section>
 
-  <aside class="col-sidebar post-body">
+  <aside class="col-sidebar post-body" transition:name="col-sidebar" transition:animate="fade">
     <div class="post-mobile-header">
       <p class="post-page-date">{project.data.year}</p>
       <h1 class="post-page-title">{project.data.title}</h1>

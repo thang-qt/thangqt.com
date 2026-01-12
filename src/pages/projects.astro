@@ -8,7 +8,7 @@ const sortedProjects = projects.sort((a, b) => parseInt(b.data.year) - parseInt(
 ---
 
 <Layout title="Projects - ThangQT" description="Selected works and projects">
-  <section class="col-main">
+  <section class="col-main" transition:name="col-main" transition:animate="fade">
     <div class="list-mobile-header">
       <h1 class="list-page-title">Projects</h1>
     </div>
@@ -22,7 +22,7 @@ const sortedProjects = projects.sort((a, b) => parseInt(b.data.year) - parseInt(
     ))}
   </section>
 
-  <aside class="col-sidebar">
+  <aside class="col-sidebar" transition:name="col-sidebar" transition:animate="fade">
     <div class="is-visible">
       <h2>Projects</h2>
     </div>

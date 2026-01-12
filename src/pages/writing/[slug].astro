@@ -47,6 +47,8 @@ function formatDate(date: Date): string {
   <section
     class:list={['col-main post-header', coverMode === 'title-background' ? 'has-title-bg' : '']}
     style={coverMode === 'title-background' && post.data.cover ? `--post-cover-url: url('${post.data.cover}')` : undefined}
+    transition:name="col-main"
+    transition:animate="fade"
   >
     <a href="/writing" class="back-link" aria-label="Back to writing">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -64,6 +66,8 @@ function formatDate(date: Date): string {
   <aside
     class:list={['col-sidebar post-body', contentBackground ? 'has-content-bg' : '']}
     style={contentBackground ? `--post-content-bg-url: url('${contentBackground}')` : undefined}
+    transition:name="col-sidebar"
+    transition:animate="fade"
   >
     <div class="post-mobile-header">
       <p class="post-page-date">{formatDate(post.data.date)}</p>

@@ -11,7 +11,7 @@ function formatDate(date: Date): string {
 ---
 
 <Layout title="Writing - ThangQT" description="Thoughts on design and development">
-  <section class="col-main">
+  <section class="col-main" transition:name="col-main" transition:animate="fade">
     <div class="list-mobile-header">
       <h1 class="list-page-title">Writing</h1>
     </div>
@@ -25,7 +25,7 @@ function formatDate(date: Date): string {
     ))}
   </section>
 
-  <aside class="col-sidebar">
+  <aside class="col-sidebar" transition:name="col-sidebar" transition:animate="fade">
     <div class="is-visible">
       <h2>Writing</h2>
     </div>

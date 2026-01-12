@@ -1418,3 +1418,94 @@ main {
 .prose h4 + p {
   margin-top: 0;
 }
+
+/* ===========================================
+   VIEW TRANSITIONS
+   =========================================== */
+
+/* Disable default root transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Prevent clipping during animations */
+::view-transition-group(col-main),
+::view-transition-group(col-sidebar) {
+  overflow: hidden;
+}
+
+/* col-main: slide up */
+::view-transition-old(col-main),
+::view-transition-new(col-main) {
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(col-main) {
+  animation-name: slide-up-out;
+}
+
+::view-transition-new(col-main) {
+  animation-name: slide-up-in;
+}
+
+/* col-sidebar: slide up with stagger */
+::view-transition-old(col-sidebar),
+::view-transition-new(col-sidebar) {
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(col-sidebar) {
+  animation-name: slide-up-out;
+}
+
+::view-transition-new(col-sidebar) {
+  animation-name: slide-up-in;
+  animation-delay: 0.08s;
+  animation-fill-mode: backwards;
+}
+
+@keyframes slide-up-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes slide-up-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced motion: simple crossfade */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(col-main),
+  ::view-transition-new(col-main),
+  ::view-transition-old(col-sidebar),
+  ::view-transition-new(col-sidebar) {
+    animation-duration: 0.15s;
+    animation-delay: 0s;
+  }
+
+  @keyframes slide-up-out {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @keyframes slide-up-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+}
