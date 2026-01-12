@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
 
 export async function getStaticPaths() {
   const posts = await getCollection('writing');
@@ -16,6 +17,11 @@ const coverMode = post.data.coverMode ?? 'inline';
 const contentBackground = post.data.contentBackground;
 const themeColor = post.data.themeColor;
 const themeColorDark = post.data.themeColorDark;
+
+// Get optimized cover image URL for background usage
+const coverBgImage = post.data.cover && coverMode === 'title-background'
+  ? await getImage({ src: post.data.cover, width: 1920 })
+  : null;
 
 const bodyClass = [
   'page-post',
@@ -46,7 +52,7 @@ function formatDate(date: Date): string {
 >
   <section
     class:list={['col-main post-header', coverMode === 'title-background' ? 'has-title-bg' : '']}
-    style={coverMode === 'title-background' && post.data.cover ? `--post-cover-url: url('${post.data.cover}')` : undefined}
+    style={coverBgImage ? `--post-cover-url: url('${coverBgImage.src}')` : undefined}
     transition:name="col-main"
     transition:animate="fade"
   >
@@ -75,7 +81,7 @@ function formatDate(date: Date): string {
     </div>
     {post.data.cover && (
       <figure class="post-cover">
-        <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+        <Image src={post.data.cover} alt={post.data.title} />
       </figure>
     )}
     <article class="prose">
