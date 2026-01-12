@@ -127,6 +127,9 @@ const currentPath = Astro.url.pathname;
       import { customCursor } from '../scripts/cursor-original.js';
       import { themeToggle } from '../scripts/theme-original.js';
 
+      // Store cursor instance globally so we can refresh it after page transitions
+      let cursorInstance = null;
+
       function initMobileMenu() {
         const menuToggle = document.getElementById('menu-toggle');
         const mobileNav = document.getElementById('mobile-nav');
@@ -483,7 +486,7 @@ const currentPath = Astro.url.pathname;
 
       // Initialize on first load
       document.addEventListener('DOMContentLoaded', function() {
-        customCursor();
+        cursorInstance = customCursor();
         initThemeToggles();
         initMobileMenu();
         initLightbox();
@@ -495,6 +498,10 @@ const currentPath = Astro.url.pathname;
         initMobileMenu();
         updateActiveLinks();
         initLightbox();
+        // Refresh cursor hover listeners for new page content
+        if (cursorInstance && cursorInstance.refreshHoverListeners) {
+          cursorInstance.refreshHoverListeners();
+        }
       });
     </script>
   </body>

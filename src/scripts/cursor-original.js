@@ -77,6 +77,19 @@ export function customCursor() {
     });
   }
 
+  function showCursor() {
+    cursor.classList.remove(IS_HIDDEN);
+    cursor.classList.remove(IS_INACTIVE);
+    resetInactivityTimer();
+  }
+
+  function hideCursor() {
+    cursor.classList.add(IS_HIDDEN);
+    if (inactivityTimeout) {
+      clearTimeout(inactivityTimeout);
+    }
+  }
+
   function init() {
     if (isTouchDevice()) {
       cursor.style.display = 'none';
@@ -98,7 +111,47 @@ export function customCursor() {
     });
     
     document.body.addEventListener('mouseleave', () => {
-      cursor.classList.add(IS_HIDDEN);
+      hideCursor();
+    });
+
+    // Handle tab visibility changes - restore cursor when returning to tab
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        // Tab is now visible - reset inactive state but keep hidden if mouse outside
+        cursor.classList.remove(IS_INACTIVE);
+        // Only show and start timer if cursor was previously ready (user has moved mouse)
+        if (cursor.classList.contains(IS_READY)) {
+          resetInactivityTimer();
+        }
+      } else {
+        // Tab is hidden - clear timeout to prevent state changes while away
+        if (inactivityTimeout) {
+          clearTimeout(inactivityTimeout);
+        }
+      }
+    });
+
+    // Handle page show (back/forward navigation with bfcache)
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        // Page was restored from bfcache - reset cursor state
+        cursor.classList.remove(IS_INACTIVE);
+        cursor.classList.remove(IS_HIDDEN);
+        if (cursor.classList.contains(IS_READY)) {
+          resetInactivityTimer();
+        }
+      }
+    });
+
+    // Handle window focus/blur for additional robustness
+    window.addEventListener('focus', () => {
+      cursor.classList.remove(IS_INACTIVE);
+      if (cursor.classList.contains(IS_READY)) {
+        resetInactivityTimer();
+      }
+    });
+
+    window.addEventListener('blur', () => {
       if (inactivityTimeout) {
         clearTimeout(inactivityTimeout);
       }
@@ -112,4 +165,11 @@ export function customCursor() {
   }
 
   init();
+
+  // Return a refresh function for updating hover listeners after page navigation
+  return {
+    refreshHoverListeners: addHoverListeners,
+    show: showCursor,
+    hide: hideCursor
+  };
 }
