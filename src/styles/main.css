@@ -181,10 +181,24 @@ html[data-theme="dark"] body.has-theme-bg {
   margin: 0;
   color: var(--fg-color);
   text-decoration: none;
+  position: relative;
 }
 
-.site-logo:hover {
-  opacity: 0.6;
+.site-logo::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.site-logo:hover::after {
+  transform: scaleX(1);
 }
 
 .mobile-header-actions {
