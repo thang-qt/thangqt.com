@@ -76,34 +76,41 @@ ${message}
 Sent from thangqt.com contact form
     `.trim();
 
-    // For now, log the message (email sending requires Email Routing setup on CF)
-    // In production, you would use CF Email Workers here
     console.log('=== Contact Form Submission ===');
     console.log('Subject:', emailSubject);
     console.log('Body:', emailBody);
     console.log('===============================');
 
-    // Check if we have email sending capability
-    // CF Email Routing uses the `email` binding - we'll add this when you deploy
-    const emailBinding = runtime?.env?.EMAIL;
-    
-    if (emailBinding) {
-      // Send email using Cloudflare Email Routing
-      // This requires setting up Email Routing in CF dashboard and adding the binding
-      try {
-        const emailMessage = new EmailMessage(
-          'contact@thangqt.com', // From address (must be configured in Email Routing)
-          'thang@thangqt.com',   // To address (your verified email)
-          `Subject: ${emailSubject}\r\n\r\n${emailBody}`
-        );
-        await emailBinding.send(emailMessage);
-        console.log('Email sent successfully');
-      } catch (emailError) {
-        console.error('Failed to send email:', emailError);
-        // Don't fail the request if email fails - the message was received
-      }
-    } else {
-      console.log('Email binding not available - message logged only');
+    const emailWorkerUrl = runtime?.env?.EMAIL_WORKER_URL;
+    const emailWorkerToken = runtime?.env?.EMAIL_WORKER_TOKEN;
+
+    if (!emailWorkerUrl || !emailWorkerToken) {
+      return new Response(
+        JSON.stringify({ error: 'Email service not configured' }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const emailResponse = await fetch(emailWorkerUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${emailWorkerToken}`,
+      },
+      body: JSON.stringify({
+        subject: emailSubject,
+        body: emailBody,
+        contactMethod,
+      }),
+    });
+
+    if (!emailResponse.ok) {
+      const errorText = await emailResponse.text();
+      console.error('Email worker failed:', errorText);
+      return new Response(
+        JSON.stringify({ error: 'Failed to send message. Please try again.' }),
+        { status: 502, headers: { 'Content-Type': 'application/json' } }
+      );
     }
 
     return new Response(
@@ -119,9 +126,3 @@ Sent from thangqt.com contact form
     );
   }
 };
-
-// Cloudflare Email Message class placeholder
-// In production, this comes from the CF Workers runtime
-declare class EmailMessage {
-  constructor(from: string, to: string, raw: string);
-}

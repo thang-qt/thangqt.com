@@ -1,0 +1,10 @@
+name = "contact-email-worker"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+send_email = [
+  { name = "EMAIL", destination_address = "thang@thangqt.com" }
+]
+
+[vars]
+# Set EMAIL_WORKER_TOKEN as a secret in the Cloudflare dashboard or via Wrangler.
