@@ -12,12 +12,20 @@ interface Props {
 
 const { href, label = 'View Project', links = [] } = Astro.props;
 const resolvedLinks = links.length ? links : (href ? [{ href, label }] : []);
+
+function isExternal(url: string) {
+  return url.startsWith('http://') || url.startsWith('https://');
+}
 ---
 
 {resolvedLinks.length > 0 && (
   <div class="project-link-wrapper">
     {resolvedLinks.map((link) => (
-      <a href={link.href} class="project-link" target="_blank" rel="noopener noreferrer">
+      <a
+        href={link.href}
+        class="project-link"
+        {...(isExternal(link.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      >
         {link.label ?? 'View Project'} <span class="arrow">→</span>
       </a>
     ))}
