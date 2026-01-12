@@ -211,6 +211,30 @@ const currentPath = Astro.url.pathname;
         let isPanning = false;
         let startX = 0;
         let startY = 0;
+        
+        // Touch state for pinch zoom
+        let lastTouchDist = 0;
+        let lastTouchX = 0;
+        let lastTouchY = 0;
+        
+        // Auto-hide controls
+        let controlsTimeout = null;
+        const CONTROLS_HIDE_DELAY = 2500;
+
+        function showControls() {
+          lightbox.classList.remove('controls-hidden');
+          clearTimeout(controlsTimeout);
+          controlsTimeout = setTimeout(() => {
+            if (lightbox.classList.contains('is-open')) {
+              lightbox.classList.add('controls-hidden');
+            }
+          }, CONTROLS_HIDE_DELAY);
+        }
+
+        function hideControlsNow() {
+          clearTimeout(controlsTimeout);
+          lightbox.classList.add('controls-hidden');
+        }
 
         // Collect all images from prose content
         function collectImages() {
@@ -261,12 +285,13 @@ const currentPath = Astro.url.pathname;
           img.style.cursor = 'zoom-in';
           img.addEventListener('click', (e) => {
             e.preventDefault();
-            collectImages(); // Re-collect in case DOM changed
+            collectImages();
             currentIndex = images.indexOf(img);
             showImage(currentIndex);
             lightbox.classList.add('is-open');
             lightbox.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
+            showControls();
           });
         });
 
@@ -274,14 +299,16 @@ const currentPath = Astro.url.pathname;
         lightboxPrev?.addEventListener('click', (e) => {
           e.stopPropagation();
           showImage(currentIndex - 1);
+          hideControlsNow();
         });
 
         lightboxNext?.addEventListener('click', (e) => {
           e.stopPropagation();
           showImage(currentIndex + 1);
+          hideControlsNow();
         });
 
-        // Zoom controls
+        // Zoom controls - hide after use
         lightbox.querySelectorAll('.lightbox-zoom-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -295,19 +322,21 @@ const currentPath = Astro.url.pathname;
               resetZoom();
             }
             updateZoom();
+            hideControlsNow();
           });
         });
 
-        // Mouse wheel zoom
+        // Mouse wheel zoom - hide controls after use
         lightboxWrapper?.addEventListener('wheel', (e) => {
           e.preventDefault();
           const delta = e.deltaY > 0 ? -0.15 : 0.15;
           zoom = Math.max(0.5, Math.min(4, zoom + delta));
           if (zoom <= 1) { panX = 0; panY = 0; }
           updateZoom();
+          hideControlsNow();
         }, { passive: false });
 
-        // Pan when zoomed
+        // Mouse pan when zoomed
         lightboxWrapper?.addEventListener('mousedown', (e) => {
           if (zoom > 1) {
             isPanning = true;
@@ -322,6 +351,8 @@ const currentPath = Astro.url.pathname;
             panX = e.clientX - startX;
             panY = e.clientY - startY;
             updateZoom();
+          } else if (lightbox.classList.contains('is-open')) {
+            showControls();
           }
         });
 
@@ -332,12 +363,73 @@ const currentPath = Astro.url.pathname;
           }
         });
 
-        // Click to zoom in, or close if not zoomed
+        // Touch support for mobile
+        lightboxWrapper?.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 2) {
+            // Pinch zoom start
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            lastTouchDist = Math.sqrt(dx * dx + dy * dy);
+          } else if (e.touches.length === 1 && zoom > 1) {
+            // Pan start
+            isPanning = true;
+            startX = e.touches[0].clientX - panX;
+            startY = e.touches[0].clientY - panY;
+          }
+          lastTouchX = e.touches[0]?.clientX || 0;
+          lastTouchY = e.touches[0]?.clientY || 0;
+        }, { passive: true });
+
+        lightboxWrapper?.addEventListener('touchmove', (e) => {
+          if (e.touches.length === 2) {
+            // Pinch zoom
+            e.preventDefault();
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (lastTouchDist > 0) {
+              const scale = dist / lastTouchDist;
+              zoom = Math.max(0.5, Math.min(4, zoom * scale));
+              if (zoom <= 1) { panX = 0; panY = 0; }
+              updateZoom();
+            }
+            lastTouchDist = dist;
+            hideControlsNow();
+          } else if (e.touches.length === 1 && isPanning && zoom > 1) {
+            // Pan
+            e.preventDefault();
+            panX = e.touches[0].clientX - startX;
+            panY = e.touches[0].clientY - startY;
+            updateZoom();
+          }
+        }, { passive: false });
+
+        lightboxWrapper?.addEventListener('touchend', (e) => {
+          lastTouchDist = 0;
+          isPanning = false;
+          
+          // Double tap to zoom
+          const now = Date.now();
+          const touch = e.changedTouches[0];
+          if (lightboxWrapper._lastTap && now - lightboxWrapper._lastTap < 300) {
+            if (zoom === 1) {
+              zoom = 2;
+            } else {
+              resetZoom();
+            }
+            updateZoom();
+          }
+          lightboxWrapper._lastTap = now;
+        });
+
+        // Click to zoom in (desktop)
         lightboxWrapper?.addEventListener('click', (e) => {
           if (e.target === lightboxImg && !isPanning) {
             if (zoom === 1) {
               zoom = 2;
               updateZoom();
+              hideControlsNow();
             }
           }
         });
@@ -345,9 +437,11 @@ const currentPath = Astro.url.pathname;
         // Close lightbox
         function closeLightbox() {
           lightbox.classList.remove('is-open');
+          lightbox.classList.remove('controls-hidden');
           lightbox.setAttribute('aria-hidden', 'true');
           document.body.style.overflow = '';
           resetZoom();
+          clearTimeout(controlsTimeout);
         }
 
         lightboxClose?.addEventListener('click', closeLightbox);
@@ -360,18 +454,29 @@ const currentPath = Astro.url.pathname;
           if (!lightbox.classList.contains('is-open')) return;
           
           if (e.key === 'Escape') closeLightbox();
-          if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
-          if (e.key === 'ArrowRight') showImage(currentIndex + 1);
+          if (e.key === 'ArrowLeft') {
+            showImage(currentIndex - 1);
+            hideControlsNow();
+          }
+          if (e.key === 'ArrowRight') {
+            showImage(currentIndex + 1);
+            hideControlsNow();
+          }
           if (e.key === '+' || e.key === '=') {
             zoom = Math.min(zoom + 0.25, 4);
             updateZoom();
+            hideControlsNow();
           }
           if (e.key === '-') {
             zoom = Math.max(zoom - 0.25, 0.5);
             if (zoom <= 1) { panX = 0; panY = 0; }
             updateZoom();
+            hideControlsNow();
           }
-          if (e.key === '0') resetZoom();
+          if (e.key === '0') {
+            resetZoom();
+            hideControlsNow();
+          }
         });
       }
 

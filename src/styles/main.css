@@ -1547,18 +1547,18 @@ main {
   object-fit: contain;
   border-radius: 4px;
   transform-origin: center;
-  transition: transform 0.15s ease-out;
+  transition: transform 0.15s ease-out, opacity 0.15s ease;
   user-select: none;
 }
 
 .lightbox.is-open .lightbox-img {
-  animation: lightbox-img-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: lightbox-img-in 0.25s ease-out;
 }
 
 @keyframes lightbox-img-in {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
@@ -1683,4 +1683,39 @@ main {
 .lightbox-nav[style*="display: none"],
 .lightbox-counter[style*="display: none"] {
   display: none !important;
+}
+
+/* Auto-hide controls */
+.lightbox-close,
+.lightbox-nav,
+.lightbox-zoom-controls,
+.lightbox-counter {
+  transition: opacity 0.3s ease, background 0.2s ease, visibility 0.3s ease;
+}
+
+.lightbox.controls-hidden .lightbox-close,
+.lightbox.controls-hidden .lightbox-nav,
+.lightbox.controls-hidden .lightbox-zoom-controls,
+.lightbox.controls-hidden .lightbox-counter {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Touch-friendly: larger hit areas on mobile */
+@media (pointer: coarse) {
+  .lightbox-nav {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .lightbox-close {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .lightbox-zoom-btn {
+    width: 40px;
+    height: 40px;
+  }
 }
