@@ -1,0 +1,186 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 - Page Not Found" description="The page you're looking for doesn't exist">
+  <section class="col-main" transition:name="col-main" transition:animate="fade">
+    <h1 class="error-title">404</h1>
+    
+    <div class="error-message error-message--default" style="display: none;">
+      <p>
+        Well, this is awkward. The page you're looking for has vanished 
+        into the digital abyss. Maybe it never existed. Maybe it's just hiding. 
+        Who knows.
+      </p>
+      <p>
+        Either way, there's nothing here but confused question marks and 
+        existential dread. Let's get you somewhere useful.
+      </p>
+      <p><a href="/">← Back to safety</a></p>
+    </div>
+
+    <div class="error-message error-message--firefox" style="display: none;">
+      <p>
+        Looks like this page got <code>rm -rf</code>'d into the void. 
+        I've checked <code>/dev/null</code>, grepped through the logs, 
+        even tried <code>sudo</code> — nothing.
+      </p>
+      <p>
+        Either you followed a broken symlink, or I maybe completely forgot to push this file. 
+        Classic skill issue on someone's part.
+      </p>
+      <p><a href="/">← cd ~</a></p>
+    </div>
+  </section>
+
+  <aside class="col-sidebar home-sidebar" transition:name="col-sidebar" transition:animate="fade">
+    <div class="is-visible">
+      <pre class="ascii-anim ascii-anim--404" aria-hidden="true"></pre>
+    </div>
+  </aside>
+</Layout>
+
+<style>
+  .error-title {
+    font-size: clamp(4rem, 15vw, 12rem);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    margin: 0 0 1rem 0;
+  }
+</style>
+
+<script>
+  function init404Anim() {
+    const el = document.querySelector('.ascii-anim--404');
+    if (!el) return;
+
+    if (window.__404AsciiCleanup) {
+      window.__404AsciiCleanup();
+      window.__404AsciiCleanup = null;
+    }
+
+    let tick = 0;
+    const questionMarks = [];
+    
+    function seededRandom(seed) {
+      const x = Math.sin(seed * 127.1) * 43758.5453;
+      return x - Math.floor(x);
+    }
+
+    function measureGrid() {
+      const probe = document.createElement('span');
+      probe.textContent = 'M';
+      probe.style.position = 'absolute';
+      probe.style.visibility = 'hidden';
+      probe.style.font = getComputedStyle(el).font;
+      el.appendChild(probe);
+      const { width, height } = probe.getBoundingClientRect();
+      probe.remove();
+      const cols = Math.max(18, Math.floor(el.clientWidth / Math.max(1, width)));
+      const rows = Math.max(8, Math.floor(el.clientHeight / Math.max(1, height)));
+      return { cols, rows };
+    }
+
+    let grid = measureGrid();
+
+    // Initialize floating question marks
+    function initQuestionMarks() {
+      questionMarks.length = 0;
+      const count = Math.floor(grid.cols * grid.rows * 0.04);
+      for (let i = 0; i < count; i++) {
+        questionMarks.push({
+          x: seededRandom(i * 3.7) * grid.cols,
+          y: seededRandom(i * 7.1) * grid.rows,
+          vx: (seededRandom(i * 11.3) - 0.5) * 0.3,
+          vy: (seededRandom(i * 13.7) - 0.5) * 0.2,
+          phase: seededRandom(i * 17.1) * Math.PI * 2,
+          char: seededRandom(i * 19.3) > 0.7 ? '!' : '?',
+          wobble: seededRandom(i * 23.1) * 0.5 + 0.5,
+        });
+      }
+    }
+
+    initQuestionMarks();
+
+    function render() {
+      const { rows, cols } = grid;
+      const canvas = Array.from({ length: rows }, () => Array(cols).fill(' '));
+
+      // Draw wandering question marks
+      questionMarks.forEach((q) => {
+        // Wobble movement
+        const wobbleX = Math.sin(tick * 0.03 + q.phase) * q.wobble;
+        const wobbleY = Math.cos(tick * 0.025 + q.phase * 1.3) * q.wobble * 0.6;
+
+        q.x += q.vx + wobbleX * 0.1;
+        q.y += q.vy + wobbleY * 0.1;
+
+        // Wrap around edges
+        if (q.x < 0) q.x = cols - 1;
+        if (q.x >= cols) q.x = 0;
+        if (q.y < 0) q.y = rows - 1;
+        if (q.y >= rows) q.y = 0;
+
+        const px = Math.floor(q.x);
+        const py = Math.floor(q.y);
+
+        if (px >= 0 && px < cols && py >= 0 && py < rows) {
+          // Occasionally flicker between ? and !
+          const flicker = Math.sin(tick * 0.1 + q.phase) > 0.8;
+          canvas[py][px] = flicker ? (q.char === '?' ? '!' : '?') : q.char;
+        }
+      });
+
+      // Add some static dots for atmosphere
+      for (let i = 0; i < 5; i++) {
+        const x = Math.floor(seededRandom(tick * 0.01 + i * 7.3) * cols);
+        const y = Math.floor(seededRandom(tick * 0.01 + i * 11.7) * rows);
+        if (x >= 0 && x < cols && y >= 0 && y < rows && canvas[y][x] === ' ') {
+          const blink = Math.sin(tick * 0.15 + i) > 0.6;
+          if (blink) canvas[y][x] = '·';
+        }
+      }
+
+      el.textContent = canvas.map((row) => row.join('')).join('\n');
+      tick += 1;
+    }
+
+    render();
+    const timer = setInterval(render, 80);
+
+    const onResize = () => {
+      grid = measureGrid();
+      initQuestionMarks();
+    };
+    window.addEventListener('resize', onResize);
+
+    window.__404AsciiCleanup = () => {
+      clearInterval(timer);
+      window.removeEventListener('resize', onResize);
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', init404Anim);
+  document.addEventListener('astro:after-swap', init404Anim);
+
+  // Show nerdy message for Firefox users
+  function initFirefoxMessage() {
+    const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
+    const defaultMsg = document.querySelector('.error-message--default');
+    const firefoxMsg = document.querySelector('.error-message--firefox');
+    
+    if (defaultMsg && firefoxMsg) {
+      if (isFirefox) {
+        firefoxMsg.style.display = 'block';
+      } else {
+        defaultMsg.style.display = 'block';
+      }
+    }
+  }
+
+  // Run immediately for faster display
+  initFirefoxMessage();
+
+  document.addEventListener('astro:after-swap', initFirefoxMessage);
+</script>
