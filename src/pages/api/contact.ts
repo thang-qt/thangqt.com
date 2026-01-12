@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 
+export const prerender = false;
+
 interface ContactRequest {
   name?: string;
   contactMethod?: string;
