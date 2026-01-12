@@ -8,7 +8,7 @@ cover: /assets/imgs/hometown/PXL_20250613_113053621.jpg
 coverMode: title-background
 ---
 
-Some of the images I took when I got back to the city for a few days. I didn't realize just how beautiful this place is until I went to the city.
+Some of the images I took when I got back to my hometown for a few days. I didn't realize just how beautiful this place is until I moved to the city.
 
 *Tip: Click on any image to view it fullscreen. Use arrow keys to navigate and scroll to zoom.*
 
