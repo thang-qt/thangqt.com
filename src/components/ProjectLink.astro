@@ -1,0 +1,55 @@
+---
+interface LinkItem {
+  href: string;
+  label?: string;
+}
+
+interface Props {
+  href?: string;
+  label?: string;
+  links?: LinkItem[];
+}
+
+const { href, label = 'View Project', links = [] } = Astro.props;
+const resolvedLinks = links.length ? links : (href ? [{ href, label }] : []);
+---
+
+{resolvedLinks.length > 0 && (
+  <div class="project-link-wrapper">
+    {resolvedLinks.map((link) => (
+      <a href={link.href} class="project-link" target="_blank" rel="noopener noreferrer">
+        {link.label ?? 'View Project'} <span class="arrow">→</span>
+      </a>
+    ))}
+  </div>
+)}
+
+<style>
+.project-link-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  margin: var(--margin) 0;
+}
+
+.project-link {
+  color: var(--fg-color);
+  text-decoration: none;
+  font-size: var(--fs-body);
+}
+
+
+  .project-link:hover {
+    text-decoration: underline;
+  }
+
+  .arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .project-link:hover .arrow {
+    transform: translateX(4px);
+  }
+</style>

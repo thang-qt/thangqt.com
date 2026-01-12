@@ -952,6 +952,9 @@ main {
 
 /* Post Body Content */
 .post-body {
+  --post-body-pad-left: var(--margin);
+  --post-body-pad-right: 0;
+  --post-body-prose-pad-right: var(--margin);
   padding: var(--margin);
   padding-right: 0;
   align-items: flex-start !important;
@@ -960,6 +963,9 @@ main {
 
 @media (min-width: 1200px) {
   .post-body {
+    --post-body-pad-left: calc(var(--margin) * 2);
+    --post-body-pad-right: calc(var(--margin) * 2);
+    --post-body-prose-pad-right: calc(var(--margin) * 2);
     padding: calc(var(--margin) * 2);
   }
 }
@@ -1056,8 +1062,9 @@ main {
 
 /* Inner content padding for scrollbar spacing */
 .post-body .prose {
-  padding-right: var(--margin);
+  padding-right: var(--post-body-prose-pad-right);
 }
+
 
 @media (max-width: 1199px) {
   .post-body .prose {
@@ -1076,6 +1083,9 @@ main {
   }
 
   .page-post .post-body {
+    --post-body-pad-left: var(--margin);
+    --post-body-pad-right: var(--margin);
+    --post-body-prose-pad-right: 0;
     padding-left: var(--margin);
     padding-right: var(--margin);
   }
@@ -1091,10 +1101,32 @@ main {
    PROSE - Markdown Typography Styles
    =========================================== */
 .prose {
-  max-width: 65ch;
+  max-width: none;
+  width: 100%;
   font-size: var(--fs-body);
   line-height: 1.7;
   color: var(--fg-color);
+}
+
+.prose > :not(.full-width-image) {
+  max-width: 65ch;
+  width: 100%;
+}
+
+.prose > .full-width-image {
+  max-width: none;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+@media (max-width: 1199px) {
+  .prose > .full-width-image {
+    max-width: none;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+  }
 }
 
 /* Headings */
@@ -1318,12 +1350,18 @@ main {
 
 /* Images */
 .prose img {
+  width: 100%;
   max-width: 100%;
   height: auto;
   margin: 2rem 0;
   border-radius: 8px;
 }
 
+@media (max-width: 1199px) {
+  .prose > .full-width-image img {
+    border-radius: 0;
+  }
+}
 
 /* Task Lists */
 .prose ul:has(input[type="checkbox"]) {
