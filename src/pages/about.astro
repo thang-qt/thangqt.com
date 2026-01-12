@@ -28,7 +28,7 @@ import Layout from '../layouts/Layout.astro';
       I know perfection isn't possible, but somehow it's what I'm always 
       chasing. It makes me overthink every choice I make. I'm working on it.
     </p>
-    
+
     <h2 style="font-size: var(--fs-body-m); margin-top: calc(var(--margin) * 2); margin-bottom: var(--margin);">
       Outside of Code
     </h2>
@@ -49,6 +49,15 @@ import Layout from '../layouts/Layout.astro';
       I was never the "athlete" growing up, but I've recently started working out 
       to stay balanced. And while I'm a bit socially awkward, I'm working on that too.
     </p>
+
+    <h2 style="font-size: var(--fs-body-m); margin-top: calc(var(--margin) * 2); margin-bottom: var(--margin);">
+      Contact
+    </h2>
+
+    <p>
+      You can reach me directly via email at
+      <code class="email-obfuscated">thang at &lt;this domain&gt; dot com</code>.
+    </p>
   </section>
 
   <aside class="col-sidebar" transition:name="col-sidebar" transition:animate="fade">
@@ -57,3 +66,13 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </aside>
 </Layout>
+
+<style>
+  .email-obfuscated {
+    font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9em;
+    background: var(--fg-color-light);
+    padding: 0.2em 0.5em;
+    border-radius: 4px;
+  }
+</style>
