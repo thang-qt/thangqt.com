@@ -445,7 +445,7 @@ import Layout from '../layouts/Layout.astro';
       if (container && !(container as any)._rendered) {
         (window as any).turnstile.render('#turnstile-widget', {
           // Use test key for local development, replace with real key in production
-          sitekey: '1x00000000000000000000AA', // Visible test key (always passes)
+          sitekey: '0x4AAAAAACMDyYIwIxhAdJZX', // Visible test key (always passes)
           theme: document.documentElement.getAttribute('data-theme') || 'light',
         });
         (container as any)._rendered = true;
@@ -463,7 +463,7 @@ import Layout from '../layouts/Layout.astro';
             container.innerHTML = '';
             (container as any)._rendered = false;
             (window as any).turnstile.render('#turnstile-widget', {
-              sitekey: '1x00000000000000000000AA',
+              sitekey: '0x4AAAAAACMDyYIwIxhAdJZX',
               theme: document.documentElement.getAttribute('data-theme') || 'light',
             });
             (container as any)._rendered = true;
@@ -491,7 +491,7 @@ import Layout from '../layouts/Layout.astro';
       container.innerHTML = '';
       (container as any)._rendered = false;
       (window as any).turnstile.render('#turnstile-widget', {
-        sitekey: '1x00000000000000000000AA',
+        sitekey: '0x4AAAAAACMDyYIwIxhAdJZX',
         theme: document.documentElement.getAttribute('data-theme') || 'light',
       });
       (container as any)._rendered = true;
