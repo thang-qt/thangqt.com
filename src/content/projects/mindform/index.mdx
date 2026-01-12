@@ -1,0 +1,21 @@
+---
+title: MindForm
+year: "2025"
+description: AI-powered document generation from images
+cover: ./preview.png
+---
+import ProjectLink from '../../../components/ProjectLink.astro';
+
+Ever tried turning a blurry exam photo into a clean PDF? That's what MindForm was built to solve.
+
+I noticed people in study groups constantly sharing exam photos on Facebook, but they were barely readable. What if AI could transform those messy captures into polished, properly formatted documents?
+
+The approach: have LLMs generate HTML from images, then convert to PDF using WeasyPrint. I built a full-featured app with templates, usage tracking, and a clean UI.
+
+The problem? Current LLMs struggle with precise layout control. Page breaks end up in weird places, and the styling doesn't always match. I've paused it for now, waiting for better tools (maybe Typst will catch on?).
+
+<ProjectLink
+  links={[
+    { href: '/writing/mindform', label: 'Read the full story' },
+  ]}
+/>

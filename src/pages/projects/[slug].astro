@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -38,6 +39,11 @@ const { Content } = await project.render();
       <p class="post-page-date">{project.data.year}</p>
       <h1 class="post-page-title">{project.data.title}</h1>
     </div>
+    {project.data.cover && (
+      <figure class="post-cover">
+        <Image src={project.data.cover} alt={project.data.title} />
+      </figure>
+    )}
     <article class="prose">
       <Content />
     </article>

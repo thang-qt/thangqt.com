@@ -18,11 +18,13 @@ const writing = defineCollection({
 
 const projects = defineCollection({
   type: 'content',
-  schema: z.object({
-    title: z.string(),
-    year: z.string(),
-    description: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      year: z.string(),
+      description: z.string().optional(),
+      cover: image().optional(),
+    }),
 });
 
 export const collections = { writing, projects };

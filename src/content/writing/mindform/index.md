@@ -5,7 +5,7 @@ date: 2025-06-20
 tags:
   - llm
   - project
-cover: ./landing.png
+cover: ./preview.png
 ---
 
 ## Original inspiration
@@ -48,7 +48,7 @@ At this point, I decided to pause the project and treat it as an experiment. I c
 
 ## Preview
 
-Below are screenshots of the website. It's honestly one of the best-looking websites I've ever made, and I'm really proud of it. I hope to return to this project someday and turn it into a successful product.
+Below are some screenshots of the website. I hope to return to this project someday and turn it into a successful product.
 
 ![Landing page](./landing.png)
 
