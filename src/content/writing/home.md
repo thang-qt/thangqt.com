@@ -10,6 +10,8 @@ coverMode: title-background
 
 Some of the images I took when I got back to the city for a few days. I didn't realize just how beautiful this place is until I went to the city.
 
+*Tip: Click on any image to view it fullscreen. Use arrow keys to navigate and scroll to zoom.*
+
 ![](/assets/imgs/hometown/PXL_20250613_112754305.jpg)
 
 ![](/assets/imgs/hometown/PXL_20250613_113409870.jpg)

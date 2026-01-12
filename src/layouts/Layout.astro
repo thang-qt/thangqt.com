@@ -97,6 +97,31 @@ const currentPath = Astro.url.pathname;
 
     <div class="js-cursor" transition:persist></div>
 
+    <!-- Lightbox for full-screen image preview -->
+    <div class="lightbox" id="lightbox" aria-hidden="true" transition:persist>
+      <button class="lightbox-close" aria-label="Close image preview">&times;</button>
+      <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button class="lightbox-nav lightbox-next" aria-label="Next image">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+      <div class="lightbox-zoom-controls">
+        <button class="lightbox-zoom-btn" data-zoom="out" aria-label="Zoom out">−</button>
+        <span class="lightbox-zoom-level">100%</span>
+        <button class="lightbox-zoom-btn" data-zoom="in" aria-label="Zoom in">+</button>
+        <button class="lightbox-zoom-btn" data-zoom="reset" aria-label="Reset zoom">⟲</button>
+      </div>
+      <div class="lightbox-img-wrapper">
+        <img class="lightbox-img" src="" alt="" draggable="false" />
+      </div>
+      <div class="lightbox-counter"></div>
+    </div>
+
     <script>
       import { customCursor } from '../scripts/cursor-original.js';
       import { themeToggle } from '../scripts/theme-original.js';
@@ -166,11 +191,196 @@ const currentPath = Astro.url.pathname;
         });
       }
 
+      function initLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = lightbox?.querySelector('.lightbox-img');
+        const lightboxClose = lightbox?.querySelector('.lightbox-close');
+        const lightboxPrev = lightbox?.querySelector('.lightbox-prev');
+        const lightboxNext = lightbox?.querySelector('.lightbox-next');
+        const lightboxCounter = lightbox?.querySelector('.lightbox-counter');
+        const lightboxZoomLevel = lightbox?.querySelector('.lightbox-zoom-level');
+        const lightboxWrapper = lightbox?.querySelector('.lightbox-img-wrapper');
+        
+        if (!lightbox || !lightboxImg) return;
+
+        let images = [];
+        let currentIndex = 0;
+        let zoom = 1;
+        let panX = 0;
+        let panY = 0;
+        let isPanning = false;
+        let startX = 0;
+        let startY = 0;
+
+        // Collect all images from prose content
+        function collectImages() {
+          images = Array.from(document.querySelectorAll('.prose img, .post-cover img'));
+        }
+
+        function updateCounter() {
+          if (images.length > 1) {
+            lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
+            lightboxCounter.style.display = 'block';
+            lightboxPrev.style.display = 'flex';
+            lightboxNext.style.display = 'flex';
+          } else {
+            lightboxCounter.style.display = 'none';
+            lightboxPrev.style.display = 'none';
+            lightboxNext.style.display = 'none';
+          }
+        }
+
+        function updateZoom() {
+          lightboxZoomLevel.textContent = `${Math.round(zoom * 100)}%`;
+          lightboxImg.style.transform = `scale(${zoom}) translate(${panX / zoom}px, ${panY / zoom}px)`;
+          lightboxWrapper.style.cursor = zoom > 1 ? 'grab' : 'zoom-in';
+        }
+
+        function resetZoom() {
+          zoom = 1;
+          panX = 0;
+          panY = 0;
+          updateZoom();
+        }
+
+        function showImage(index) {
+          if (index < 0) index = images.length - 1;
+          if (index >= images.length) index = 0;
+          currentIndex = index;
+          
+          const img = images[currentIndex];
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt || '';
+          resetZoom();
+          updateCounter();
+        }
+
+        // Click on images to open lightbox
+        collectImages();
+        images.forEach((img, index) => {
+          img.style.cursor = 'zoom-in';
+          img.addEventListener('click', (e) => {
+            e.preventDefault();
+            collectImages(); // Re-collect in case DOM changed
+            currentIndex = images.indexOf(img);
+            showImage(currentIndex);
+            lightbox.classList.add('is-open');
+            lightbox.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+          });
+        });
+
+        // Navigation
+        lightboxPrev?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showImage(currentIndex - 1);
+        });
+
+        lightboxNext?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showImage(currentIndex + 1);
+        });
+
+        // Zoom controls
+        lightbox.querySelectorAll('.lightbox-zoom-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const action = btn.dataset.zoom;
+            if (action === 'in') {
+              zoom = Math.min(zoom + 0.25, 4);
+            } else if (action === 'out') {
+              zoom = Math.max(zoom - 0.25, 0.5);
+              if (zoom <= 1) { panX = 0; panY = 0; }
+            } else if (action === 'reset') {
+              resetZoom();
+            }
+            updateZoom();
+          });
+        });
+
+        // Mouse wheel zoom
+        lightboxWrapper?.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          const delta = e.deltaY > 0 ? -0.15 : 0.15;
+          zoom = Math.max(0.5, Math.min(4, zoom + delta));
+          if (zoom <= 1) { panX = 0; panY = 0; }
+          updateZoom();
+        }, { passive: false });
+
+        // Pan when zoomed
+        lightboxWrapper?.addEventListener('mousedown', (e) => {
+          if (zoom > 1) {
+            isPanning = true;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+            lightboxWrapper.style.cursor = 'grabbing';
+          }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+          if (isPanning) {
+            panX = e.clientX - startX;
+            panY = e.clientY - startY;
+            updateZoom();
+          }
+        });
+
+        document.addEventListener('mouseup', () => {
+          isPanning = false;
+          if (lightboxWrapper && zoom > 1) {
+            lightboxWrapper.style.cursor = 'grab';
+          }
+        });
+
+        // Click to zoom in, or close if not zoomed
+        lightboxWrapper?.addEventListener('click', (e) => {
+          if (e.target === lightboxImg && !isPanning) {
+            if (zoom === 1) {
+              zoom = 2;
+              updateZoom();
+            }
+          }
+        });
+
+        // Close lightbox
+        function closeLightbox() {
+          lightbox.classList.remove('is-open');
+          lightbox.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          resetZoom();
+        }
+
+        lightboxClose?.addEventListener('click', closeLightbox);
+        
+        lightbox.addEventListener('click', (e) => {
+          if (e.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (!lightbox.classList.contains('is-open')) return;
+          
+          if (e.key === 'Escape') closeLightbox();
+          if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
+          if (e.key === 'ArrowRight') showImage(currentIndex + 1);
+          if (e.key === '+' || e.key === '=') {
+            zoom = Math.min(zoom + 0.25, 4);
+            updateZoom();
+          }
+          if (e.key === '-') {
+            zoom = Math.max(zoom - 0.25, 0.5);
+            if (zoom <= 1) { panX = 0; panY = 0; }
+            updateZoom();
+          }
+          if (e.key === '0') resetZoom();
+        });
+      }
+
       // Initialize on first load
       document.addEventListener('DOMContentLoaded', function() {
         customCursor();
         initThemeToggles();
         initMobileMenu();
+        initLightbox();
       });
 
       // Re-init after view transitions
@@ -178,6 +388,7 @@ const currentPath = Astro.url.pathname;
         initThemeToggles();
         initMobileMenu();
         updateActiveLinks();
+        initLightbox();
       });
     </script>
   </body>
