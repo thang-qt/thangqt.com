@@ -1,5 +1,7 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
+import SEO from '../components/SEO.astro';
+import JsonLD from '../components/JsonLD.astro';
 import '../styles/main.css';
 
 interface Props {
@@ -7,13 +9,25 @@ interface Props {
   description?: string;
   bodyClass?: string;
   bodyStyle?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  tags?: string[];
+  jsonLdType?: 'website' | 'article' | 'person';
 }
 
 const { 
   title = 'ThangQT', 
-  description = 'Designer and Developer',
+  description = 'Open-source developer and Linux enthusiast',
   bodyClass = '',
   bodyStyle = '',
+  ogImage,
+  ogType = 'website',
+  publishedDate,
+  modifiedDate,
+  tags = [],
+  jsonLdType = 'website',
 } = Astro.props;
 
 const navItems = [
@@ -34,6 +48,32 @@ const currentPath = Astro.url.pathname;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- SEO Meta Tags -->
+    <SEO 
+      title={title}
+      description={description}
+      ogImage={ogImage}
+      ogType={ogType}
+      publishedDate={publishedDate}
+      modifiedDate={modifiedDate}
+      tags={tags}
+    />
+    
+    <!-- Structured Data -->
+    <JsonLD 
+      type={jsonLdType}
+      title={title}
+      description={description}
+      image={ogImage}
+      publishedDate={publishedDate}
+      modifiedDate={modifiedDate}
+      tags={tags}
+    />
+    
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="ThangQT's Blog" href="/rss.xml" />
+    
     <ViewTransitions />
   </head>
 

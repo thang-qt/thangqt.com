@@ -23,6 +23,11 @@ const coverBgImage = post.data.cover && coverMode === 'title-background'
   ? await getImage({ src: post.data.cover, width: 1920 })
   : null;
 
+// Get cover image URL for OG image
+const ogImageUrl = post.data.cover
+  ? (await getImage({ src: post.data.cover, width: 1200 })).src
+  : undefined;
+
 const bodyClass = [
   'page-post',
   contentBackground ? 'has-content-bg' : '',
@@ -49,6 +54,11 @@ function formatDate(date: Date): string {
   description={post.data.description || post.data.title}
   bodyClass={bodyClass}
   bodyStyle={bodyStyle || undefined}
+  ogImage={ogImageUrl}
+  ogType="article"
+  publishedDate={post.data.date}
+  tags={post.data.tags}
+  jsonLdType="article"
 >
   <section
     class:list={['col-main post-header', coverMode === 'title-background' ? 'has-title-bg' : '']}
