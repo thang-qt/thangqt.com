@@ -185,12 +185,6 @@ button {
   outline-offset: 2px;
 }
 
-/* Selection */
-::selection {
-  background-color: var(--color-accent);
-  color: white;
-}
-
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
