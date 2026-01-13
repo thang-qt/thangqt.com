@@ -342,16 +342,16 @@ const currentPath = Astro.url.pathname;
         lightboxPrev?.addEventListener('click', (e) => {
           e.stopPropagation();
           showImage(currentIndex - 1);
-          hideControlsNow();
+          showControls();
         });
 
         lightboxNext?.addEventListener('click', (e) => {
           e.stopPropagation();
           showImage(currentIndex + 1);
-          hideControlsNow();
+          showControls();
         });
 
-        // Zoom controls - hide after use
+        // Zoom controls - keep controls visible on click
         lightbox.querySelectorAll('.lightbox-zoom-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -365,18 +365,18 @@ const currentPath = Astro.url.pathname;
               resetZoom();
             }
             updateZoom();
-            hideControlsNow();
+            showControls();
           });
         });
 
-        // Mouse wheel zoom - hide controls after use
+        // Mouse wheel zoom - keep controls visible during use
         lightboxWrapper?.addEventListener('wheel', (e) => {
           e.preventDefault();
           const delta = e.deltaY > 0 ? -0.15 : 0.15;
           zoom = Math.max(0.5, Math.min(4, zoom + delta));
           if (zoom <= 1) { panX = 0; panY = 0; }
           updateZoom();
-          hideControlsNow();
+          showControls();
         }, { passive: false });
 
         // Mouse pan when zoomed
@@ -438,7 +438,7 @@ const currentPath = Astro.url.pathname;
               updateZoom();
             }
             lastTouchDist = dist;
-            hideControlsNow();
+            showControls();
           } else if (e.touches.length === 1 && isPanning && zoom > 1) {
             // Pan
             e.preventDefault();
@@ -472,7 +472,7 @@ const currentPath = Astro.url.pathname;
             if (zoom === 1) {
               zoom = 2;
               updateZoom();
-              hideControlsNow();
+              showControls();
             }
           }
         });
