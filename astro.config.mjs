@@ -7,6 +7,10 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://thangqt.com',
   output: 'static',
+  prefetch: {
+    defaultStrategy: 'hover',
+    prefetchAll: true,
+  },
   integrations: [
     mdx(),
     sitemap({
