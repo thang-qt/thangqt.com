@@ -115,7 +115,6 @@ body {
   color: var(--color-text-primary);
   background-color: var(--color-bg);
   transition: background-color var(--transition-base), color var(--transition-base);
-  cursor: none;
   overflow-x: hidden;
 }
 
@@ -177,7 +176,7 @@ button {
   font-size: inherit;
   background: none;
   border: none;
-  cursor: none;
+  cursor: pointer;
 }
 
 /* Focus Styles */
