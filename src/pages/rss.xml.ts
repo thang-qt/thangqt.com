@@ -5,7 +5,9 @@ import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { getContainerRenderer as getMDXRenderer } from '@astrojs/mdx';
 
 export async function GET(context: APIContext) {
-  const posts = await getCollection('writing');
+  const posts = await getCollection('writing', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
   
   // Sort posts by date (newest first)
   const sortedPosts = posts.sort(

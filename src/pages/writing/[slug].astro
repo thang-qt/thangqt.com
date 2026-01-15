@@ -4,7 +4,9 @@ import { getCollection } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('writing');
+  const posts = await getCollection('writing', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },

@@ -2,7 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const posts = await getCollection('writing');
+const posts = await getCollection('writing', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
 const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 function formatDate(date: Date): string {

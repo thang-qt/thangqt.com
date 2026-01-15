@@ -2,7 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const projects = await getCollection('projects');
+const projects = await getCollection('projects', ({ data }) => {
+  return import.meta.env.PROD ? data.draft !== true : true;
+});
 // Sort by year descending
 const sortedProjects = projects.sort((a, b) => parseInt(b.data.year) - parseInt(a.data.year));
 ---
