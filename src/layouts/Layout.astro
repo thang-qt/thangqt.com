@@ -83,8 +83,11 @@ const currentPath = Astro.url.pathname;
       <a href="/" class="site-logo">ThangQT</a>
       
       <div class="mobile-header-actions">
-        <button class="theme-toggle" id="theme-toggle-mobile" aria-label="Toggle theme">
-          <span class="visually-hidden">Toggle theme</span>
+        <button class="theme-toggle" id="theme-toggle-mobile" aria-label="Theme: system" data-theme-mode="system">
+          <span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span>
+          <span class="theme-toggle__icon theme-toggle__icon--system" aria-hidden="true">🖥️</span>
+          <span class="visually-hidden theme-toggle__label">Theme: system</span>
         </button>
         
         <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">
@@ -112,8 +115,11 @@ const currentPath = Astro.url.pathname;
     <div class="col-nav" transition:persist>
       <div class="col-nav-top">
         <a href="/" class="site-logo">ThangQT</a>
-        <button class="theme-toggle" id="theme-toggle-desktop" aria-label="Toggle theme">
-          <span class="visually-hidden">Toggle theme</span>
+        <button class="theme-toggle" id="theme-toggle-desktop" aria-label="Theme: system" data-theme-mode="system">
+          <span class="theme-toggle__icon theme-toggle__icon--light" aria-hidden="true">☀️</span>
+          <span class="theme-toggle__icon theme-toggle__icon--dark" aria-hidden="true">🌙</span>
+          <span class="theme-toggle__icon theme-toggle__icon--system" aria-hidden="true">🖥️</span>
+          <span class="visually-hidden theme-toggle__label">Theme: system</span>
         </button>
       </div>
       
@@ -164,8 +170,6 @@ const currentPath = Astro.url.pathname;
 
     <script>
       import { customCursor } from '../scripts/cursor-original.js';
-      import { themeToggle } from '../scripts/theme-original.js';
-
       // Store cursor instance globally so we can refresh it after page transitions
       let cursorInstance = null;
 
@@ -199,6 +203,42 @@ const currentPath = Astro.url.pathname;
       }
 
       function initThemeToggles() {
+        const THEME_KEY = 'theme';
+        const THEME_MODES = ['light', 'dark', 'system'];
+
+        const getSystemTheme = () =>
+          window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+        const getStoredMode = () => localStorage.getItem(THEME_KEY) || 'system';
+
+        const updateToggleIndicator = (mode) => {
+          document.querySelectorAll('.theme-toggle').forEach(toggle => {
+            toggle.dataset.themeMode = mode;
+            toggle.setAttribute('aria-label', `Theme: ${mode}`);
+            const label = toggle.querySelector('.theme-toggle__label');
+            if (label) {
+              label.textContent = `Theme: ${mode}`;
+            }
+          });
+        };
+
+        const applyTheme = (mode) => {
+          const resolvedTheme = mode === 'system' ? getSystemTheme() : mode;
+          document.documentElement.setAttribute('data-theme', resolvedTheme);
+          updateToggleIndicator(mode);
+        };
+
+        const setMode = (mode) => {
+          localStorage.setItem(THEME_KEY, mode);
+          applyTheme(mode);
+        };
+
+        const getNextMode = (mode) => {
+          const index = THEME_MODES.indexOf(mode);
+          const nextIndex = index === -1 ? 0 : (index + 1) % THEME_MODES.length;
+          return THEME_MODES[nextIndex];
+        };
+
         // Handle both mobile and desktop theme toggles
         const toggles = document.querySelectorAll('.theme-toggle');
         
@@ -207,19 +247,23 @@ const currentPath = Astro.url.pathname;
           toggle.parentNode?.replaceChild(newToggle, toggle);
           
           newToggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+            const currentMode = newToggle.dataset.themeMode || getStoredMode();
+            const nextMode = getNextMode(currentMode);
+            setMode(nextMode);
           });
         });
 
-        // Apply saved theme
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-          document.documentElement.setAttribute('data-theme', savedTheme);
-        }
+        // Apply saved theme preference or follow system
+        applyTheme(getStoredMode());
+
+        // Keep in sync with system changes when following system preference
+        window
+          .matchMedia('(prefers-color-scheme: dark)')
+          .addEventListener('change', () => {
+            if (getStoredMode() === 'system') {
+              applyTheme('system');
+            }
+          });
       }
 
       function updateActiveLinks() {

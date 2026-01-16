@@ -439,9 +439,9 @@ body.is-mobile-nav-open .mobile-header .theme-toggle {
 
 /* Theme Toggle */
 .theme-toggle {
-  --size: 21px;
+  --size: 28px;
   width: var(--size);
-  aspect-ratio: 1;
+  height: var(--size);
   background-color: var(--bg-color);
   border: 1px solid var(--fg-color);
   border-radius: 50%;
@@ -449,23 +449,31 @@ body.is-mobile-nav-open .mobile-header .theme-toggle {
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg-color);
+  transition: background-color 200ms, border-color 200ms;
 }
 
-.theme-toggle::before {
-  display: block;
-  content: "";
+.theme-toggle[data-theme-mode="system"] {
+  border-style: dashed;
+}
+
+.theme-toggle__icon {
   position: absolute;
-  width: 50%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background-color: var(--fg-color);
-  transition: transform 250ms;
+  font-size: 0.75rem;
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 200ms, transform 200ms;
 }
 
-[data-theme="dark"] .theme-toggle::before {
-  transform: rotate(180deg);
-  transform-origin: center;
+.theme-toggle[data-theme-mode="light"] .theme-toggle__icon--light,
+.theme-toggle[data-theme-mode="dark"] .theme-toggle__icon--dark,
+.theme-toggle[data-theme-mode="system"] .theme-toggle__icon--system {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* ===========================================
