@@ -1,0 +1,29 @@
+---
+title: SpanBoard
+year: "2025-12"
+description: Experimental time-span journaling with metadata and analytics
+cover: ./main_list_view.png
+---
+
+import FullWidthImage from '../../../components/FullWidthImage.astro';
+import mainListView from './main_list_view.png';
+import focusMode from './focus_mode.png';
+import calendarView from './calendar_view.png';
+import journalView from './journal_view.png';
+import analytics from './analytics.png';
+
+SpanBoard is an experimental take on time tracking, but instead of counting hours, it documents the story of the day. Every span has a start and end, so you can map out exactly when you woke up, how long it took to get ready, breakfast, commute, deep work, anything.
+
+Spans can nest into sub-entries, so a “Gym” block can hold warm-up, sets, sauna, shower, and the ride home. Each span can also carry metadata like mood, links, or numeric counters, plus a rich note field with full markdown support. Over time, the calendar and journal views make it easy to review patterns, and analytics help you spot where your days really go.
+
+## Experience snapshots
+
+<FullWidthImage src={mainListView} alt="Main list view" caption="Timeline-style list of every time span." />
+
+<FullWidthImage src={focusMode} alt="Focus mode" caption="Focus mode for logging without distractions." />
+
+<FullWidthImage src={calendarView} alt="Calendar view" caption="Calendar view highlights days at a glance." />
+
+<FullWidthImage src={journalView} alt="Journal view" caption="Journal view aggregates notes across entries." />
+
+<FullWidthImage src={analytics} alt="Analytics dashboard" caption="Analytics surface patterns and routines." />
