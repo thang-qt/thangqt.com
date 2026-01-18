@@ -25,6 +25,8 @@ const projects = defineCollection({
       year: z.string(),
       description: z.string().optional(),
       cover: image().optional(),
+      themeColor: z.string().optional(),
+      themeColorDark: z.string().optional(),
       draft: z.boolean().optional().default(false),
     }),
 });

@@ -15,12 +15,27 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await project.render();
+
+const themeColor = project.data.themeColor;
+const themeColorDark = project.data.themeColorDark;
+
+const bodyClass = ['page-post', themeColor ? 'has-theme-bg' : '']
+  .filter(Boolean)
+  .join(' ');
+
+const bodyStyle = [
+  themeColor ? `--post-theme-bg: ${themeColor}` : '',
+  themeColorDark ? `--post-theme-bg-dark: ${themeColorDark}` : '',
+]
+  .filter(Boolean)
+  .join('; ');
 ---
 
 <Layout
   title={`${project.data.title} - ThangQT`}
   description={project.data.description || project.data.title}
-  bodyClass="page-post"
+  bodyClass={bodyClass}
+  bodyStyle={bodyStyle || undefined}
 >
   <section class="col-main post-header" transition:name="col-main" transition:animate="fade">
     <a href="/projects" class="back-link" aria-label="Back to projects">
