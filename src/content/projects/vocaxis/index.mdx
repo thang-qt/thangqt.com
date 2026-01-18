@@ -1,0 +1,25 @@
+---
+title: Vocaxis
+year: "2026"
+description: Learner-friendly vocabulary decks powered by AI and FSRS
+cover: ./vocaxis-cover.png
+---
+
+import FullWidthImage from '../../../components/FullWidthImage.astro';
+import ProjectLink from '../../../components/ProjectLink.astro';
+import cover from './vocaxis-cover.png';
+import heroLight from './hero-light.png';
+
+Vocaxis is a web app for learning English vocabulary, built around one simple frustration I had with Anki: making good cards takes so long that you end up creating more than reviewing.
+
+Vocaxis fixes that with a built-in, AI-generated dictionary written for learners. You can search any word, see friendly definitions and translations in multiple languages, then add it to your deck in seconds. If a word is missing, the flagship AI model fills the gap on the fly.
+
+Under the hood it uses FSRS to optimize retention, plus contextual AI help for quick explanations or Q&A right inside the review flow. Collections let you save words now and build decks later, and a browser extension makes it effortless to capture vocabulary anywhere you browse.
+
+<FullWidthImage src={heroLight} alt="Vocaxis hero" caption="Focused review interface for fast recall." />
+
+<ProjectLink
+  links={[
+    { href: 'https://vocaxis.com', label: 'Visit Vocaxis' },
+  ]}
+/>
