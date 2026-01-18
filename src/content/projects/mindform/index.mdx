@@ -5,14 +5,16 @@ description: AI-powered document generation from images
 cover: ./preview.png
 ---
 import ProjectLink from '../../../components/ProjectLink.astro';
+import FullWidthImage from '../../../components/FullWidthImage.astro';
+import preview from './preview.png';
 
-Ever tried turning a blurry exam photo into a clean PDF? That's what MindForm was built to solve.
+MindForm started with a simple pain point: group chats were full of blurry exam photos, and no one wanted to rewrite them cleanly. I wanted a tool that could turn those messy shots into tidy PDFs you could actually study from.
 
-I noticed people in study groups constantly sharing exam photos on Facebook, but they were barely readable. What if AI could transform those messy captures into polished, properly formatted documents?
+The flow was: LLMs turn images into HTML, then WeasyPrint generates the PDF. I built templates, tracking, and a clean interface so people could batch-convert exams without losing the original structure.
 
-The approach: have LLMs generate HTML from images, then convert to PDF using WeasyPrint. I built a full-featured app with templates, usage tracking, and a clean UI.
+The hard part is layout precision. Page breaks land in the wrong places, and the styling still drifts from the original. I paused it for now while waiting for better layout control (maybe Typst will get us there).
 
-The problem? Current LLMs struggle with precise layout control. Page breaks end up in weird places, and the styling doesn't always match. I've paused it for now, waiting for better tools (maybe Typst will catch on?).
+<FullWidthImage src={preview} alt="MindForm preview" caption="MindForm turns exam photos into clean PDFs." />
 
 <ProjectLink
   links={[

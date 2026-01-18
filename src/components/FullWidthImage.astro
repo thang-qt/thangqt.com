@@ -1,6 +1,9 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
-  src: string;
+  src: ImageMetadata;
   alt: string;
   caption?: string;
 }
@@ -9,7 +12,7 @@ const { src, alt, caption } = Astro.props;
 ---
 
 <figure class="full-width-image">
-  <img src={src} alt={alt} loading="lazy" />
+  <Image src={src} alt={alt} loading="lazy" />
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
 
@@ -28,7 +31,8 @@ const { src, alt, caption } = Astro.props;
   .full-width-image figcaption {
     font-size: var(--fs-small);
     color: var(--fg-color-muted);
-    padding: 0.5rem 0;
-    margin-top: 0.5rem;
+    text-align: center;
+    padding: 0;
+    margin-top: 0.25rem;
   }
 </style>
