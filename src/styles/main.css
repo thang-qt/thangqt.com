@@ -152,6 +152,8 @@ a {
 
 body.has-theme-bg {
   --page-bg: var(--post-theme-bg, var(--bg-color));
+  --fg-color-light: color-mix(in srgb, var(--fg-color) 10%, var(--page-bg));
+  --fg-color-medium: color-mix(in srgb, var(--fg-color) 60%, var(--page-bg));
   --divider-color: color-mix(in srgb, var(--fg-color) 25%, var(--page-bg));
 }
 
@@ -160,6 +162,8 @@ html[data-theme="dark"] body.has-theme-bg {
     --post-theme-bg-dark,
     color-mix(in srgb, var(--post-theme-bg) 30%, #000)
   );
+  --fg-color-light: color-mix(in srgb, var(--fg-color) 10%, var(--page-bg));
+  --fg-color-medium: color-mix(in srgb, var(--fg-color) 60%, var(--page-bg));
   --divider-color: color-mix(in srgb, var(--fg-color) 30%, var(--page-bg));
 }
 
@@ -449,6 +453,24 @@ body.is-mobile-nav-open .mobile-header .theme-toggle {
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
+}
+
+body.has-theme-bg .theme-toggle {
+  background-color: var(--page-bg, var(--bg-color));
+  border-color: color-mix(in srgb, var(--post-theme-bg-dark, var(--bg-color)) 70%, var(--fg-color));
+}
+
+body.has-theme-bg .theme-toggle::before {
+  background-color: color-mix(in srgb, var(--post-theme-bg-dark, var(--bg-color)) 70%, var(--fg-color));
+}
+
+html[data-theme="dark"] body.has-theme-bg .theme-toggle {
+  background-color: var(--page-bg, var(--bg-color));
+  border-color: color-mix(in srgb, var(--post-theme-bg, var(--bg-color)) 70%, var(--fg-color));
+}
+
+html[data-theme="dark"] body.has-theme-bg .theme-toggle::before {
+  background-color: color-mix(in srgb, var(--post-theme-bg, var(--bg-color)) 70%, var(--fg-color));
 }
 
 .theme-toggle::before {
