@@ -5,8 +5,13 @@ import { getCollection } from 'astro:content';
 const projects = await getCollection('projects', ({ data }) => {
   return import.meta.env.PROD ? data.draft !== true : true;
 });
-// Sort by year descending
-const sortedProjects = projects.sort((a, b) => parseInt(b.data.year) - parseInt(a.data.year));
+
+const getSortKey = (value) => (value.includes('-') ? value : `${value}-00`);
+
+// Sort by year/month descending
+const sortedProjects = projects.sort((a, b) =>
+  getSortKey(b.data.year).localeCompare(getSortKey(a.data.year))
+);
 ---
 
 <Layout title="Projects - ThangQT" description="Selected works and projects">
@@ -18,7 +23,7 @@ const sortedProjects = projects.sort((a, b) => parseInt(b.data.year) - parseInt(
       <article class="project-item">
         <a href={`/projects/${project.slug}`} class="list-link">
           <h2 class="project-title">{project.data.title}</h2>
-          <p class="project-meta">{project.data.year}</p>
+          <p class="project-meta">{project.data.year.slice(0, 4)}</p>
         </a>
       </article>
     ))}

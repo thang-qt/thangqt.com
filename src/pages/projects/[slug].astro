@@ -31,14 +31,14 @@ const { Content } = await project.render();
       <span>Back</span>
     </a>
     <div class="post-header-content">
-      <p class="post-page-date">{project.data.year}</p>
+      <p class="post-page-date">{project.data.year.slice(0, 4)}</p>
       <h1 class="post-page-title">{project.data.title}</h1>
     </div>
   </section>
 
   <aside class="col-sidebar post-body project-body" transition:name="col-sidebar" transition:animate="fade">
     <div class="post-mobile-header">
-      <p class="post-page-date">{project.data.year}</p>
+      <p class="post-page-date">{project.data.year.slice(0, 4)}</p>
       <h1 class="post-page-title">{project.data.title}</h1>
     </div>
     {project.data.cover && (
