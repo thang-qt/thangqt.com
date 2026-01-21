@@ -29,14 +29,135 @@ So why am I switching back now? I miss the 90% too much.
 
 New year, fresh start. Do I expect my previous problems to be solved? Not really. But if push comes to shove, I might just use Distrobox or something similar to handle the edge cases.
 
-Anyway, let's get into the actual backup setup.
+---
 
-**Setting up restic on Void**
+Okay, so that's what I drafted in advance, or you might say my "planned plan"? However, it suddenly occurred to me that I still have Windows installed on another disk that I haven't touched in ages. Why? you might ask. Well, my professor at the time required us to use this monitored browser for exams, and it only supported Windows. That's why.
 
-<!-- TODO: Write about the Void setup -->
+Anyway, after that I bought a gamepad on a whim, thinking I'd get some joy out of it. Well, I did. I played RDR with it for a few days, then got bored. After that, I never bothered touching Windows again. So it's the perfect opportunity to nuke it and install NixOS on it.
 
-**Setting up restic on NixOS**
+Anyway, here is the actual backup setup.
 
-<!-- TODO: Write about the NixOS setup -->
+**On Void**
 
-<!-- TODO: Closing thoughts -->
+<!-- to be written later -->
+
+**NixOS**
+
+Setting up restic on NixOS is where the platform really shines. Instead of manually managing systemd services and timers, NixOS provides a declarative `services.restic.backups` module that handles everything.
+
+I followed [this guide](https://imranmustafa.net/simple-restic-backup-on-nixos/) which breaks down the setup nicely. Here's my configuration:
+
+```nix
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+{
+  sops.age.keyFile = "/etc/sops/age/keys.txt";
+
+  sops.secrets = {
+    restic-password = {
+      sopsFile = ../../secrets/restic.yaml;
+      format = "yaml";
+      key = "restic_password";
+      mode = "0400";
+      owner = "root";
+    };
+
+    restic-s3-access-key = {
+      sopsFile = ../../secrets/restic.yaml;
+      format = "yaml";
+      key = "aws_access_key_id";
+      mode = "0400";
+      owner = "root";
+    };
+
+    restic-s3-secret-key = {
+      sopsFile = ../../secrets/restic.yaml;
+      format = "yaml";
+      key = "aws_secret_access_key";
+      mode = "0400";
+      owner = "root";
+    };
+  };
+
+  sops.templates."restic-env".content = ''
+    AWS_ACCESS_KEY_ID=${config.sops.placeholder."restic-s3-access-key"}
+    AWS_SECRET_ACCESS_KEY=${config.sops.placeholder."restic-s3-secret-key"}
+  '';
+
+  sops.templates."restic-repo".content = ''
+    s3:https://s3-hcm5-r1.longvan.net/backupqt/hostname/pathway
+  '';
+
+  services.restic.backups = {
+    pathway-home = {
+      initialize = true;
+      repositoryFile = config.sops.templates."restic-repo".path;
+      passwordFile = config.sops.secrets.restic-password.path;
+      environmentFile = config.sops.templates."restic-env".path;
+
+      paths = [ "/home/thang" ];
+
+      exclude = [
+        "/home/thang/.cache"
+        "/home/thang/.local/share/Trash"
+        "/home/thang/.mozilla/firefox/*/cache2"
+        "/home/thang/.config/google-chrome/*/Cache"
+        "/home/thang/.config/chromium/*/Cache"
+        "/home/thang/Downloads"
+        "/home/thang/.local/share/Steam"
+        "node_modules"
+        ".next"
+        ".nuxt"
+        ".venv"
+        ".tox"
+        "__pycache__"
+        "target/debug"
+        "target/release"
+        "dist"
+        "build"
+        ".cache"
+        ".pytest_cache"
+        ".mypy_cache"
+        ".ruff_cache"
+        "*.tmp"
+        "*.temp"
+        ".DS_Store"
+      ];
+
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+        RandomizedDelaySec = "5m";
+      };
+
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 6"
+        "--keep-yearly 2"
+      ];
+
+      runCheck = false;
+
+      extraBackupArgs = [
+        "--exclude-caches"
+        "--exclude-if-present .nobackup"
+        "--compression auto"
+      ];
+    };
+  };
+}
+```
+
+A few things worth noting:
+
+- I'm using `sops-nix` to manage secrets securely. The restic password and S3 credentials are encrypted and only decrypted at runtime.
+- I'm keeping 7 daily snapshots, 4 weekly, 6 monthly, and 2 yearly. This gives me a good balance between storage usage and recovery options.
+- The exclude list covers common cache directories, build artifacts, and temporary files. No point backing up `node_modules` when I can just `npm install` again.
+
+So now I have 2 Linux partitions, a little bit redundant to be honest, but I have no other use so I'm gonna keep the Void one as backup just in case.
