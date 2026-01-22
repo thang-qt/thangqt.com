@@ -5,7 +5,7 @@ date: 2026-01-23
 tags:
   - linux
   - personal
-draft: true
+draft: false
 ---
 
 I keep bouncing between Void and NixOS. It's been years of hopping, but lately it's mostly those two.
@@ -22,4 +22,4 @@ But the remaining 10%? When you want to do something that's not officially suppo
 
 Overall, I still prefer NixOS so much that I've switched back to it. I initially didn't think much about making the switch, but then I found a cheap object storage offer and set up backups - having that safety net made the decision easier. You can read about my backup setup [here](/writing/restic-backup).
 
-**Edit:** Now that I remember, I was having trouble with running Prisma back then. Now that I'm back on NixOS, I just came across a project that uses Prisma and tried to set it up. NixOS even has an official guide now, but no luck. Found [this project](link-later) though, and it helped me run Prisma just fine.
+**Edit:** I just remembered that one of the big friction points I had with NixOS last time was running Prisma. Now that I'm back, I tried setting it up again following the official guide, but still had no luck. Luckily, I found [nix-prisma-utils](https://github.com/VanCoding/nix-prisma-utils) and it worked like a charm.

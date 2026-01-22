@@ -6,7 +6,7 @@ tags:
   - linux
   - personal
   - backup
-draft: true
+draft: false
 ---
 
 I recently came across a cheap object storage offer. It got me thinking about backups, one of those things I always tell myself I'll set up "eventually." Well, this is eventually.
