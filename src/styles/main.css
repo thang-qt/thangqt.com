@@ -1152,7 +1152,7 @@ main {
 }
 
 .prose > :not(.full-width-image) {
-  max-width: 65ch;
+  max-width: 72ch;
   width: 100%;
 }
 
