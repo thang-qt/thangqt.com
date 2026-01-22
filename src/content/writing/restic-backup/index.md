@@ -1,7 +1,7 @@
 ---
-title: Setting up backup with restic (and switching back to NixOS)
-description: Finally setting up proper backups, and using it as an excuse to distro-hop again
-date: 2026-01-15
+title: Setting up backup with restic
+description: Finally setting up proper backups with restic on Void and NixOS
+date: 2026-01-23
 tags:
   - linux
   - personal
@@ -11,35 +11,13 @@ draft: true
 
 I recently came across a cheap object storage offer. It got me thinking about backups, one of those things I always tell myself I'll set up "eventually." Well, this is eventually.
 
-And it's also the perfect excuse to try NixOS again. The plan is simple: set up backups on my current Void system first, then jump to NixOS with a safety net. If anything goes wrong or I regret it, I can just restore and be back on Void with minimal hassle.
+It also got me thinking about switching back to NixOS (why? I wrote about that [here](/writing/thoughts-on-nixos-and-void)), something I've been considering for a while now. This felt like the perfect opportunity - set up proper backups first, then make the switch with a safety net.
 
-To give some context, I've been hopping distros for years, but recently it's just been between Void and NixOS.
+Then I realized I still had a Windows partition sitting unused on another disk. It only existed because my professor required a monitored exam browser for exams, and after that I had a brief gamepad phase where I played RDR for a few days. Haven't touched it since.
 
-Back when I was on Arch, I heard about Void as a lightweight alternative. I didn't really care about the whole systemd debate, I was just tired of my system breaking, especially from dependency conflicts. You know the drill: on Ubuntu-based distros you pull packages from third-party repos, on Arch you use the AUR, and eventually something breaks.
+So I nuked Windows and installed NixOS there instead. Set everything up, including the backup configuration. After NixOS was stable, I booted back into Void to back it up as well. Now I'm using NixOS as my main system.
 
-Void has honestly been one of the most stable experiences I've had with a "normal" distro. People say its package repo is modest, but I never found myself missing anything.
-
-Then came NixOS. The cool new kid, the immutable distro everyone was talking about. The "high learning curve" warnings didn't turn me off. After trying it, yeah, it is different. But even with modest knowledge, without really learning Nix syntax properly, I was able to set up my workspace.
-
-Here's my honest take: 90% of the time, NixOS offers convenience and time savings far beyond any distro I've used. With `services.*`, I can deploy almost any service with just a few lines of config. The `nix-shell` is great for temporarily testing things out. And if I ever break my system, I just boot into the previous generation. How nice is that?
-
-But the remaining 10%? When you want to do something that's not officially supported or not "the Nix way", it becomes way harder than on normal distros. That's why I switched back to Void. At the time, I was having trouble setting up my web dev environment for learning, and I just needed things to work.
-
-So why am I switching back now? I miss the 90% too much.
-
-New year, fresh start. Do I expect my previous problems to be solved? Not really. But if push comes to shove, I might just use Distrobox or something similar to handle the edge cases.
-
----
-
-Okay, so that's what I drafted in advance, or you might say my "planned plan"? However, it suddenly occurred to me that I still have Windows installed on another disk that I haven't touched in ages. Why? you might ask. Well, my professor at the time required us to use this monitored browser for exams, and it only supported Windows. That's why.
-
-Anyway, after that I bought a gamepad on a whim, thinking I'd get some joy out of it. Well, I did. I played RDR with it for a few days, then got bored. After that, I never bothered touching Windows again. So it's the perfect opportunity to nuke it and install NixOS on it.
-
-Anyway, here is the actual backup setup.
-
-**On Void**
-
-<!-- to be written later -->
+Here's the actual setup. I'm presenting NixOS first since that's my main system now, then the Void backup.
 
 **NixOS**
 
@@ -160,4 +138,82 @@ A few things worth noting:
 - I'm keeping 7 daily snapshots, 4 weekly, 6 monthly, and 2 yearly. This gives me a good balance between storage usage and recovery options.
 - The exclude list covers common cache directories, build artifacts, and temporary files. No point backing up `node_modules` when I can just `npm install` again.
 
-So now I have 2 Linux partitions, a little bit redundant to be honest, but I have no other use so I'm gonna keep the Void one as backup just in case.
+**On Void**
+
+Setting up restic on Void is more hands-on than NixOS, but it's straightforward. First, install restic:
+
+```sh
+sudo xbps-install -S restic
+```
+
+Then create a directory for secrets and configuration:
+
+```sh
+sudo mkdir -p /etc/restic
+sudo chmod 700 /etc/restic
+```
+
+Create the password file, environment variables for S3 credentials, and repository URL:
+
+```sh
+# Password for the restic repository
+sudo hx /etc/restic/password
+sudo chmod 600 /etc/restic/password
+
+# S3 credentials
+sudo hx /etc/restic/env
+# Contains:
+# AWS_ACCESS_KEY_ID=your_key
+# AWS_SECRET_ACCESS_KEY=your_secret
+sudo chmod 600 /etc/restic/env
+
+# Repository URL
+sudo sh -c 'echo "s3:https://s3-hcm5-r1.longvan.net/backupqt/hostname/leaf" > /etc/restic/repo'
+sudo chmod 600 /etc/restic/repo
+```
+
+Initialize the repository:
+
+```sh
+sudo sh -c 'export $(cat /etc/restic/env | xargs); restic -r "$(cat /etc/restic/repo)" --password-file /etc/restic/password init'
+```
+
+Create an excludes file with patterns for directories and files you don't want backed up:
+
+```sh
+sudo hx /etc/restic/excludes
+sudo chmod 600 /etc/restic/excludes
+```
+
+Mine looks mostly similar to the NixOS config, with a few tweaks.
+
+Create a backup script:
+
+```sh
+sudo sh -c 'cat > /usr/local/bin/restic-backup <<EOF
+#!/bin/sh
+set -e
+export \$(cat /etc/restic/env | xargs)
+
+restic -r "\$(cat /etc/restic/repo)" \\
+  --password-file /etc/restic/password \\
+  backup /home/thang \\
+  --exclude-caches \\
+  --exclude-if-present .nobackup \\
+  --exclude-file /etc/restic/excludes \\
+  --compression auto
+EOF'
+sudo chmod 700 /usr/local/bin/restic-backup
+```
+
+Before running the first backup, I cleaned up some junk that had accumulated in my home directory - old `node_modules`, a `go` directory I wasn't using, and some leftover project folders. Then ran:
+
+```sh
+sudo /usr/local/bin/restic-backup
+```
+
+The first backup was... an iterative process. I kept stopping it (Ctrl+C) to refine the excludes file as I realized what else I didn't need backed up - the Android SDK, more cache directories, temporary files. Each interrupted run uploaded some data before I cancelled it. After a few rounds of tweaking, the final successful run processed 551,006 files (48.39 GiB).
+
+It took over an hour, which was quite long. I suspect it's because I have lots of small files scattered everywhere - config files, dotfiles, all those tiny things that accumulate over time.
+
+Unlike the NixOS setup, I'm not running automated daily backups or pruning here. Since I'm now using NixOS as my main system and will likely store all my data there going forward, this Void backup is just a one-time safety net. I probably won't touch this partition much anymore, and will likely nuke it eventually once I'm fully settled on NixOS.
