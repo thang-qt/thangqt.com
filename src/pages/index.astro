@@ -28,7 +28,7 @@ import Layout from '../layouts/Layout.astro';
   </aside>
 </Layout>
 
-<script>
+<script is:inline data-astro-rerun>
   function initAsciiAnim() {
     const el = document.querySelector('.ascii-anim');
     if (!el) return;
@@ -201,6 +201,15 @@ import Layout from '../layouts/Layout.astro';
     };
   }
 
-  document.addEventListener('DOMContentLoaded', initAsciiAnim);
-  document.addEventListener('astro:after-swap', initAsciiAnim);
+  const runAsciiAnim = () => {
+    requestAnimationFrame(initAsciiAnim);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runAsciiAnim, { once: true });
+  } else {
+    runAsciiAnim();
+  }
+
+  document.addEventListener('astro:page-load', runAsciiAnim);
 </script>
