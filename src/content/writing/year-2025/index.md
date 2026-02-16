@@ -38,11 +38,15 @@ Though honestly, I spent too much money on it. Part of that savings I mentioned.
 
 The biggest thing is I got an internship offer, and I'm onboarding right after the holiday. To be honest, I wasn't planning to apply this early. I thought I'd wait until summer. But my friends kept asking about it, and I got hit with FOMO. So I started looking right before the holiday and got one after a few tries.
 
+I've also been trying to get my sleep schedule back to normal after staying up late for too long. I've made real progress recently, which feels good since I'll need to wake up early for the internship and school.
+
 On top of that, my parents got me a motorbike to commute to work. A huge gift. I'm really grateful.
 
 So my direction for this new year is simple. Try my best in this internship and prepare myself for the job market.
 
 More specifically, I'm planning to take IELTS before summer. I'm confident in reading and listening, but speaking, and maybe writing, aren't quite there yet. After the holiday, I'll take a mock test to make an informed decision and see if I can allocate the time for it.
+
+I also want more agency this year. I want to cut down on unhelpful ways I relax, like mobile gaming, read more books, and reduce the unhealthy content I consume on social media.
 
 I hope that leads to more career opportunities. I want to secure an official position within the year.
 
