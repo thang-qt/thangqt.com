@@ -48,8 +48,6 @@ More specifically, I'm planning to take IELTS before summer. I'm confident in re
 
 I also want more agency this year. I want to cut down on unhelpful ways I relax, like mobile gaming, read more books, and reduce the unhealthy content I consume on social media.
 
-I want to secure an official position within the year.
-
 Honestly, I don't know exactly how it'll all play out. But this feels like a transition year for me. Something is waiting, and I have a good feeling about it.
 
 Chúc mừng năm mới!
