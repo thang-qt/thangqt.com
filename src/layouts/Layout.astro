@@ -135,8 +135,6 @@ const currentPath = Astro.url.pathname;
       <slot />
     </main>
 
-    <div class="js-cursor" transition:persist></div>
-
     <!-- Lightbox for full-screen image preview -->
     <div class="lightbox" id="lightbox" aria-hidden="true" transition:persist>
       <button class="lightbox-close" aria-label="Close image preview">&times;</button>
@@ -163,11 +161,7 @@ const currentPath = Astro.url.pathname;
     </div>
 
     <script>
-      import { customCursor } from '../scripts/cursor-original.js';
       import { themeToggle } from '../scripts/theme-original.js';
-
-      // Store cursor instance globally so we can refresh it after page transitions
-      let cursorInstance = null;
 
       function initMobileMenu() {
         const menuToggle = document.getElementById('menu-toggle');
@@ -525,7 +519,6 @@ const currentPath = Astro.url.pathname;
 
       // Initialize on first load
       document.addEventListener('DOMContentLoaded', function() {
-        cursorInstance = customCursor();
         initThemeToggles();
         initMobileMenu();
         initLightbox();
@@ -537,10 +530,6 @@ const currentPath = Astro.url.pathname;
         initMobileMenu();
         updateActiveLinks();
         initLightbox();
-        // Refresh cursor hover listeners for new page content
-        if (cursorInstance && cursorInstance.refreshHoverListeners) {
-          cursorInstance.refreshHoverListeners();
-        }
       });
     </script>
   </body>

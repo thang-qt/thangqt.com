@@ -236,38 +236,3 @@
   }
 }
 
-/* ===========================
-   Custom Cursor
-   =========================== */
-
-.cursor {
-  position: fixed;
-  width: var(--cursor-size);
-  height: var(--cursor-size);
-  border: 2px solid var(--color-accent);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transition: transform var(--transition-fast), opacity var(--transition-fast);
-  opacity: 0;
-  mix-blend-mode: difference;
-}
-
-.cursor.active {
-  opacity: 1;
-}
-
-.cursor.hover {
-  transform: scale(1.5);
-  background-color: rgba(var(--color-accent), 0.1);
-}
-
-@media (hover: none) and (pointer: coarse) {
-  body {
-    cursor: auto;
-  }
-  
-  .cursor {
-    display: none;
-  }
-}
