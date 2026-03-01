@@ -1462,6 +1462,60 @@ main {
 }
 
 /* ===========================================
+   NAVIGATION PROGRESS
+   =========================================== */
+
+.nav-progress {
+  --nav-progress: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1100;
+  transition: opacity 0.16s ease;
+}
+
+.nav-progress::before,
+.nav-progress::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.nav-progress::before {
+  background-color: color-mix(in srgb, var(--fg-color) 14%, transparent);
+}
+
+.nav-progress::after {
+  background-color: var(--fg-color);
+  transform-origin: left center;
+  transform: scaleX(var(--nav-progress));
+  transition: transform 0.18s linear;
+  will-change: transform;
+}
+
+.nav-progress.is-visible {
+  opacity: 1;
+}
+
+.nav-progress.is-active::after {
+  transition: none;
+}
+
+.nav-progress.is-complete::after {
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-progress::after {
+    transition-duration: 0.1s;
+  }
+}
+
+/* ===========================================
    VIEW TRANSITIONS
    =========================================== */
 

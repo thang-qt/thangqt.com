@@ -78,6 +78,8 @@ const currentPath = Astro.url.pathname;
   </head>
 
   <body class={`ly-default ${bodyClass}`.trim()} style={bodyStyle || undefined}>
+    <div class="nav-progress" id="nav-progress" transition:persist aria-hidden="true"></div>
+
     <!-- Mobile Header (hidden on desktop) -->
     <header class="mobile-header" transition:persist>
       <a href="/" class="site-logo">ThangQT</a>
@@ -226,6 +228,101 @@ const currentPath = Astro.url.pathname;
             link.removeAttribute('aria-current');
           }
         });
+      }
+
+      function initNavigationProgress() {
+        if (window.__navProgressInitialized) return;
+
+        const progressEl = document.getElementById('nav-progress');
+        if (!progressEl) return;
+
+        window.__navProgressInitialized = true;
+
+        const state = {
+          active: false,
+          value: 0,
+          delayTimer: null,
+          rafId: null,
+          hideTimer: null,
+          shownAt: 0,
+          lastFrameAt: 0,
+        };
+
+        function setProgress(nextValue) {
+          state.value = Math.max(0, Math.min(1, nextValue));
+          progressEl.style.setProperty('--nav-progress', String(state.value));
+        }
+
+        function startTrickle() {
+          cancelAnimationFrame(state.rafId);
+
+          function tick(now) {
+            if (!state.active) return;
+
+            if (!state.lastFrameAt) state.lastFrameAt = now;
+            const delta = Math.min(64, now - state.lastFrameAt);
+            state.lastFrameAt = now;
+
+            const next = Math.min(0.92, state.value + delta * 0.00038);
+            setProgress(next);
+
+            state.rafId = requestAnimationFrame(tick);
+          }
+
+          state.lastFrameAt = 0;
+          state.rafId = requestAnimationFrame(tick);
+        }
+
+        function start() {
+          clearTimeout(state.hideTimer);
+          cancelAnimationFrame(state.rafId);
+          clearTimeout(state.delayTimer);
+
+          progressEl.classList.remove('is-complete');
+
+          state.active = true;
+          setProgress(0.03);
+
+          state.delayTimer = setTimeout(() => {
+            if (!state.active) return;
+            progressEl.classList.add('is-visible');
+            progressEl.classList.add('is-active');
+            state.shownAt = performance.now();
+            setProgress(Math.max(state.value, 0.08));
+            startTrickle();
+          }, 220);
+        }
+
+        function complete() {
+          state.active = false;
+          clearTimeout(state.delayTimer);
+          cancelAnimationFrame(state.rafId);
+
+          if (!progressEl.classList.contains('is-visible')) {
+            setProgress(0);
+            return;
+          }
+
+          const elapsed = state.shownAt ? performance.now() - state.shownAt : 0;
+          const minVisible = 260;
+          const wait = Math.max(0, minVisible - elapsed);
+
+          progressEl.classList.remove('is-active');
+
+          state.hideTimer = setTimeout(() => {
+            setProgress(1);
+            progressEl.classList.add('is-complete');
+
+            state.hideTimer = setTimeout(() => {
+              progressEl.classList.remove('is-visible', 'is-complete');
+              setProgress(0);
+            }, 180);
+          }, wait);
+        }
+
+        document.addEventListener('astro:before-preparation', start);
+        document.addEventListener('astro:after-swap', complete);
+        document.addEventListener('astro:page-load', complete);
       }
 
       function initLightbox() {
@@ -519,6 +616,7 @@ const currentPath = Astro.url.pathname;
 
       // Initialize on first load
       document.addEventListener('DOMContentLoaded', function() {
+        initNavigationProgress();
         initThemeToggles();
         initMobileMenu();
         initLightbox();
