@@ -746,6 +746,21 @@ main {
   transform: scaleX(1);
 }
 
+.col-content a.home-inline-link {
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+.col-content a.home-inline-link::after {
+  display: none;
+}
+
+.col-content a.home-inline-link:hover,
+.col-content a.home-inline-link:focus-visible {
+  opacity: 0.7;
+}
+
 /* ===========================================
    BLOG/PROJECT LIST ITEMS
    =========================================== */
