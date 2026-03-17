@@ -111,16 +111,16 @@ const currentPath = Astro.url.pathname;
       </ul>
     </nav>
 
-    <!-- Column 1: Nav column (desktop only) -->
-    <div class="col-nav" transition:persist>
-      <div class="col-nav-top">
+    <!-- Column 1: Navigation panel (desktop only) -->
+    <div class="col-navigation" transition:persist>
+      <div class="col-navigation-top">
         <a href="/" class="site-logo">ThangQT</a>
         <button class="theme-toggle" id="theme-toggle-desktop" aria-label="Toggle theme">
           <span class="visually-hidden">Toggle theme</span>
         </button>
       </div>
       
-      <nav class="col-nav-bottom desktop-nav" aria-label="Main navigation">
+      <nav class="col-navigation-bottom desktop-nav" aria-label="Main navigation">
         <ul>
           {navItems.map(({ label, href }) => (
             <li>
@@ -133,7 +133,7 @@ const currentPath = Astro.url.pathname;
       </nav>
     </div>
 
-    <!-- Column 2 & 3: Main content -->
+    <!-- Column 2 & 3: Content and detail panels -->
     <main>
       <slot />
     </main>

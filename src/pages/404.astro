@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="404 - Page Not Found" description="The page you're looking for doesn't exist">
-  <section class="col-main" transition:name="col-main" transition:animate="fade">
+  <section class="col-content" transition:name="col-content" transition:animate="fade">
     <h1 class="error-title">404</h1>
     
     <div class="error-message error-message--default" style="display: none;">
@@ -33,7 +33,7 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <aside class="col-sidebar home-sidebar" transition:name="col-sidebar" transition:animate="fade">
+  <aside class="col-detail home-detail" transition:name="col-detail" transition:animate="fade">
     <div class="is-visible">
       <pre class="ascii-anim ascii-anim--404" aria-hidden="true"></pre>
     </div>

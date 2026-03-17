@@ -63,9 +63,9 @@ function formatDate(date: Date): string {
   jsonLdType="article"
 >
   <section
-    class:list={['col-main post-header', coverMode === 'title-background' ? 'has-title-bg' : '']}
+    class:list={['col-content post-header', coverMode === 'title-background' ? 'has-title-bg' : '']}
     style={coverBgImage ? `--post-cover-url: url('${coverBgImage.src}')` : undefined}
-    transition:name="col-main"
+    transition:name="col-content"
     transition:animate="fade"
   >
     <a href="/writing" class="back-link" aria-label="Back to writing">
@@ -82,9 +82,9 @@ function formatDate(date: Date): string {
   </section>
 
   <aside
-    class:list={['col-sidebar post-body', contentBackground ? 'has-content-bg' : '']}
+    class:list={['col-detail post-body', contentBackground ? 'has-content-bg' : '']}
     style={contentBackground ? `--post-content-bg-url: url('${contentBackground}')` : undefined}
-    transition:name="col-sidebar"
+    transition:name="col-detail"
     transition:animate="fade"
   >
     <div class="post-mobile-header">
