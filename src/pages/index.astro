@@ -97,7 +97,12 @@ import Layout from '../layouts/Layout.astro';
           const dx = s.x - pointer.x;
           const dy = s.y - pointer.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          ripple = Math.sin(dist * 0.35 - tick * 0.08) * 0.12;
+          const influenceRadius = 6;
+
+          if (dist < influenceRadius) {
+            const falloff = 1 - dist / influenceRadius;
+            ripple = Math.sin(dist * 0.35 - tick * 0.08) * 0.12 * falloff;
+          }
         }
         const b = Math.max(0, Math.min(1, s.brightness * twinkle + ripple));
 
