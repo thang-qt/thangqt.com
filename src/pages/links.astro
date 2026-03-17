@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import PaginationNav from '../components/PaginationNav.astro';
 import {
   formatLinkDate,
   formatLinkKind,
@@ -9,6 +10,9 @@ import {
   getPublishedLinks,
   resolveVia,
 } from '../utils/links';
+import { paginateItems } from '../utils/pagination';
+
+const PAGE_SIZE = 3;
 
 const { links, slugMap } = await getPublishedLinks();
 
@@ -16,6 +20,7 @@ const linksWithVia = links.map((link) => ({
   link,
   via: resolveVia(link.data.via, slugMap),
 }));
+const paginatedLinks = paginateItems(linksWithVia, 1, PAGE_SIZE);
 ---
 
 <Layout title="Links - ThangQT" description="A public bookmark archive of things I want to remember.">
@@ -31,7 +36,7 @@ const linksWithVia = links.map((link) => ({
       </div>
     ) : (
       <div class="links-list">
-        {linksWithVia.map(({ link, via }) => (
+        {paginatedLinks.items.map(({ link, via }) => (
           <article class="link-item" data-preview-trigger={link.slug}>
             <div class="link-item-main">
               <h2 class="link-title">
@@ -80,6 +85,13 @@ const linksWithVia = links.map((link) => ({
         ))}
       </div>
     )}
+
+    <PaginationNav
+      basePath="/links"
+      currentPage={paginatedLinks.currentPage}
+      totalPages={paginatedLinks.totalPages}
+      label="Links pagination"
+    />
   </section>
 
   <aside class="col-detail link-preview-detail" transition:name="col-detail" transition:animate="fade">

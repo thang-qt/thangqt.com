@@ -1,23 +1,39 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import PaginationNav from '../components/PaginationNav.astro';
+import Layout from '../../../layouts/Layout.astro';
+import PaginationNav from '../../../components/PaginationNav.astro';
 import { getCollection } from 'astro:content';
-import { paginateItems } from '../utils/pagination';
+import { paginateItems } from '../../../utils/pagination';
 
 const PAGE_SIZE = 8;
+
+export async function getStaticPaths() {
+  const pageSize = 8;
+  const posts = await getCollection('writing', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(posts.length / pageSize));
+
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
+    params: { page: String(index + 2) },
+  }));
+}
+
+const currentPage = Number(Astro.params.page);
 
 const posts = await getCollection('writing', ({ data }) => {
   return import.meta.env.PROD ? data.draft !== true : true;
 });
+
 const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const paginatedPosts = paginateItems(sortedPosts, 1, PAGE_SIZE);
+const paginatedPosts = paginateItems(sortedPosts, currentPage, PAGE_SIZE);
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 ---
 
-<Layout title="Writing - ThangQT" description="My various thoughts on life, tech, and everything in between">
+<Layout title={`Writing - Page ${paginatedPosts.currentPage} - ThangQT`} description="My various thoughts on life, tech, and everything in between">
   <section class="col-content" transition:name="col-content" transition:animate="fade">
     <div class="list-mobile-header">
       <h1 class="list-page-title">Writing</h1>

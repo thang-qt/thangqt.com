@@ -1,25 +1,42 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import PaginationNav from '../components/PaginationNav.astro';
+import Layout from '../../../layouts/Layout.astro';
+import PaginationNav from '../../../components/PaginationNav.astro';
 import { getCollection } from 'astro:content';
-import { paginateItems } from '../utils/pagination';
+import { paginateItems } from '../../../utils/pagination';
 
 const PAGE_SIZE = 8;
+
+function getSortKey(value: string) {
+  return value.includes('-') ? value : `${value}-00`;
+}
+
+export async function getStaticPaths() {
+  const pageSize = 8;
+  const projects = await getCollection('projects', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(projects.length / pageSize));
+
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
+    params: { page: String(index + 2) },
+  }));
+}
+
+const currentPage = Number(Astro.params.page);
 
 const projects = await getCollection('projects', ({ data }) => {
   return import.meta.env.PROD ? data.draft !== true : true;
 });
 
-const getSortKey = (value) => (value.includes('-') ? value : `${value}-00`);
-
-// Sort by year/month descending
 const sortedProjects = projects.sort((a, b) =>
   getSortKey(b.data.year).localeCompare(getSortKey(a.data.year))
 );
-const paginatedProjects = paginateItems(sortedProjects, 1, PAGE_SIZE);
+
+const paginatedProjects = paginateItems(sortedProjects, currentPage, PAGE_SIZE);
 ---
 
-<Layout title="Projects - ThangQT" description="Selected works and projects">
+<Layout title={`Projects - Page ${paginatedProjects.currentPage} - ThangQT`} description="Selected works and projects">
   <section class="col-content" transition:name="col-content" transition:animate="fade">
     <div class="list-mobile-header">
       <h1 class="list-page-title">Projects</h1>
