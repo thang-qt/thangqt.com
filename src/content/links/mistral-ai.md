@@ -9,4 +9,3 @@ tags:
 kind: tool
 ---
 
-It stands out mostly because the interaction details feel considered instead of generic.

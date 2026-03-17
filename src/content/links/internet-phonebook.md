@@ -14,4 +14,3 @@ via:
     slug: "elles-homepage"
 ---
 
-This feels like a good rabbit hole for finding sites with actual character.

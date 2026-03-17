@@ -10,4 +10,3 @@ tags:
 kind: portfolio
 ---
 
-Personal sites like this make the web feel handcrafted again.
