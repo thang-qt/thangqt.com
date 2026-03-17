@@ -754,6 +754,148 @@ main {
   padding: calc(var(--margin) / 2) 0;
 }
 
+.link-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--margin);
+  padding: calc(var(--margin) * 0.75) 0;
+}
+
+.link-item + .link-item {
+  border-top: 1px solid var(--divider-color);
+}
+
+.link-item-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.link-title {
+  margin: 0;
+  font-size: var(--fs-body);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.link-source {
+  color: var(--fg-color);
+  text-decoration: none;
+  position: relative;
+}
+
+.link-source::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.link-item:hover .link-source::after,
+.link-source:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.link-meta,
+.link-via,
+.link-detail-meta,
+.link-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.link-meta,
+.link-detail-meta {
+  margin: 0.35rem 0 0;
+  font-size: var(--fs-caption);
+  color: var(--fg-color-medium);
+}
+
+.link-meta span:not(:last-child)::after,
+.link-detail-meta span:not(:last-child)::after {
+  content: '·';
+  margin-left: 0.75rem;
+}
+
+.link-note {
+  margin: 0.65rem 0 0;
+  color: var(--fg-color);
+}
+
+.link-via {
+  margin: 0.65rem 0 0;
+  font-size: var(--fs-caption);
+  color: var(--fg-color-medium);
+}
+
+.link-via > span {
+  color: var(--fg-color-medium);
+}
+
+.link-via a,
+.link-detail-actions a,
+.link-permalink {
+  color: var(--fg-color);
+  text-decoration: none;
+}
+
+.link-via a::after,
+.link-detail-actions a::after,
+.link-permalink::after {
+  display: none;
+}
+
+.link-via a:hover,
+.link-detail-actions a:hover,
+.link-permalink:hover {
+  opacity: 0.7;
+}
+
+.link-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.link-tags li {
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--divider-color);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  color: var(--fg-color-medium);
+}
+
+.link-permalink {
+  flex-shrink: 0;
+  font-size: var(--fs-caption);
+  color: var(--fg-color-medium);
+  padding-top: 0.1rem;
+}
+
+.links-empty-state {
+  display: grid;
+  gap: 0.25rem;
+}
+
+@media (max-width: 767px) {
+  .link-item {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .link-permalink {
+    padding-top: 0;
+  }
+}
+
 .post-item a,
 .project-item a {
   display: block;
@@ -1066,6 +1208,47 @@ main {
 /* Inner content padding for scrollbar spacing */
 .post-body .prose {
   padding-right: var(--post-body-prose-pad-right);
+}
+
+.link-header .post-header-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.link-page-domain {
+  margin-bottom: 0;
+}
+
+.link-detail-actions {
+  margin: 0;
+  font-size: var(--fs-caption);
+}
+
+.link-body {
+  gap: 1.5rem;
+}
+
+.link-note-detail {
+  max-width: 72ch;
+  margin: 0;
+}
+
+.link-detail-section {
+  max-width: 72ch;
+}
+
+.link-detail-section h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.link-via-detail {
+  margin-top: 0;
+}
+
+.link-prose {
+  padding-top: 0.5rem;
 }
 
 

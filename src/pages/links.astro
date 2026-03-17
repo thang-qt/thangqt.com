@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {
+  formatLinkDate,
+  getHostnameLabel,
+  getLinkHref,
+  getLinkTitle,
+  getPublishedLinks,
+  resolveVia,
+} from '../utils/links';
+
+const { links, slugMap } = await getPublishedLinks();
+
+const linksWithVia = links.map((link) => ({
+  link,
+  via: resolveVia(link.data.via, slugMap),
+}));
+---
+
+<Layout title="Links - ThangQT" description="A public bookmark archive of things I want to remember.">
+  <section class="col-main" transition:name="col-main" transition:animate="fade">
+    <div class="list-mobile-header">
+      <h1 class="list-page-title">Links</h1>
+    </div>
+
+    {linksWithVia.length === 0 ? (
+      <div class="links-empty-state">
+        <p>No links yet.</p>
+        <p>Add entries in <code>src/content/links/</code> with a <code>slug</code> and <code>url</code>.</p>
+      </div>
+    ) : (
+      linksWithVia.map(({ link, via }) => (
+        <article class="link-item">
+          <div class="link-item-main">
+            <h2 class="link-title">
+              <a href={link.data.url} class="link-source" target="_blank" rel="noreferrer">
+                {getLinkTitle(link)}
+              </a>
+            </h2>
+
+            <p class="link-meta">
+              <span>{getHostnameLabel(link.data.url)}</span>
+              {link.data.kind && <span>{link.data.kind}</span>}
+              {formatLinkDate(link.data.date) && <span>{formatLinkDate(link.data.date)}</span>}
+            </p>
+
+            {link.data.note && <p class="link-note">{link.data.note}</p>}
+
+            {via.length > 0 && (
+              <p class="link-via">
+                <span>via</span>
+                {via.map((item) => (
+                  <a href={item.href} target={item.type === 'external' ? '_blank' : undefined} rel={item.type === 'external' ? 'noreferrer' : undefined}>
+                    {item.label}
+                  </a>
+                ))}
+              </p>
+            )}
+
+            {link.data.tags && link.data.tags.length > 0 && (
+              <ul class="link-tags" aria-label="Tags">
+                {link.data.tags.map((tag) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <a href={getLinkHref(link)} class="link-permalink">Permalink</a>
+        </article>
+      ))
+    )}
+  </section>
+
+  <aside class="col-sidebar" transition:name="col-sidebar" transition:animate="fade">
+    <div class="is-visible">
+      <h2>Links</h2>
+    </div>
+  </aside>
+</Layout>

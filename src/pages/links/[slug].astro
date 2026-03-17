@@ -1,0 +1,99 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {
+  formatLinkDate,
+  getHostnameLabel,
+  getLinkTitle,
+  getPublishedLinks,
+  hasRenderableLinkBody,
+  resolveVia,
+} from '../../utils/links';
+
+export async function getStaticPaths() {
+  const { links } = await getPublishedLinks();
+
+  return links.map((link) => ({
+    params: { slug: link.slug },
+    props: { link },
+  }));
+}
+
+const { link } = Astro.props;
+const { Content } = await link.render();
+const { slugMap } = await getPublishedLinks();
+const via = resolveVia(link.data.via, slugMap);
+const hasBody = hasRenderableLinkBody(link);
+const pageTitle = getLinkTitle(link);
+const pageDescription = link.data.note || `Saved link to ${getHostnameLabel(link.data.url)}.`;
+---
+
+<Layout
+  title={`${pageTitle} - Links - ThangQT`}
+  description={pageDescription}
+  publishedDate={link.data.date}
+  tags={link.data.tags}
+  ogType="website"
+>
+  <section class="col-main post-header link-header" transition:name="col-main" transition:animate="fade">
+    <a href="/links" class="back-link" aria-label="Back to links">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Back</span>
+    </a>
+
+    <div class="post-header-content">
+      <p class="post-page-date link-page-domain">{getHostnameLabel(link.data.url)}</p>
+      <h1 class="post-page-title">{pageTitle}</h1>
+
+      <div class="link-detail-meta">
+        {link.data.kind && <span>{link.data.kind}</span>}
+        {formatLinkDate(link.data.date) && <span>{formatLinkDate(link.data.date)}</span>}
+      </div>
+
+      <p class="link-detail-actions">
+        <a href={link.data.url} target="_blank" rel="noreferrer">Visit source</a>
+      </p>
+    </div>
+  </section>
+
+  <aside class="col-sidebar post-body link-body" transition:name="col-sidebar" transition:animate="fade">
+    <div class="post-mobile-header">
+      <p class="post-page-date link-page-domain">{getHostnameLabel(link.data.url)}</p>
+      <h1 class="post-page-title">{pageTitle}</h1>
+    </div>
+
+    {link.data.note && <p class="link-note link-note-detail">{link.data.note}</p>}
+
+    {via.length > 0 && (
+      <div class="link-detail-section">
+        <h2>Via</h2>
+        <p class="link-via link-via-detail">
+          {via.map((item) => (
+            <a href={item.href} target={item.type === 'external' ? '_blank' : undefined} rel={item.type === 'external' ? 'noreferrer' : undefined}>
+              {item.label}
+            </a>
+          ))}
+        </p>
+      </div>
+    )}
+
+    {link.data.tags && link.data.tags.length > 0 && (
+      <div class="link-detail-section">
+        <h2>Tags</h2>
+        <ul class="link-tags" aria-label="Tags">
+          {link.data.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {hasBody && (
+      <article class="prose link-prose">
+        <Content />
+      </article>
+    )}
+  </aside>
+</Layout>
