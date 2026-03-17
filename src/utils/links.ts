@@ -42,6 +42,10 @@ export async function getPublishedLinks() {
 
     if (dateDiff !== 0) return dateDiff;
 
+    const orderDiff = (a.data.order ?? Number.MAX_SAFE_INTEGER) - (b.data.order ?? Number.MAX_SAFE_INTEGER);
+
+    if (orderDiff !== 0) return orderDiff;
+
     return a.slug.localeCompare(b.slug);
   });
 
