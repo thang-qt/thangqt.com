@@ -65,6 +65,10 @@ export function getHostnameLabel(url: string) {
   }
 }
 
+export function getDisplayUrl(url: string) {
+  return url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+}
+
 export function formatLinkDate(date?: Date) {
   if (!date) return null;
 
@@ -73,6 +77,11 @@ export function formatLinkDate(date?: Date) {
     day: 'numeric',
     year: 'numeric',
   });
+}
+
+export function formatLinkKind(kind?: string) {
+  if (!kind) return null;
+  return kind.charAt(0).toUpperCase() + kind.slice(1);
 }
 
 export function resolveVia(via: LinkEntry['data']['via'], slugMap: Map<string, LinkEntry>): ResolvedVia[] {

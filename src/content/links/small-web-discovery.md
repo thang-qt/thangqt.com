@@ -8,10 +8,7 @@ tags:
   - web
   - writing
 kind: article
-via:
-  - type: external
-    url: "https://news.ycombinator.com/item?id=41934348"
-    title: "Hacker News"
+archiveUrl: "https://example.com"
 ---
 
 This is exactly the kind of page I want the links section to surface: thoughtful, personal, and worth revisiting later.

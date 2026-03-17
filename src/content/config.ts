@@ -50,6 +50,7 @@ const links = defineCollection({
     title: z.string().optional(),
     date: z.date().optional(),
     note: z.string().optional(),
+    archiveUrl: z.string().url().optional(),
     tags: z.array(z.string()).optional(),
     kind: z.enum(['article', 'video', 'repo', 'tool', 'paper', 'thread', 'podcast']).optional(),
     via: z.array(linkVia).optional().default([]),

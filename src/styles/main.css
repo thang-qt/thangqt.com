@@ -760,6 +760,7 @@ main {
   justify-content: space-between;
   gap: var(--margin);
   padding: calc(var(--margin) * 0.75) 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .link-item + .link-item {
@@ -778,13 +779,20 @@ main {
   line-height: 1.45;
 }
 
-.link-source {
+.link-source,
+.link-title-link {
   color: var(--fg-color);
   text-decoration: none;
   position: relative;
 }
 
-.link-source::after {
+.link-source:visited,
+.link-title-link:visited {
+  color: var(--fg-color);
+}
+
+.link-source::after,
+.link-title-link::after {
   content: '';
   position: absolute;
   left: 0;
@@ -798,7 +806,9 @@ main {
 }
 
 .link-item:hover .link-source::after,
-.link-source:focus-visible::after {
+.link-item:hover .link-title-link::after,
+.link-source:focus-visible::after,
+.link-title-link:focus-visible::after {
   transform: scaleX(1);
 }
 
@@ -839,23 +849,58 @@ main {
   color: var(--fg-color-medium);
 }
 
+.link-via-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.link-via-item + .link-via-item::before {
+  content: '\00b7';
+  margin-right: 0.75rem;
+  color: var(--fg-color-medium);
+}
+
 .link-via a,
 .link-detail-actions a,
-.link-permalink {
+.link-permalink,
+.link-title-link {
   color: var(--fg-color);
   text-decoration: none;
+  position: relative;
 }
 
-.link-via a::after,
+.link-inline {
+  color: var(--fg-color);
+  text-decoration: none;
+  position: relative;
+}
+
+.link-inline:visited {
+  color: var(--fg-color);
+}
+
+.link-inline::after,
 .link-detail-actions a::after,
 .link-permalink::after {
-  display: none;
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
 }
 
-.link-via a:hover,
-.link-detail-actions a:hover,
-.link-permalink:hover {
-  opacity: 0.7;
+.link-inline:hover::after,
+.link-inline:focus-visible::after,
+.link-detail-actions a:hover::after,
+.link-detail-actions a:focus-visible::after,
+.link-permalink:hover::after,
+.link-permalink:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .link-tags {
@@ -880,6 +925,19 @@ main {
   padding-top: 0.1rem;
 }
 
+.link-permalink-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.link-source-inline {
+  flex-shrink: 0;
+  font-size: var(--fs-caption);
+  color: var(--fg-color-medium);
+  padding-top: 0.1rem;
+}
+
 .links-empty-state {
   display: grid;
   gap: 0.25rem;
@@ -892,6 +950,10 @@ main {
   }
 
   .link-permalink {
+    padding-top: 0;
+  }
+
+  .link-source-inline {
     padding-top: 0;
   }
 }
@@ -1215,13 +1277,34 @@ main {
   gap: 1rem;
 }
 
-.link-page-domain {
-  margin-bottom: 0;
+.links-list-column {
+  padding-bottom: calc(var(--margin) * 2);
 }
 
-.link-detail-actions {
-  margin: 0;
-  font-size: var(--fs-caption);
+.link-preview-sidebar {
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.links-preview-shell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.link-preview-panel {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+  flex: 1;
+  padding: 0;
+  overflow: hidden;
+}
+
+.link-page-domain {
+  margin-bottom: 0.4rem;
 }
 
 .link-body {
@@ -1229,26 +1312,144 @@ main {
 }
 
 .link-note-detail {
-  max-width: 72ch;
+  max-width: none;
   margin: 0;
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+  line-height: 1.55;
+}
+
+.link-note-main {
+  margin-top: 0;
+  max-width: none;
+}
+
+.link-detail-top {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.65fr) minmax(0, 1.35fr);
+  gap: 0 1.5rem;
+  width: 100%;
+  align-items: start;
+}
+
+.link-detail-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  width: 100%;
+  border-top: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--divider-color);
 }
 
 .link-detail-section {
-  max-width: 72ch;
+  max-width: none;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--divider-color);
 }
 
-.link-detail-section h2 {
+.link-detail-section:last-child {
+  border-bottom: 0;
+}
+
+.link-detail-section h3 {
   margin: 0 0 0.5rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
   letter-spacing: 0.02em;
+  font-weight: 600;
+  color: var(--fg-color-medium);
+  text-transform: uppercase;
 }
 
 .link-via-detail {
   margin-top: 0;
 }
 
+.link-archive-link {
+  display: inline-flex;
+  align-items: center;
+  word-break: break-word;
+}
+
+.link-page-domain .link-inline {
+  color: var(--fg-color-medium);
+}
+
+.link-page-domain .link-inline:visited {
+  color: var(--fg-color-medium);
+}
+
+.link-page-domain .link-inline:hover,
+.link-page-domain .link-inline:focus-visible {
+  color: var(--fg-color-medium);
+}
+
 .link-prose {
-  padding-top: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+.link-preview-stamp {
+  position: absolute;
+  right: calc(var(--margin) * 1.35);
+  bottom: calc(var(--margin) * 1.35);
+  margin: 0;
+  padding: 0.25rem 0.35rem 0.22em 0.5rem;
+  font-size: clamp(4rem, 7vw, 7.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+  font-weight: 800;
+  text-align: right;
+  color: var(--fg-color);
+  background: linear-gradient(135deg, transparent 0%, var(--bg-color) 18%, var(--bg-color) 100%);
+  z-index: 1;
+}
+
+.link-summary-column .post-header-content {
+  margin-top: 0;
+}
+
+.link-detail-column {
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+
+.link-detail-column .link-tags {
+  margin-top: 0;
+  gap: 0.45rem;
+}
+
+.link-detail-column .link-tags li {
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--divider-color);
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 1199px) {
+  .link-preview-sidebar {
+    display: none;
+  }
+
+  .link-detail-column {
+    padding: 0;
+    padding-top: 0;
+  }
+
+  .link-detail-column .post-mobile-header {
+    margin-bottom: var(--margin);
+  }
+
+  .link-detail-top {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .link-page-domain {
+    margin-bottom: 0.35rem;
+  }
+
+  .link-detail-meta-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 
