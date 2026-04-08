@@ -1,0 +1,39 @@
+---
+title: Kairos
+year: "2026-03"
+description: Lightweight OSS chat client for hosted LLMs
+cover: ./chat-default.png
+---
+
+import FullWidthImage from '../../../components/FullWidthImage.astro';
+import ProjectLink from '../../../components/ProjectLink.astro';
+import focusedChat from './focused-chat-with-right-navigator.png';
+
+## Why?
+
+Because I want one single chat app for every model and every conversation.
+
+But aren't there already thousands of apps like this out there? That's true. I used Open WebUI for a long time, but it's really heavy on both the client side and server side. It's bundled with local model support, so that makes sense. But I don't need all that. I just need a client that stores all my conversations and lets me chat with models via API.
+
+There are some that resemble this, but they are either not open source, too feature-heavy, or I just don't like the UI.
+
+## How?
+
+I came across [webclaw](https://github.com/ibelick/webclaw), which is a simple client for OpenClaw. I liked the UI and decided to extract the frontend UI and write a new backend in Go for it.
+
+<FullWidthImage
+  src={focusedChat}
+  alt="Kairos focused chat view with right-side conversation navigator"
+  caption="Kairos keeps the interface minimal while still making long conversations easy to navigate."
+/>
+
+## Current state
+
+It supports OpenAI-compatible providers. Only chat completions are implemented right now, so there is no tool use yet, which is indeed a flaw. However, I don't have time for that yet, and the current state is already good enough for me most of the time.
+
+<ProjectLink
+  links={[
+    { href: 'https://github.com/thang-qt/Kairos', label: 'View on GitHub' },
+    { href: 'https://github.com/ibelick/webclaw', label: 'See the UI inspiration' },
+  ]}
+/>
