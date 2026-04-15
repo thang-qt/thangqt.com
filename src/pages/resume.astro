@@ -1,0 +1,142 @@
+---
+import ResumeLayout from '../layouts/ResumeLayout.astro';
+---
+
+<ResumeLayout
+  title="Resume - ThangQT"
+  description="Resume of Tô Quang Thắng, computer science student and full-stack developer."
+>
+  <section class="resume-page">
+    <article class="resume-document">
+      <header class="resume-header">
+        <div class="resume-name-block">
+          <h1 class="resume-name">Tô Quang Thắng</h1>
+        </div>
+
+        <div class="resume-meta">
+          <p class="resume-location">Hanoi, Vietnam</p>
+          <div class="resume-links" aria-label="Resume contact links">
+            <a href="tel:0387000902">+84 387 000 902</a>
+            <a href="mailto:thang@thangqt.com">thang@thangqt.com</a>
+            <a href="https://www.github.com/thang-qt" target="_blank" rel="noreferrer">github.com/thang-qt</a>
+          </div>
+        </div>
+
+        <p class="resume-summary">
+          Computer Science student who learns by building and breaking things. Comfortable
+          working in Linux and across the full web stack, with a focus on clean architecture,
+          testing, and thoughtful tool selection.
+        </p>
+      </header>
+
+        <div class="resume-grid">
+          <section class="resume-section" aria-labelledby="resume-skills">
+            <h2 class="resume-section-title" id="resume-skills">Skills</h2>
+            <div class="resume-skills">
+              <div class="resume-skill-row">
+                <p class="resume-skill-label">Languages</p>
+                <p>C++, Java, Python, JavaScript, TypeScript, Go</p>
+              </div>
+              <div class="resume-skill-row">
+                <p class="resume-skill-label">Frameworks &amp; Data</p>
+                <p>React, Next.js, NestJS, Vite, PostgreSQL, Supabase</p>
+              </div>
+              <div class="resume-skill-row">
+                <p class="resume-skill-label">Tools &amp; Platforms</p>
+                <p>Linux, Docker, Git, Nix, Cloudflare Workers</p>
+              </div>
+              <div class="resume-skill-row">
+                <p class="resume-skill-label">Spoken Languages</p>
+                <p>Vietnamese (Native), English (Upper-Intermediate)</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="resume-section" aria-labelledby="resume-experience">
+            <h2 class="resume-section-title" id="resume-experience">Experience</h2>
+            <article class="resume-entry">
+              <header class="resume-entry-header">
+                <div class="resume-entry-heading">
+                  <h3 class="resume-entry-title">Full Stack Intern</h3>
+                  <p class="resume-entry-org">BAP IT Co., JSC</p>
+                </div>
+                <p class="resume-entry-meta">
+                  <span>Hanoi</span>
+                  <span>Feb 2026 - Present</span>
+                </p>
+              </header>
+              <ul class="resume-bullets">
+                <li>Defined the initial API specification, database schema, and AGENTS.md development conventions, then scaffolded the project foundation with Docker Compose, tooling, and GitHub Actions CI.</li>
+                <li>Built the staff dashboard, JWT authentication with RBAC, candidate invite lifecycle with link revocation, and question bank/session management workflows.</li>
+                <li>Integrated a self-hosted Judge0 sandbox for multi-language code execution and prototyped real-time collaboration using Yjs and WebSocket.</li>
+                <li>Set up testing infrastructure across the stack with Jest and Playwright, and built a Codeforces Parquet importer to bulk-seed the question bank.</li>
+              </ul>
+            </article>
+          </section>
+
+          <section class="resume-section" aria-labelledby="resume-projects">
+            <h2 class="resume-section-title" id="resume-projects">Products &amp; Projects</h2>
+
+            <article class="resume-entry">
+              <div class="resume-project-top">
+                <h3 class="resume-project-title">Vocaxis</h3>
+                <p class="resume-project-year">2025</p>
+              </div>
+              <p class="resume-project-summary">
+                <a href="https://vocaxis.com" target="_blank" rel="noreferrer">vocaxis.com</a>
+                {' '}— Web platform for English vocabulary learning with AI-generated entries,
+                multi-language translations, and FSRS spaced repetition.
+              </p>
+              <ul class="resume-bullets">
+                <li>Built a StarDict-compatible dictionary loadable into Kindle and GoldenDict, served via Cloudflare Workers/D1.</li>
+                <li>Created a Plasmo browser extension for context-aware vocabulary capture from any webpage.</li>
+                <li>Publicly launched on Next.js/Supabase and reached around 400 user signups organically.</li>
+              </ul>
+            </article>
+
+            <article class="resume-entry">
+              <div class="resume-project-top">
+                <h3 class="resume-project-title">Ngàn Lá</h3>
+                <p class="resume-project-year">2025</p>
+              </div>
+              <p class="resume-project-summary">
+                <a href="https://thangqt.com/projects/nganla" target="_blank" rel="noreferrer">thangqt.com/projects/nganla</a>
+                {' '}— Online exam platform for Vietnamese high school students with textbook mapping and analytics.
+              </p>
+              <ul class="resume-bullets">
+                <li>Built with Next.js, Go (Chi) backend, and shadcn/ui; structured content by grade, subject, and textbook chapter.</li>
+                <li>Developed automated content crawlers and an LLM-powered assistant to generate and bulk-import exam questions.</li>
+              </ul>
+            </article>
+
+            <article class="resume-entry">
+              <div class="resume-project-top">
+                <h3 class="resume-project-title">Spanboard</h3>
+                <p class="resume-project-year">2025</p>
+              </div>
+              <p class="resume-project-summary">
+                <a href="https://thangqt.com/projects/spanboard" target="_blank" rel="noreferrer">thangqt.com/projects/spanboard</a>
+                {' '}— Time-journaling app for documenting high-resolution daily activity spans.
+              </p>
+              <ul class="resume-bullets">
+                <li>Designed an accessibility-focused interface using React Aria and Next.js.</li>
+                <li>Implemented Pomodoro-based focus sessions with persistent storage via Supabase.</li>
+              </ul>
+            </article>
+          </section>
+
+          <section class="resume-section" aria-labelledby="resume-education">
+            <h2 class="resume-section-title" id="resume-education">Education</h2>
+            <article class="resume-entry">
+              <div class="resume-education-top">
+                <h3 class="resume-education-title">VNU University of Engineering and Technology</h3>
+                <p class="resume-education-meta">Hanoi</p>
+                <p class="resume-education-meta">2023 - 2027</p>
+              </div>
+              <p class="resume-project-summary">Computer Science</p>
+            </article>
+          </section>
+        </div>
+    </article>
+  </section>
+</ResumeLayout>
