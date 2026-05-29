@@ -1,0 +1,32 @@
+---
+title: Tilia
+year: "2026-04"
+description: Focused modern email client with a separate background daemon
+---
+
+import FullWidthImage from '../../../components/FullWidthImage.astro';
+import inbox from './inbox.png';
+import reader from './reader.png';
+
+Tilia is an experimental desktop email client I started after getting frustrated with Thunderbird. Thunderbird is great in many ways, but the desktop app has to stay open for sync and notifications, and it does not even have tray support. The UI also never quite felt right to me.
+
+The other reason was simpler: I was bored and wanted to experiment with Tauri. Email clients need a web renderer anyway, so Tauri felt like a natural fit. I did not want to build a mail engine from scratch though. Email is important and full of edge cases, and I am not foolish enough to reinvent that wheel. I looked around for crates and CLI projects that could act as the backend, and found the Pimalaya stack, which already provides a lot of the mail functionality I needed.
+
+The architecture became a separate daemon and desktop client. The daemon handles account state, sync, local storage, notifications, and the orchestration around the Pimalaya/email stack. The Tauri app is just the frontend: mailbox UI, reader, compose, settings, themes, and account management.
+
+<FullWidthImage
+  src={inbox}
+  alt="Tilia inbox with accounts, message list, and message reader"
+  caption="The default three-column mailbox layout, with accounts and folders, a message list, and the reader."
+/>
+
+I got it to a basic working state. It can read and send simple email, supports multiple accounts, has unified mailbox views, and includes several built-in themes with custom CSS overrides. Gmail OAuth also works, but that is where more quirks started to show up. The deeper I went into OAuth and backend integration, the more rough edges I found. Then school, internship work, and other interests took over, so I paused it for a while.
+
+<FullWidthImage
+  src={reader}
+  alt="Tilia two-column reader layout with the account sidebar collapsed"
+  caption="A more focused two-column view, with the sidebar collapsed and the message content taking the main space."
+/>
+
+I still see potential in it when I open it again. I have thought about open sourcing it, but I am holding off for now. I want to find time to clean up the rough edges and make the daemon integration feel less fragile first.
+
