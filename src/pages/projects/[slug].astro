@@ -1,7 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
+import { getFirstContentImage } from '../../utils/contentImages';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ data }) => {
@@ -29,6 +30,14 @@ const bodyStyle = [
 ]
   .filter(Boolean)
   .join('; ');
+
+// SEO image fallback order: explicit SEO image -> cover -> first content image -> site default.
+// This affects metadata only; it does not render a visual cover.
+const firstContentImage = getFirstContentImage('projects', project.id, project.body);
+const seoImage = project.data.seoImage ?? project.data.cover ?? firstContentImage;
+const ogImageUrl = seoImage
+  ? (await getImage({ src: seoImage, width: 1200 })).src
+  : undefined;
 ---
 
 <Layout
@@ -36,6 +45,7 @@ const bodyStyle = [
   description={project.data.description || project.data.title}
   bodyClass={bodyClass}
   bodyStyle={bodyStyle || undefined}
+  ogImage={ogImageUrl}
 >
   <section class="col-content post-header" transition:name="col-content" transition:animate="fade">
     <a href="/projects" class="back-link" aria-label="Back to projects">
@@ -52,9 +62,9 @@ const bodyStyle = [
   </section>
 
   <aside class="col-detail post-body project-body" transition:name="col-detail" transition:animate="fade">
-    <div class="post-mobile-header">
+    <div class="post-mobile-header" aria-hidden="true">
       <p class="post-page-date">{project.data.year.slice(0, 4)}</p>
-      <h1 class="post-page-title">{project.data.title}</h1>
+      <p class="post-page-title">{project.data.title}</p>
     </div>
     {project.data.cover && (
       <figure class="post-cover">

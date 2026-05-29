@@ -61,11 +61,11 @@ const websiteSchema = {
 // Article schema (for blog posts)
 const articleSchema = {
   '@context': 'https://schema.org',
-  '@type': 'Article',
+  '@type': 'BlogPosting',
   headline: title,
   description: description,
   url: absoluteUrl,
-  image: absoluteImage,
+  ...(absoluteImage ? { image: absoluteImage } : {}),
   datePublished: publishedDate?.toISOString(),
   dateModified: modifiedDate?.toISOString() || publishedDate?.toISOString(),
   author: {

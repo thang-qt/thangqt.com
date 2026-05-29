@@ -60,13 +60,13 @@ const pageDescription = link.data.note || `Saved link to ${getHostnameLabel(link
   </section>
 
   <aside class="col-detail post-body link-body link-detail-column" transition:name="col-detail" transition:animate="fade">
-    <div class="post-mobile-header">
+    <div class="post-mobile-header" aria-hidden="true">
       <p class="post-page-date link-page-domain">
-        <a href={link.data.url} class="link-inline" target="_blank" rel="noreferrer">
+        <a href={link.data.url} class="link-inline" target="_blank" rel="noreferrer" tabindex="-1">
           <span>{getHostnameLabel(link.data.url)}</span>
         </a>
       </p>
-      <h1 class="post-page-title">{pageTitle}</h1>
+      <p class="post-page-title">{pageTitle}</p>
     </div>
 
     <div class="link-detail-top">

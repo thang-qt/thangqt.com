@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
+import { getFirstContentImage } from '../../utils/contentImages';
 
 export async function getStaticPaths() {
   const posts = await getCollection('writing', ({ data }) => {
@@ -25,9 +26,12 @@ const coverBgImage = post.data.cover && coverMode === 'title-background'
   ? await getImage({ src: post.data.cover, width: 1920 })
   : null;
 
-// Get cover image URL for OG image
-const ogImageUrl = post.data.cover
-  ? (await getImage({ src: post.data.cover, width: 1200 })).src
+// SEO image fallback order: explicit SEO image -> cover -> first content image -> site default.
+// This affects metadata only; it does not render a visual cover.
+const firstContentImage = getFirstContentImage('writing', post.id, post.body);
+const seoImage = post.data.seoImage ?? post.data.cover ?? firstContentImage;
+const ogImageUrl = seoImage
+  ? (await getImage({ src: seoImage, width: 1200 })).src
   : undefined;
 
 const bodyClass = [
@@ -59,6 +63,7 @@ function formatDate(date: Date): string {
   ogImage={ogImageUrl}
   ogType="article"
   publishedDate={post.data.date}
+  modifiedDate={post.data.updated}
   tags={post.data.tags}
   jsonLdType="article"
 >
@@ -87,9 +92,9 @@ function formatDate(date: Date): string {
     transition:name="col-detail"
     transition:animate="fade"
   >
-    <div class="post-mobile-header">
+    <div class="post-mobile-header" aria-hidden="true">
       <p class="post-page-date">{formatDate(post.data.date)}</p>
-      <h1 class="post-page-title">{post.data.title}</h1>
+      <p class="post-page-title">{post.data.title}</p>
     </div>
     {post.data.cover && (
       <figure class="post-cover">
