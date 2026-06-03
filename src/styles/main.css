@@ -646,6 +646,274 @@ pre {
   display: none;
 }
 
+.desktop-launcher[hidden] {
+  display: none;
+}
+
+.desktop-launcher {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.desktop-launcher__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: color-mix(in srgb, var(--wm-content) 18%, transparent);
+  backdrop-filter: blur(1px);
+}
+
+.desktop-launcher__panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.55rem;
+  width: min(100%, 32rem);
+  padding: 0.65rem;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-window-radius);
+  background: var(--wm-content);
+  box-shadow: var(--wm-shadow), 0 1px 0 var(--wm-glint) inset;
+}
+
+.desktop-launcher__search {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: center;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 55%, transparent);
+  border-radius: var(--wm-window-radius);
+  background: var(--wm-raised);
+  font-family: var(--font-mono);
+}
+
+.desktop-launcher__search input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--wm-ink);
+  font: inherit;
+}
+
+.desktop-launcher__search input::placeholder {
+  color: color-mix(in srgb, var(--wm-ink) 45%, transparent);
+}
+
+.desktop-launcher__search kbd {
+  padding: 0.12rem 0.38rem;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 45%, transparent);
+  border-radius: calc(var(--wm-window-radius) - 2px);
+  background: var(--wm-chrome);
+  font: inherit;
+  font-size: 0.68rem;
+  color: color-mix(in srgb, var(--wm-ink) 58%, transparent);
+}
+
+.desktop-launcher__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.8rem, 1fr));
+  gap: 0.35rem;
+  max-height: min(24rem, 58dvh);
+  overflow: auto;
+}
+
+.desktop-launcher__item {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 6.6rem;
+  padding: 0.7rem 0.45rem;
+  border: 1px solid transparent;
+  border-radius: var(--wm-window-radius);
+  background: transparent;
+  color: inherit;
+  text-align: center;
+  font: inherit;
+  cursor: pointer;
+}
+
+.desktop-launcher__item:hover,
+.desktop-launcher__item.is-selected,
+.ledger-row__link.is-key-selected,
+.bookmark-card__main.is-key-selected,
+.project-color-section__link.is-key-selected,
+.list-link.is-key-selected {
+  border-color: color-mix(in srgb, var(--wm-border) 45%, transparent);
+  background: color-mix(in srgb, var(--wm-accent-soft) 22%, var(--wm-raised));
+}
+
+.desktop-menu__nav-icon,
+.desktop-launcher__icon {
+  display: grid;
+  place-items: center;
+  color: currentColor;
+}
+
+.desktop-menu__nav-icon svg,
+.desktop-launcher__icon svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.desktop-menu__nav-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.desktop-launcher__icon {
+  width: 2.55rem;
+  height: 2.55rem;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 45%, transparent);
+  border-radius: calc(var(--wm-window-radius) - 1px);
+  background: var(--wm-chrome);
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+}
+
+.desktop-launcher__icon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.desktop-launcher__text {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.desktop-launcher__text strong,
+.desktop-launcher__text small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.desktop-launcher__text strong {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+}
+
+.desktop-launcher__text small,
+.desktop-launcher__empty {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: color-mix(in srgb, var(--wm-ink) 52%, transparent);
+}
+
+.desktop-launcher__empty {
+  margin: 0;
+  padding: 0.85rem;
+}
+
+.desktop-shortcuts[hidden] {
+  display: none;
+}
+
+.desktop-shortcuts {
+  position: fixed;
+  z-index: 2600;
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  gap: 0.75rem;
+  width: min(calc(100vw - 2rem), 24rem);
+  padding: 0.85rem;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-window-radius);
+  background: var(--wm-content);
+  box-shadow: var(--wm-shadow), 0 1px 0 var(--wm-glint) inset;
+  font-family: var(--font-mono);
+}
+
+.desktop-shortcuts header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.desktop-shortcuts h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  line-height: 0.9;
+}
+
+.desktop-shortcuts button {
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid var(--wm-border);
+  border-radius: 999px;
+  background: var(--wm-chrome);
+  color: inherit;
+  cursor: pointer;
+}
+
+.desktop-shortcuts dl {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.desktop-shortcuts dl > div {
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--wm-border) 32%, transparent);
+}
+
+.desktop-shortcuts dt,
+.desktop-shortcuts dd {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.desktop-shortcuts dd {
+  color: color-mix(in srgb, var(--wm-ink) 62%, transparent);
+}
+
+.desktop-shortcuts kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.35rem;
+  padding: 0.08rem 0.25rem;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 45%, transparent);
+  border-radius: calc(var(--wm-window-radius) - 2px);
+  background: var(--wm-chrome);
+  font: inherit;
+}
+
+@media (max-width: 640px) {
+  .desktop-shortcuts {
+    right: 0.5rem;
+    bottom: 0.5rem;
+    width: calc(100vw - 1rem);
+  }
+
+  .desktop-shortcuts dl > div {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
 .desktop-context-menu {
   position: fixed;
   z-index: 5000;

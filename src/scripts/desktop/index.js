@@ -5,6 +5,8 @@ import { initSettingsControls, applyDesktopPrefs, syncSettingsControls } from '.
 import { restoreWindowState, setActiveRoute } from './router.js';
 import { saveWindowState } from './windowState.js';
 import { initWindowLinks } from './links.js';
+import { initLauncher } from './launcher.js';
+import { initShortcutHelper } from './shortcuts.js';
 import { initWindowManager } from './windowManager.js';
 
 function initDesktop() {
@@ -18,6 +20,8 @@ function initDesktop() {
   initSettingsControls();
   initDisplayControls();
   initContextMenus();
+  initLauncher();
+  initShortcutHelper();
   syncSettingsControls();
 }
 

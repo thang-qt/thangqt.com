@@ -181,6 +181,38 @@ function attachResize(win, stage) {
   });
 }
 
+function toggleMaximize(win) {
+  if (win.dataset.windowMaximizable === 'false' || isStackedViewport()) return;
+  win.classList.remove('is-minimized');
+  if (win.classList.contains('is-maximized')) {
+    win.classList.remove('is-maximized');
+    const previous = win.dataset.previousRect;
+    if (previous) {
+      const rect = JSON.parse(previous);
+      win.style.left = rect.left;
+      win.style.top = rect.top;
+      win.style.width = rect.width;
+      win.style.height = rect.height;
+    }
+    saveWindowState();
+    return;
+  }
+
+  win.dataset.previousRect = JSON.stringify({
+    left: win.style.left,
+    top: win.style.top,
+    width: win.style.width,
+    height: win.style.height,
+  });
+  win.classList.add('is-floating', 'is-maximized');
+  win.style.left = '12px';
+  win.style.top = `${desktopWorkAreaTop}px`;
+  win.style.width = 'calc(100vw - 24px)';
+  win.style.height = `calc(100dvh - ${desktopWorkAreaTop + desktopWorkAreaPad}px)`;
+  bringWindowForward(win);
+  saveWindowState();
+}
+
 function attachControls(win) {
   win.querySelector('[data-window-action="close"]')?.addEventListener('click', () => {
     win.remove();
@@ -198,36 +230,8 @@ function attachControls(win) {
     maximizeButton?.setAttribute('aria-hidden', 'true');
   }
 
-  maximizeButton?.addEventListener('click', () => {
-    if (win.dataset.windowMaximizable === 'false' || isStackedViewport()) return;
-    if (win.classList.contains('is-maximized')) {
-      win.classList.remove('is-maximized');
-      const previous = win.dataset.previousRect;
-      if (previous) {
-        const rect = JSON.parse(previous);
-        win.style.left = rect.left;
-        win.style.top = rect.top;
-        win.style.width = rect.width;
-        win.style.height = rect.height;
-      }
-      saveWindowState();
-      return;
-    }
+  maximizeButton?.addEventListener('click', () => toggleMaximize(win));
 
-    win.dataset.previousRect = JSON.stringify({
-      left: win.style.left,
-      top: win.style.top,
-      width: win.style.width,
-      height: win.style.height,
-    });
-    win.classList.add('is-floating', 'is-maximized');
-    win.style.left = '12px';
-    win.style.top = `${desktopWorkAreaTop}px`;
-    win.style.width = 'calc(100vw - 24px)';
-    win.style.height = `calc(100dvh - ${desktopWorkAreaTop + desktopWorkAreaPad}px)`;
-    bringWindowForward(win);
-    saveWindowState();
-  });
 }
 
 export function initWindowManager() {

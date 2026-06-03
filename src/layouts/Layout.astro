@@ -2,6 +2,7 @@
 import SEO from '../components/SEO.astro';
 import JsonLD from '../components/JsonLD.astro';
 import DesktopWindow from '../components/DesktopWindow.astro';
+import { Icon } from 'astro-icon/components';
 import {
   desktopApps,
   desktopBackgroundPatterns,
@@ -103,7 +104,7 @@ const initialWindow = currentPage.window;
     <div class="desktop-bg" aria-hidden="true"></div>
 
     <header class="desktop-menu">
-      <a href="/" class="desktop-menu__brand" aria-label="ThangQT home">
+      <a href="/" class="desktop-menu__brand" aria-label="Open app launcher" data-launcher-open>
         <span class="desktop-menu__brand-icon" aria-hidden="true"></span>
         <strong>ThangQT</strong>
       </a>
@@ -115,7 +116,9 @@ const initialWindow = currentPage.window;
             data-window-title={item.label}
             aria-current={currentPath === item.href || (item.href !== '/' && currentPath.startsWith(`${item.href}/`)) ? 'page' : undefined}
           >
-            <span aria-hidden="true">{item.icon}</span>
+            <span class="desktop-menu__nav-icon" aria-hidden="true">
+              {item.iconName ? <Icon name={item.iconName} /> : item.icon}
+            </span>
             {item.label}
           </a>
         ))}
@@ -180,6 +183,51 @@ const initialWindow = currentPage.window;
       </DesktopWindow>
 
     </main>
+
+    <div class="desktop-icon-templates" hidden aria-hidden="true">
+      {desktopNavItems.map((item) => (
+        item.iconName && (
+          <template data-app-icon-template={item.id}>
+            <Icon name={item.iconName} />
+          </template>
+        )
+      ))}
+    </div>
+
+    <div class="desktop-launcher" data-launcher hidden>
+      <button class="desktop-launcher__backdrop" type="button" data-launcher-backdrop aria-label="Close launcher"></button>
+      <section class="desktop-launcher__panel" role="dialog" aria-label="App launcher">
+        <div class="desktop-launcher__search">
+          <span aria-hidden="true">⌕</span>
+          <input type="search" placeholder="Search apps…" autocomplete="off" spellcheck="false" data-launcher-input />
+          <kbd>Alt Space</kbd>
+        </div>
+        <div class="desktop-launcher__list" role="listbox" data-launcher-list></div>
+      </section>
+    </div>
+
+    <aside class="desktop-shortcuts" data-shortcuts-helper hidden aria-label="Keyboard shortcuts">
+      <header>
+        <h2>Shortcuts</h2>
+        <button type="button" data-shortcuts-close aria-label="Close shortcuts">×</button>
+      </header>
+      <dl>
+        <div><dt><kbd>Alt</kbd> <kbd>Space</kbd></dt><dd>Open app launcher</dd></div>
+        <div><dt><kbd>?</kbd></dt><dd>Toggle this helper</dd></div>
+        <div><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>Select list item, or scroll page</dd></div>
+        <div><dt><kbd>H</kbd> <kbd>L</kbd></dt><dd>Scroll active window sideways</dd></div>
+        <div><dt><kbd>Enter</kbd></dt><dd>Open selected item/app</dd></div>
+        <div><dt><kbd>Alt</kbd> <kbd>H/J/K/L</kbd></dt><dd>Focus window by direction</dd></div>
+        <div><dt><kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>H/J/K/L</kbd></dt><dd>Move active window</dd></div>
+        <div><dt><kbd>Alt</kbd> <kbd>Ctrl</kbd> <kbd>H/J/K/L</kbd></dt><dd>Resize active window</dd></div>
+        <div><dt><kbd>Alt</kbd> <kbd>Q</kbd></dt><dd>Quit active window</dd></div>
+        <div><dt><kbd>Alt</kbd> <kbd>M</kbd></dt><dd>Minimize active window</dd></div>
+        <div><dt><kbd>Alt</kbd> <kbd>F</kbd></dt><dd>Maximize active window</dd></div>
+        <div><dt><kbd>Double click title</kbd></dt><dd>Maximize window</dd></div>
+        <div><dt><kbd>Alt</kbd> <kbd>1–7</kbd></dt><dd>Open app by topbar order</dd></div>
+        <div><dt><kbd>Esc</kbd></dt><dd>Close launcher/helper</dd></div>
+      </dl>
+    </aside>
 
     <script is:inline define:vars={{ desktopThemePacks, desktopBackgroundPatterns, desktopApps }}>
       window.__DESKTOP_THEME_PACKS = desktopThemePacks;

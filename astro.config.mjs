@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,6 +14,11 @@ export default defineConfig({
   },
   integrations: [
     mdx(),
+    icon({
+      include: {
+        ph: ['house', 'pencil-simple', 'cube', 'link', 'info', 'file-text', 'gear'],
+      },
+    }),
     sitemap({
       changefreq: 'weekly',
       priority: 0.7,

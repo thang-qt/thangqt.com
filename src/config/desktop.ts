@@ -12,12 +12,23 @@ export const desktopTheme = {
   patternSize: '32px',
 };
 
+export const desktopAppIcons = {
+  home: 'ph:house',
+  writing: 'ph:pencil-simple',
+  projects: 'ph:cube',
+  links: 'ph:link',
+  about: 'ph:info',
+  resume: 'ph:file-text',
+  settings: 'ph:gear',
+};
+
 export const desktopApps = [
   {
     id: 'home',
     label: 'Home',
     href: '/',
     icon: '⌂',
+    iconName: desktopAppIcons.home,
     nav: true,
     window: { minWidth: 320, minHeight: 240, width: 'min(64rem, calc(100vw - 5rem))', height: 'min(46rem, calc(100dvh - 8rem))' },
   },
@@ -26,6 +37,7 @@ export const desktopApps = [
     label: 'Writing',
     href: '/writing',
     icon: '✎',
+    iconName: desktopAppIcons.writing,
     nav: true,
     detailWindows: true,
     window: { minWidth: 340, minHeight: 260, width: 'min(58rem, calc(100vw - 5rem))', height: 'min(48rem, calc(100dvh - 8rem))' },
@@ -35,6 +47,7 @@ export const desktopApps = [
     label: 'Projects',
     href: '/projects',
     icon: '◈',
+    iconName: desktopAppIcons.projects,
     nav: true,
     detailWindows: true,
     window: { minWidth: 360, minHeight: 260, width: 'min(66rem, calc(100vw - 5rem))', height: 'min(49rem, calc(100dvh - 8rem))' },
@@ -44,6 +57,7 @@ export const desktopApps = [
     label: 'Links',
     href: '/links',
     icon: '↗',
+    iconName: desktopAppIcons.links,
     nav: true,
     detailWindows: true,
     window: { minWidth: 320, minHeight: 240, width: 'min(54rem, calc(100vw - 5rem))', height: 'min(44rem, calc(100dvh - 8rem))' },
@@ -53,6 +67,7 @@ export const desktopApps = [
     label: 'About',
     href: '/about',
     icon: 'ⓘ',
+    iconName: desktopAppIcons.about,
     nav: true,
     window: { minWidth: 320, minHeight: 220, width: 'min(50rem, calc(100vw - 5rem))', height: 'min(38rem, calc(100dvh - 8rem))' },
   },
@@ -61,6 +76,7 @@ export const desktopApps = [
     label: 'Resume',
     href: '/resume',
     icon: '□',
+    iconName: desktopAppIcons.resume,
     nav: true,
     window: { minWidth: 380, minHeight: 300, width: 'min(68rem, calc(100vw - 5rem))', height: 'min(50rem, calc(100dvh - 8rem))' },
   },
@@ -69,6 +85,7 @@ export const desktopApps = [
     label: 'Settings',
     href: '/settings',
     icon: '⚙',
+    iconName: desktopAppIcons.settings,
     nav: true,
     window: { minWidth: 340, minHeight: 260, width: 'min(46rem, calc(100vw - 5rem))', height: 'min(42rem, calc(100dvh - 8rem))' },
   },
