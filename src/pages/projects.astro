@@ -2,15 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import PaginationNav from '../components/PaginationNav.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import { paginateItems } from '../utils/pagination';
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 12;
 
 const projects = await getCollection('projects', ({ data }) => {
   return import.meta.env.PROD ? data.draft !== true : true;
 });
 
-const getSortKey = (value) => (value.includes('-') ? value : `${value}-00`);
+const getSortKey = (value: string) => (value.includes('-') ? value : `${value}-00`);
 
 // Sort by year/month descending
 const sortedProjects = projects.sort((a, b) =>
@@ -20,44 +21,43 @@ const paginatedProjects = paginateItems(sortedProjects, 1, PAGE_SIZE);
 ---
 
 <Layout title="Projects - ThangQT" description="Selected works and projects">
-  <section class="col-content list-app list-app--projects" data-window-title="Projects">
-    <div class="list-mobile-header">
-      <div>
-        <p class="list-kicker">Build archive</p>
-        <h1 class="list-page-title">Projects</h1>
-      </div>
-      <div class="list-toolbar" aria-label="Project display options">
-        <span>View</span>
-        <button type="button" data-list-view="list">List</button>
-        <button type="button" data-list-view="grid">Grid</button>
-        <button type="button" data-list-view="compact">Compact</button>
-      </div>
+  <section class="col-content projects-page" data-window-title="Projects">
+    <header class="projects-header">
+      <p class="projects-kicker">Build archive</p>
+      <h1>Projects</h1>
+      <p class="projects-status">{paginatedProjects.totalItems} projects shipped and counting.</p>
+    </header>
+
+    <div class="projects-grid">
+      {paginatedProjects.items.map((project) => (
+        <article class="project-card">
+          <a href={`/projects/${project.slug}`} class="project-card-link">
+            <div class="project-card-cover-wrapper">
+              {project.data.cover ? (
+                <Image src={project.data.cover} alt={project.data.title} class="project-card-image" />
+              ) : (
+                <div class="project-card-placeholder">
+                  <span class="project-placeholder-icon" aria-hidden="true">▦</span>
+                </div>
+              )}
+              <span class="project-card-year">{project.data.year.slice(0, 4)}</span>
+            </div>
+            <div class="project-card-body">
+              <h2 class="project-card-title">{project.data.title}</h2>
+              {project.data.description && <p class="project-card-desc">{project.data.description}</p>}
+            </div>
+          </a>
+        </article>
+      ))}
     </div>
-    <p class="list-status">{paginatedProjects.totalItems} projects sorted by ship date.</p>
 
-    {paginatedProjects.items.map((project) => (
-      <article class="project-item">
-        <a href={`/projects/${project.slug}`} class="list-link">
-          <span class="list-row-main">
-            <h2 class="project-title">{project.data.title}</h2>
-            {project.data.description && <p class="list-description">{project.data.description}</p>}
-          </span>
-          <span class="project-meta">{project.data.year.slice(0, 4)}</span>
-        </a>
-      </article>
-    ))}
-
-    <PaginationNav
-      basePath="/projects"
-      currentPage={paginatedProjects.currentPage}
-      totalPages={paginatedProjects.totalPages}
-      label="Projects pagination"
-    />
+    {paginatedProjects.totalPages > 1 && (
+      <PaginationNav
+        basePath="/projects"
+        currentPage={paginatedProjects.currentPage}
+        totalPages={paginatedProjects.totalPages}
+        label="Projects pagination"
+      />
+    )}
   </section>
-
-  <aside class="col-detail">
-    <div class="is-visible">
-      <h2>Projects</h2>
-    </div>
-  </aside>
 </Layout>

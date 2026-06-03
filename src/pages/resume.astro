@@ -6,16 +6,16 @@ import Layout from '../layouts/Layout.astro';
   title="Resume - ThangQT"
   description="Resume of Tô Quang Thắng, computer science student and full-stack developer."
 >
-  <section class="col-content resume-page">
+  <section class="col-content resume-page" data-window-title="Resume">
     <article class="resume-document">
       <header class="resume-header">
-        <div class="resume-name-block">
-          <h1 class="resume-name">Tô Quang Thắng</h1>
-        </div>
+        <div class="resume-name-hero">
+          <div>
+            <h1 class="resume-name">Tô Quang Thắng</h1>
+            <p class="resume-title-line">Full Stack Developer · Computer Science Student</p>
+          </div>
 
-        <div class="resume-meta">
-          <p class="resume-location">Hanoi, Vietnam</p>
-          <div class="resume-links" aria-label="Resume contact links">
+          <div class="resume-contacts" aria-label="Resume contact links">
             <a href="tel:0387000902">+84 387 000 902</a>
             <a href="mailto:thang@thangqt.com">thang@thangqt.com</a>
             <a href="https://www.github.com/thang-qt" target="_blank" rel="noreferrer">github.com/thang-qt</a>
@@ -30,100 +30,126 @@ import Layout from '../layouts/Layout.astro';
         </p>
       </header>
 
-        <div class="resume-grid">
-          <section class="resume-section" aria-labelledby="resume-skills">
-            <h2 class="resume-section-title" id="resume-skills">Skills</h2>
-            <div class="resume-skills">
-              <div class="resume-skill-row">
-                <p class="resume-skill-label">Languages</p>
-                <p>C++, Java, Python, JavaScript, TypeScript, Go</p>
-              </div>
-              <div class="resume-skill-row">
-                <p class="resume-skill-label">Frameworks &amp; Data</p>
-                <p>React, Next.js, NestJS, Vite, PostgreSQL, Supabase</p>
-              </div>
-              <div class="resume-skill-row">
-                <p class="resume-skill-label">Tools &amp; Platforms</p>
-                <p>Linux, Docker, Git, Nix, Cloudflare Workers</p>
-              </div>
-              <div class="resume-skill-row">
-                <p class="resume-skill-label">Spoken Languages</p>
-                <p>Vietnamese (Native), English (Working proficiency)</p>
-              </div>
+      <div class="resume-body-flow">
+        <!-- Section: Skills -->
+        <section class="resume-section" aria-labelledby="resume-skills">
+          <h2 class="resume-section-title" id="resume-skills">Skills</h2>
+          <div class="resume-skills-list">
+            <div class="resume-skill-item">
+              <strong>Languages</strong>
+              <span>C++, Java, Python, JavaScript, TypeScript, Go</span>
             </div>
-          </section>
+            <div class="resume-skill-item">
+              <strong>Frameworks &amp; Databases</strong>
+              <span>React, Next.js, NestJS, Vite, PostgreSQL, Supabase</span>
+            </div>
+            <div class="resume-skill-item">
+              <strong>Tools &amp; Infrastructure</strong>
+              <span>Linux, Docker, Git, Nix, Cloudflare Workers</span>
+            </div>
+            <div class="resume-skill-item">
+              <strong>Spoken Languages</strong>
+              <span>Vietnamese (Native), English (Working proficiency)</span>
+            </div>
+          </div>
+        </section>
 
-          <section class="resume-section" aria-labelledby="resume-experience">
-            <h2 class="resume-section-title" id="resume-experience">Experience</h2>
-            <article class="resume-entry">
-              <header class="resume-entry-header">
-                <div class="resume-entry-heading">
-                  <h3 class="resume-entry-title">Full Stack Developer (Contract)</h3>
-                  <p class="resume-entry-org">BAP IT Co., JSC</p>
-                </div>
-                <p class="resume-entry-meta">
-                  <span>Hanoi</span>
-                  <span>Feb 2026 - Present</span>
-                </p>
-              </header>
-              <ul class="resume-bullets">
-                <li>Contributed to an internal online coding/interview platform, implementing staff-facing dashboard workflows, authentication, question bank management, and session management features.</li>
-                <li>Built JWT-based auth flows, role-based access control, candidate invite lifecycle, and execution-related backend/frontend surfaces.</li>
-                <li>Integrated Judge0-based multi-language code execution, prototyped real-time collaboration with Yjs/WebSocket, and set up testing infrastructure with Jest and Playwright.</li>
-                <li>Built development tooling and CI workflows, including a Codeforces Parquet importer to bulk-seed the question bank.</li>
-                <li>Contributed to flow analysis and feature implementation for client demo applications in healthcare and enterprise workflow domains.</li>
-              </ul>
-            </article>
-          </section>
-
-          <section class="resume-section" aria-labelledby="resume-projects">
-            <h2 class="resume-section-title" id="resume-projects">Products &amp; Projects</h2>
-
-            <article class="resume-entry">
-              <div class="resume-project-top">
-                <h3 class="resume-project-title">Ngàn Lá</h3>
-                <p class="resume-project-year">2025 - 2026</p>
+        <!-- Section: Experience -->
+        <section class="resume-section" aria-labelledby="resume-experience">
+          <h2 class="resume-section-title" id="resume-experience">Experience</h2>
+          <article class="resume-entry">
+            <header class="resume-entry-header">
+              <div class="resume-entry-heading">
+                <h3 class="resume-entry-title">Full Stack Developer (Contract)</h3>
+                <span class="resume-entry-org">BAP IT Co., JSC</span>
               </div>
-              <p class="resume-project-summary">
-                <a href="https://nganla.com" target="_blank" rel="noreferrer">nganla.com</a>
-                {' '}— Online exam platform for Vietnamese high school students with textbook mapping and analytics.
-              </p>
-              <ul class="resume-bullets">
-                <li>Built with Next.js, Go (Chi) backend, and shadcn/ui; structured content by grade, subject, and textbook chapter.</li>
-                <li>Developed automated content crawlers and an LLM-assisted workflow to generate and bulk-import exam questions.</li>
-                <li>Implemented SePay QR payment flow with API/webhook-based payment confirmation.</li>
-              </ul>
-            </article>
-
-            <article class="resume-entry">
-              <div class="resume-project-top">
-                <h3 class="resume-project-title">Vocaxis</h3>
-                <p class="resume-project-year">2025</p>
+              <div class="resume-entry-meta">
+                <span>Hanoi, Vietnam</span>
+                <span class="resume-meta-divider">·</span>
+                <span>Feb 2026 - Present</span>
               </div>
-              <p class="resume-project-summary">
-                <a href="https://thangqt.com/projects/vocaxis" target="_blank" rel="noreferrer">thangqt.com/projects/vocaxis</a>
-                {' '}— Vocabulary learning platform with AI-generated entries, multi-language translations, and FSRS spaced repetition.
-              </p>
-              <ul class="resume-bullets">
-                <li>Built a StarDict-compatible dictionary loadable into Kindle and GoldenDict, served via Cloudflare Workers/D1.</li>
-                <li>Created a Plasmo browser extension for context-aware vocabulary capture from any webpage.</li>
-                <li>Publicly launched on Next.js/Supabase and reached ~400 user signups organically.</li>
-              </ul>
-            </article>
-          </section>
+            </header>
+            <ul class="resume-bullets">
+              <li>Contributed to an internal online coding/interview platform, implementing staff-facing dashboard workflows, authentication, question bank management, and session management features.</li>
+              <li>Built JWT-based auth flows, role-based access control, candidate invite lifecycle, and execution-related backend/frontend surfaces.</li>
+              <li>Integrated Judge0-based multi-language code execution, prototyped real-time collaboration with Yjs/WebSocket, and set up testing infrastructure with Jest and Playwright.</li>
+              <li>Built development tooling and CI workflows, including a Codeforces Parquet importer to bulk-seed the question bank.</li>
+              <li>Contributed to flow analysis and feature implementation for client demo applications in healthcare and enterprise workflow domains.</li>
+            </ul>
+          </article>
+        </section>
 
-          <section class="resume-section" aria-labelledby="resume-education">
-            <h2 class="resume-section-title" id="resume-education">Education</h2>
-            <article class="resume-entry">
-              <div class="resume-education-top">
-                <h3 class="resume-education-title">VNU University of Engineering and Technology</h3>
-                <p class="resume-education-meta">Hanoi</p>
-                <p class="resume-education-meta">2023 - 2027</p>
+        <!-- Section: Products & Projects -->
+        <section class="resume-section" aria-labelledby="resume-projects">
+          <h2 class="resume-section-title" id="resume-projects">Products &amp; Projects</h2>
+
+          <article class="resume-entry">
+            <header class="resume-entry-header">
+              <div class="resume-entry-heading">
+                <h3 class="resume-entry-title">Ngàn Lá</h3>
+                <span class="resume-entry-org">
+                  <a href="https://nganla.com" target="_blank" rel="noreferrer">nganla.com</a>
+                </span>
               </div>
-              <p class="resume-project-summary">Computer Science</p>
-            </article>
-          </section>
-        </div>
+              <div class="resume-entry-meta">
+                <span>Online Exam Platform</span>
+                <span class="resume-meta-divider">·</span>
+                <span>2025 - 2026</span>
+              </div>
+            </header>
+            <p class="resume-project-summary-text">
+              Online exam platform for Vietnamese high school students with textbook mapping and analytics.
+            </p>
+            <ul class="resume-bullets">
+              <li>Built with Next.js, Go (Chi) backend, and shadcn/ui; structured content by grade, subject, and textbook chapter.</li>
+              <li>Developed automated content crawlers and an LLM-assisted workflow to generate and bulk-import exam questions.</li>
+              <li>Implemented SePay QR payment flow with API/webhook-based payment confirmation.</li>
+            </ul>
+          </article>
+
+          <article class="resume-entry">
+            <header class="resume-entry-header">
+              <div class="resume-entry-heading">
+                <h3 class="resume-entry-title">Vocaxis</h3>
+                <span class="resume-entry-org">
+                  <a href="https://thangqt.com/projects/vocaxis" target="_blank" rel="noreferrer">thangqt.com/projects/vocaxis</a>
+                </span>
+              </div>
+              <div class="resume-entry-meta">
+                <span>Vocabulary Repetition System</span>
+                <span class="resume-meta-divider">·</span>
+                <span>2025</span>
+              </div>
+            </header>
+            <p class="resume-project-summary-text">
+              Vocabulary learning platform with AI-generated entries, multi-language translations, and FSRS spaced repetition algorithm.
+            </p>
+            <ul class="resume-bullets">
+              <li>Built a StarDict-compatible dictionary loadable into Kindle and GoldenDict, served via Cloudflare Workers/D1.</li>
+              <li>Created a Plasmo browser extension for context-aware vocabulary capture from any webpage.</li>
+              <li>Publicly launched on Next.js/Supabase and reached ~400 user signups organically.</li>
+            </ul>
+          </article>
+        </section>
+
+        <!-- Section: Education -->
+        <section class="resume-section" aria-labelledby="resume-education">
+          <h2 class="resume-section-title" id="resume-education">Education</h2>
+          <article class="resume-entry">
+            <header class="resume-entry-header">
+              <div class="resume-entry-heading">
+                <h3 class="resume-entry-title">VNU University of Engineering and Technology</h3>
+                <span class="resume-entry-org">Computer Science Degree</span>
+              </div>
+              <div class="resume-entry-meta">
+                <span>Hanoi, Vietnam</span>
+                <span class="resume-meta-divider">·</span>
+                <span>2023 - 2027</span>
+              </div>
+            </header>
+          </article>
+        </section>
+      </div>
     </article>
   </section>
 </Layout>

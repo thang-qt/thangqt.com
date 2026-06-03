@@ -119,21 +119,25 @@ export const desktopThemePacks = [
     id: 'poolsuite',
     label: 'Poolsuite',
     note: 'Mint, leisure OS, pixel resort energy.',
+    colors: ['#87cf9d', '#e7f8df', '#e1f4d8', '#13c3a3', '#9de5bd'],
   },
   {
     id: 'bloom',
     label: 'Bloom',
     note: 'Soft garden chrome with peach and leaf tones.',
+    colors: ['#9fd6a3', '#f2f2cd', '#f7dca5', '#d66f57', '#ffc0a8'],
   },
   {
     id: 'paper',
     label: 'Paper Desk',
     note: 'Warm writing room with ruled cards.',
+    colors: ['#d6bf8d', '#efe2bd', '#ecd8a5', '#a35d22', '#f1c981'],
   },
   {
     id: 'signal',
     label: 'Signal Lab',
     note: 'Blue dashboard chrome and radar grain.',
+    colors: ['#7db7d9', '#dceef7', '#c7e3f2', '#1d7dff', '#9dd7ff'],
   },
 ];
 

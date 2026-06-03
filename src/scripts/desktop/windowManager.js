@@ -23,8 +23,11 @@ function numericStyle(value, fallback = 0) {
 
 function enforceDesktopWorkArea(win) {
   if (isStackedViewport() || !win.classList.contains('is-floating')) return;
-  const top = numericStyle(win.style.top, desktopWorkAreaTop);
-  const left = numericStyle(win.style.left, desktopWorkAreaPad);
+  const stage = getStage();
+  const stageRect = stage ? stage.getBoundingClientRect() : { left: 0, top: 0 };
+  const winRect = win.getBoundingClientRect();
+  const top = numericStyle(win.style.top, winRect.top - stageRect.top);
+  const left = numericStyle(win.style.left, winRect.left - stageRect.left);
   if (top < desktopWorkAreaTop) win.style.top = `${desktopWorkAreaTop}px`;
   if (left < desktopWorkAreaPad) win.style.left = `${desktopWorkAreaPad}px`;
 }
@@ -270,10 +273,11 @@ function nudgeAllWindowsIntoView(stage) {
     if (win.classList.contains('is-maximized')) return;
 
     const metrics = readWindowMetrics(win);
-    let left = numericStyle(win.style.left, desktopWorkAreaPad);
-    let top = numericStyle(win.style.top, desktopWorkAreaTop);
-    let width = numericStyle(win.style.width, metrics.minWidth);
-    let height = numericStyle(win.style.height, metrics.minHeight);
+    const winRect = win.getBoundingClientRect();
+    let left = numericStyle(win.style.left, winRect.left - stageRect.left);
+    let top = numericStyle(win.style.top, winRect.top - stageRect.top);
+    let width = numericStyle(win.style.width, winRect.width);
+    let height = numericStyle(win.style.height, winRect.height);
 
     // Clamp width/height to new stage size
     const maxW = Math.max(metrics.minWidth, stageRect.width - desktopWorkAreaPad * 2);

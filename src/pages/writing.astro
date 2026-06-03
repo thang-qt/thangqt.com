@@ -4,7 +4,7 @@ import PaginationNav from '../components/PaginationNav.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '../utils/pagination';
 
-const PAGE_SIZE = 40; // show more in timeline view
+const PAGE_SIZE = 40;
 
 const posts = await getCollection('writing', ({ data }) => {
   return import.meta.env.PROD ? data.draft !== true : true;
@@ -29,44 +29,37 @@ function formatShortDate(date: Date): string {
 ---
 
 <Layout title="Writing - ThangQT" description="My various thoughts on life, tech, and everything in between">
-  <section class="writing-app col-content list-app list-app--writing" data-window-title="Writing">
+  <section class="col-content writing-page" data-window-title="Writing">
+    <header class="writing-header">
+      <p class="writing-kicker">Writing</p>
+      <h1>Journal</h1>
+      <p class="writing-status">{paginatedPosts.totalItems} posts archived.</p>
+    </header>
 
-    <div class="writing-app-header">
-      <div class="app-title-group">
-        <p class="app-kicker">Writing</p>
-        <h1 class="app-title">Journal</h1>
-      </div>
-      <div class="list-toolbar" aria-label="Writing display options">
-        <button class="ds-button" type="button" data-list-view="list" aria-pressed="true">List</button>
-        <button class="ds-button" type="button" data-list-view="grid">Grid</button>
-        <button class="ds-button" type="button" data-list-view="compact">Compact</button>
-      </div>
-    </div>
-
-    <p class="list-status">{paginatedPosts.totalItems} posts</p>
-
-    {years.map(year => (
-      <div class="writing-year-group">
-        <div class="writing-year-marker" aria-label={`Year ${year}`}>{year}</div>
-        <div class="writing-year-posts">
-          {postsByYear[year].map(post => (
-            <article class="post-item">
-              <a href={`/writing/${post.slug}`} class="list-link">
-                <span class="list-row-main">
-                  <h2 class="post-title">{post.data.title}</h2>
-                  {post.data.description && (
-                    <p class="list-description">{post.data.description}</p>
-                  )}
-                </span>
-                <time class="post-meta" datetime={post.data.date.toISOString()}>
-                  {formatShortDate(post.data.date)}
-                </time>
-              </a>
-            </article>
-          ))}
+    <div class="writing-timeline">
+      {years.map((year) => (
+        <div class="timeline-year-group">
+          <div class="timeline-year-marker" aria-label={`Year ${year}`}>{year}</div>
+          <div class="timeline-posts">
+            {postsByYear[year].map((post) => (
+              <article class="timeline-post-item">
+                <a href={`/writing/${post.slug}`} class="timeline-link">
+                  <time class="timeline-post-date" datetime={post.data.date.toISOString()}>
+                    {formatShortDate(post.data.date)}
+                  </time>
+                  <div class="timeline-post-content">
+                    <h2 class="timeline-post-title">{post.data.title}</h2>
+                    {post.data.description && (
+                      <p class="timeline-post-desc">{post.data.description}</p>
+                    )}
+                  </div>
+                </a>
+              </article>
+            ))}
+          </div>
         </div>
-      </div>
-    ))}
+      ))}
+    </div>
 
     {paginatedPosts.totalPages > 1 && (
       <PaginationNav
@@ -76,6 +69,5 @@ function formatShortDate(date: Date): string {
         label="Writing pagination"
       />
     )}
-
   </section>
 </Layout>

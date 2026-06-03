@@ -4,7 +4,7 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
 ---
 
 <Layout title="Settings - ThangQT" description="Desktop shell settings and credits.">
-  <section class="col-content settings-page">
+  <section class="col-content settings-page" data-window-title="Settings">
     <header class="settings-hero">
       <p class="settings-kicker">Desktop control panel</p>
       <h1>Settings</h1>
@@ -13,85 +13,99 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
       </p>
     </header>
 
-    <section class="settings-panel" aria-labelledby="settings-mode">
-      <div>
-        <h2 id="settings-mode">Mode</h2>
-        <p>Choose the base contrast for the whole desktop.</p>
-      </div>
-      <div class="settings-segmented" role="radiogroup" aria-label="Color mode">
-        <label>
-          <input type="radio" name="desktop-mode" value="light" data-settings-mode />
-          <span>Light</span>
-        </label>
-        <label>
-          <input type="radio" name="desktop-mode" value="dark" data-settings-mode />
-          <span>Dark</span>
-        </label>
-      </div>
-    </section>
-
-    <section class="settings-panel settings-panel--packs" aria-labelledby="settings-packs">
-      <div>
-        <h2 id="settings-packs">Theme Packs</h2>
-        <p>Theme packs control color tokens, app chrome, text, and contrast.</p>
-      </div>
-      <div class="settings-pack-grid">
-        {desktopThemePacks.map((pack) => (
-          <label class={`settings-pack settings-pack--${pack.id}`}>
-            <input type="radio" name="desktop-theme-pack" value={pack.id} data-settings-pack />
-            <span class="settings-pack__preview" aria-hidden="true"></span>
-            <span class="settings-pack__body">
-              <strong>{pack.label}</strong>
-              <small>{pack.note}</small>
-            </span>
+    <div class="settings-sections">
+      <!-- Section: Contrast Mode -->
+      <section class="settings-panel" aria-labelledby="settings-mode">
+        <div class="settings-panel-head">
+          <h2 id="settings-mode">Mode</h2>
+          <p>Choose the base contrast for the whole desktop.</p>
+        </div>
+        <div class="settings-segmented" role="radiogroup" aria-label="Color mode">
+          <label>
+            <input type="radio" name="desktop-mode" value="light" data-settings-mode />
+            <span>Light</span>
           </label>
-        ))}
-      </div>
-    </section>
-
-    <section class="settings-panel settings-panel--patterns" aria-labelledby="settings-patterns">
-      <div>
-        <h2 id="settings-patterns">Background Pattern</h2>
-        <p>Choose the generative desktop field separately from the color pack.</p>
-      </div>
-      <div class="settings-pack-grid settings-pattern-grid">
-        {desktopBackgroundPatterns.map((pattern) => (
-          <label class={`settings-pack settings-pattern settings-pattern--${pattern.id}`}>
-            <input type="radio" name="desktop-bg-pattern" value={pattern.id} data-settings-pattern />
-            <span class="settings-pack__preview" aria-hidden="true"></span>
-            <span class="settings-pack__body">
-              <strong>{pattern.label}</strong>
-              <small>{pattern.note}</small>
-            </span>
+          <label>
+            <input type="radio" name="desktop-mode" value="dark" data-settings-mode />
+            <span>Dark</span>
           </label>
-        ))}
-      </div>
-    </section>
+        </div>
+      </section>
 
-    <section class="settings-panel settings-about" aria-labelledby="settings-about">
-      <div>
-        <h2 id="settings-about">About</h2>
-        <p>
-          Desktop/window-manager direction and chrome references are credited to
-          <a href="https://poolsuite.net/" target="_blank" rel="noreferrer">Poolsuite</a>
-          and
-          <a href="https://posthog.com/" target="_blank" rel="noreferrer">PostHog</a>.
-        </p>
-      </div>
-      <dl>
-        <div>
-          <dt>Shell</dt>
-          <dd>Astro static site with client-side app windows</dd>
+      <!-- Section: Theme Packs -->
+      <section class="settings-panel settings-panel--packs" aria-labelledby="settings-packs">
+        <div class="settings-panel-head">
+          <h2 id="settings-packs">Theme Packs</h2>
+          <p>Theme packs control color tokens, app chrome, text, and contrast.</p>
         </div>
-        <div>
-          <dt>Routing</dt>
-          <dd>History API, no full page reload for internal links</dd>
+        <div class="settings-pack-grid">
+          {desktopThemePacks.map((pack) => (
+            <label class={`settings-pack settings-pack--${pack.id}`}>
+              <input type="radio" name="desktop-theme-pack" value={pack.id} data-settings-pack />
+              <span class="settings-pack__preview" aria-hidden="true">
+                {pack.colors && (
+                  <span class="palette-strip">
+                    {pack.colors.map((color) => (
+                      <span class="palette-swatch" style={`background-color: ${color};`} title={color}></span>
+                    ))}
+                  </span>
+                )}
+              </span>
+              <span class="settings-pack__body">
+                <strong>{pack.label}</strong>
+                <small>{pack.note}</small>
+              </span>
+            </label>
+          ))}
         </div>
-        <div>
-          <dt>Tokens</dt>
-          <dd>CSS variables controlled by theme pack and mode</dd>
+      </section>
+
+      <!-- Section: Background Pattern -->
+      <section class="settings-panel settings-panel--patterns" aria-labelledby="settings-patterns">
+        <div class="settings-panel-head">
+          <h2 id="settings-patterns">Background Pattern</h2>
+          <p>Choose the generative desktop field separately from the color pack.</p>
         </div>
-      </dl>
-    </section>
+        <div class="settings-pack-grid settings-pattern-grid">
+          {desktopBackgroundPatterns.map((pattern) => (
+            <label class={`settings-pack settings-pattern settings-pattern--${pattern.id}`}>
+              <input type="radio" name="desktop-bg-pattern" value={pattern.id} data-settings-pattern />
+              <span class="settings-pack__preview" aria-hidden="true"></span>
+              <span class="settings-pack__body">
+                <strong>{pattern.label}</strong>
+                <small>{pattern.note}</small>
+              </span>
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <!-- Section: About -->
+      <section class="settings-panel settings-about" aria-labelledby="settings-about">
+        <div class="settings-panel-head">
+          <h2 id="settings-about">About</h2>
+          <p>
+            Desktop/window-manager direction and chrome references are credited to
+            <a href="https://poolsuite.net/" target="_blank" rel="noreferrer">Poolsuite</a>
+            and
+            <a href="https://posthog.com/" target="_blank" rel="noreferrer">PostHog</a>.
+          </p>
+        </div>
+        <dl>
+          <div>
+            <dt>Shell</dt>
+            <dd>Astro static site with client-side app windows</dd>
+          </div>
+          <div>
+            <dt>Routing</dt>
+            <dd>History API, no full page reload for internal links</dd>
+          </div>
+          <div>
+            <dt>Tokens</dt>
+            <dd>CSS variables controlled by theme pack and mode</dd>
+          </div>
+        </dl>
+      </section>
+    </div>
   </section>
 </Layout>
