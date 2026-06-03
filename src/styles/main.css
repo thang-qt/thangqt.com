@@ -359,11 +359,15 @@ pre {
   text-decoration: none;
 }
 
-.desktop-menu__brand img {
-  display: grid;
+.desktop-menu__brand-icon {
+  display: inline-block;
   width: 20px;
   height: 20px;
-  object-fit: contain;
+  color: var(--wm-ink);
+  background: currentColor;
+  flex: 0 0 auto;
+  mask: url('/favicon.svg') center / contain no-repeat;
+  -webkit-mask: url('/favicon.svg') center / contain no-repeat;
 }
 
 .desktop-menu__nav {
@@ -576,8 +580,8 @@ pre {
 
 .wm-resize-edge--top,
 .wm-resize-edge--bottom {
-  left: 10px;
-  right: 10px;
+  left: 12px;
+  right: 12px;
   height: 8px;
   cursor: ns-resize;
 }
@@ -592,8 +596,8 @@ pre {
 
 .wm-resize-edge--left,
 .wm-resize-edge--right {
-  top: 10px;
-  bottom: 10px;
+  top: 12px;
+  bottom: 12px;
   width: 8px;
   cursor: ew-resize;
 }
@@ -604,6 +608,38 @@ pre {
 
 .wm-resize-edge--right {
   right: -4px;
+}
+
+.wm-resize-edge--top-right,
+.wm-resize-edge--bottom-right,
+.wm-resize-edge--bottom-left,
+.wm-resize-edge--top-left {
+  width: 16px;
+  height: 16px;
+}
+
+.wm-resize-edge--top-right {
+  top: -6px;
+  right: -6px;
+  cursor: nesw-resize;
+}
+
+.wm-resize-edge--bottom-right {
+  right: -6px;
+  bottom: -6px;
+  cursor: nwse-resize;
+}
+
+.wm-resize-edge--bottom-left {
+  bottom: -6px;
+  left: -6px;
+  cursor: nesw-resize;
+}
+
+.wm-resize-edge--top-left {
+  top: -6px;
+  left: -6px;
+  cursor: nwse-resize;
 }
 
 .desktop-window[data-window-resizable="false"] .wm-resize-edge {
@@ -1896,9 +1932,9 @@ pre {
 
 .home-greeting {
   display: grid;
-  gap: 0.4rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--wm-border) 40%, transparent);
+  gap: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 .home-greeting-label {
@@ -1912,9 +1948,10 @@ pre {
 .home-greeting-name {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 6vw, 4rem);
-  font-weight: 700;
-  line-height: 0.95;
+  font-size: clamp(2.4rem, 7vw, 4.8rem);
+  font-weight: 800;
+  line-height: 0.82;
+  letter-spacing: -0.045em;
 }
 
 .home-body p {

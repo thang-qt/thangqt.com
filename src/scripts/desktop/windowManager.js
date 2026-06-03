@@ -7,7 +7,7 @@ import {
 } from './dom.js';
 import { bumpTopZ, saveWindowState, scheduleWindowStateSave } from './windowState.js';
 
-const edgeNames = ['top', 'right', 'bottom', 'left'];
+const edgeNames = ['top', 'right', 'bottom', 'left', 'top-right', 'bottom-right', 'bottom-left', 'top-left'];
 const stackedQuery = '(max-width: 1100px)';
 const desktopWorkAreaTop = 64;
 const desktopWorkAreaPad = 12;
@@ -136,21 +136,21 @@ function attachResize(win, stage) {
         let width = startWidth;
         let height = startHeight;
 
-        if (edge === 'right') width = startWidth + dx;
-        if (edge === 'bottom') height = startHeight + dy;
-        if (edge === 'left') {
+        if (edge.includes('right')) width = startWidth + dx;
+        if (edge.includes('bottom')) height = startHeight + dy;
+        if (edge.includes('left')) {
           width = startWidth - dx;
           left = startLeft + dx;
         }
-        if (edge === 'top') {
+        if (edge.includes('top')) {
           height = startHeight - dy;
           top = startTop + dy;
         }
 
         width = clamp(width, metrics.minWidth, Math.min(metrics.maxWidth, stageRect.width - left));
         height = clamp(height, metrics.minHeight, Math.min(metrics.maxHeight, stageRect.height - top));
-        if (edge === 'left') left = startLeft + (startWidth - width);
-        if (edge === 'top') top = startTop + (startHeight - height);
+        if (edge.includes('left')) left = startLeft + (startWidth - width);
+        if (edge.includes('top')) top = startTop + (startHeight - height);
 
         win.style.left = `${clamp(left, desktopWorkAreaPad, stageRect.width - metrics.minWidth - desktopWorkAreaPad)}px`;
         win.style.top = `${clamp(top, desktopWorkAreaTop, stageRect.height - metrics.minHeight)}px`;

@@ -34,7 +34,7 @@ export const desktopApps = [
     id: 'projects',
     label: 'Projects',
     href: '/projects',
-    icon: '▦',
+    icon: '◈',
     nav: true,
     detailWindows: true,
     window: { minWidth: 360, minHeight: 260, width: 'min(66rem, calc(100vw - 5rem))', height: 'min(49rem, calc(100dvh - 8rem))' },
@@ -52,7 +52,7 @@ export const desktopApps = [
     id: 'about',
     label: 'About',
     href: '/about',
-    icon: '☻',
+    icon: 'ⓘ',
     nav: true,
     window: { minWidth: 320, minHeight: 220, width: 'min(50rem, calc(100vw - 5rem))', height: 'min(38rem, calc(100dvh - 8rem))' },
   },
@@ -94,8 +94,8 @@ export function getDesktopAppKeyForPath(pathname: string) {
 }
 
 export const desktopProfile = {
-  name: 'ThangQT',
-  handle: 'thang-qt',
+  name: 'Tô Quang Thắng',
+  handle: 'thangqt',
   role: 'Computer science student at UET-VNU',
   location: 'Vietnam',
   tagline: 'Open-source developer, Linux enjoyer, and builder of small tools.',

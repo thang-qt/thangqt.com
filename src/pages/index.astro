@@ -1,14 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { desktopNavItems } from '../config/desktop';
 ---
 
 <Layout title="ThangQT" description="Open-source developer and Linux enthusiast">
   <div class="home-app">
     <div class="home-content">
       <header class="home-greeting">
-        <p class="home-greeting-label">Personal site</p>
-        <h1 class="home-greeting-name">Thang Qt.</h1>
+        <h1 class="home-greeting-name">ThangQT</h1>
       </header>
 
       <div class="home-body col-content">
@@ -30,19 +28,6 @@ import { desktopNavItems } from '../config/desktop';
         </p>
       </div>
 
-      <nav class="home-nav-grid" aria-label="Quick navigation">
-        {desktopNavItems.filter(item => item.href !== '/').map(item => (
-          <a
-            href={item.href}
-            class="home-nav-item"
-            data-window-link
-            data-window-title={item.label}
-          >
-            <span class="home-nav-icon" aria-hidden="true">{item.icon}</span>
-            {item.label}
-          </a>
-        ))}
-      </nav>
     </div>
 
     <aside class="home-ascii-panel home-detail" aria-hidden="true">
