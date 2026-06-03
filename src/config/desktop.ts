@@ -30,6 +30,7 @@ export const desktopApps = [
     icon: '⌂',
     iconName: desktopAppIcons.home,
     nav: true,
+    pinned: true,
     window: { minWidth: 320, minHeight: 240, width: 'min(64rem, calc(100vw - 5rem))', height: 'min(46rem, calc(100dvh - 8rem))' },
   },
   {
@@ -39,6 +40,7 @@ export const desktopApps = [
     icon: '✎',
     iconName: desktopAppIcons.writing,
     nav: true,
+    pinned: true,
     detailWindows: true,
     window: { minWidth: 340, minHeight: 260, width: 'min(58rem, calc(100vw - 5rem))', height: 'min(48rem, calc(100dvh - 8rem))' },
   },
@@ -49,6 +51,7 @@ export const desktopApps = [
     icon: '◈',
     iconName: desktopAppIcons.projects,
     nav: true,
+    pinned: true,
     detailWindows: true,
     window: { minWidth: 360, minHeight: 260, width: 'min(66rem, calc(100vw - 5rem))', height: 'min(49rem, calc(100dvh - 8rem))' },
   },
@@ -59,6 +62,7 @@ export const desktopApps = [
     icon: '↗',
     iconName: desktopAppIcons.links,
     nav: true,
+    pinned: true,
     detailWindows: true,
     window: { minWidth: 320, minHeight: 240, width: 'min(54rem, calc(100vw - 5rem))', height: 'min(44rem, calc(100dvh - 8rem))' },
   },
@@ -69,6 +73,7 @@ export const desktopApps = [
     icon: 'ⓘ',
     iconName: desktopAppIcons.about,
     nav: true,
+    pinned: false,
     window: { minWidth: 320, minHeight: 220, width: 'min(50rem, calc(100vw - 5rem))', height: 'min(38rem, calc(100dvh - 8rem))' },
   },
   {
@@ -78,6 +83,7 @@ export const desktopApps = [
     icon: '□',
     iconName: desktopAppIcons.resume,
     nav: true,
+    pinned: false,
     window: { minWidth: 380, minHeight: 300, width: 'min(68rem, calc(100vw - 5rem))', height: 'min(50rem, calc(100dvh - 8rem))' },
   },
   {
@@ -87,11 +93,13 @@ export const desktopApps = [
     icon: '⚙',
     iconName: desktopAppIcons.settings,
     nav: true,
+    pinned: false,
     window: { minWidth: 340, minHeight: 260, width: 'min(46rem, calc(100vw - 5rem))', height: 'min(42rem, calc(100dvh - 8rem))' },
   },
 ];
 
 export const desktopNavItems = desktopApps.filter((app) => app.nav);
+export const desktopPinnedItems = desktopApps.filter((app) => app.pinned);
 
 export function getDesktopAppForPath(pathname: string) {
   const normalized = pathname === '/' ? '/' : pathname.replace(/\/$/, '');

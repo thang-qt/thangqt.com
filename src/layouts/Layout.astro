@@ -7,6 +7,7 @@ import {
   desktopApps,
   desktopBackgroundPatterns,
   desktopNavItems,
+  desktopPinnedItems,
   desktopProfile,
   desktopThemePacks,
   getDesktopAppForPath,
@@ -109,7 +110,7 @@ const initialWindow = currentPage.window;
         <strong>ThangQT</strong>
       </a>
       <nav class="desktop-menu__nav" aria-label="Main navigation">
-        {desktopNavItems.map((item) => (
+        {desktopPinnedItems.map((item) => (
           <a
             href={item.href}
             data-window-link
@@ -223,7 +224,6 @@ const initialWindow = currentPage.window;
         <div><dt><kbd>Alt</kbd> <kbd>Q</kbd></dt><dd>Quit active window</dd></div>
         <div><dt><kbd>Alt</kbd> <kbd>M</kbd></dt><dd>Minimize active window</dd></div>
         <div><dt><kbd>Alt</kbd> <kbd>F</kbd></dt><dd>Maximize active window</dd></div>
-        <div><dt><kbd>Double click title</kbd></dt><dd>Maximize window</dd></div>
         <div><dt><kbd>Alt</kbd> <kbd>1–7</kbd></dt><dd>Open app by topbar order</dd></div>
         <div><dt><kbd>Esc</kbd></dt><dd>Close launcher/helper</dd></div>
       </dl>
