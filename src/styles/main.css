@@ -1260,11 +1260,20 @@ pre {
 
 @media (max-width: 640px) {
   .desktop-menu {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto;
+    width: auto;
+    left: 12px;
+    right: 12px;
+    transform: none;
+    justify-content: space-between;
+  }
+
+  .desktop-menu__brand {
+    border-right: 0;
   }
 
   .desktop-menu__brand strong,
-  .desktop-menu__status {
+  .desktop-menu__nav {
     display: none;
   }
 

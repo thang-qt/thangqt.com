@@ -35,6 +35,14 @@ function enforceDesktopWorkArea(win) {
 export function bringWindowForward(win) {
   if (!(win instanceof HTMLElement)) return;
   win.style.zIndex = String(bumpTopZ());
+
+  if (isStackedViewport()) {
+    const stage = getStage();
+    if (stage?.contains(win) && stage.firstElementChild !== win) {
+      stage.prepend(win);
+    }
+  }
+
   scheduleWindowStateSave();
 }
 
@@ -242,7 +250,6 @@ export function initWindowManager() {
   });
 
   initViewportResizeNudge(stage);
-  initMobileAccordion();
 }
 
 /**
@@ -302,72 +309,3 @@ function nudgeAllWindowsIntoView(stage) {
   scheduleWindowStateSave();
 }
 
-/** Mobile accordion: only one window expanded at a time on narrow screens. */
-const mobileQuery = '(max-width: 768px)';
-
-function isMobileViewport() {
-  return window.matchMedia(mobileQuery).matches;
-}
-
-function initMobileAccordion() {
-  if (window.__wmMobileAccordionReady) return;
-  window.__wmMobileAccordionReady = true;
-
-  // Apply initial accordion state
-  applyMobileAccordion();
-
-  // Re-apply when viewport changes breakpoint
-  window.matchMedia(mobileQuery).addEventListener('change', applyMobileAccordion);
-
-  // Listen for taps on collapsed title bars
-  document.addEventListener('click', (event) => {
-    if (!isMobileViewport()) return;
-    const bar = event.target.closest('.desktop-window__bar');
-    if (!bar) return;
-    const win = bar.closest('.desktop-window');
-    if (!win || !win.classList.contains('is-mobile-collapsed')) return;
-    expandMobileWindow(win);
-  });
-}
-
-function applyMobileAccordion() {
-  if (!isMobileViewport()) {
-    // Clear mobile classes when returning to desktop
-    getDesktopWindows().forEach((win) => {
-      win.classList.remove('is-mobile-collapsed', 'is-mobile-active');
-    });
-    return;
-  }
-
-  const wins = getDesktopWindows();
-  if (wins.length === 0) return;
-
-  // Find the one with the highest z-index to make "active"
-  let activeWin = wins[0];
-  let topZ = numericStyle(wins[0].style.zIndex, 0);
-  wins.forEach((win) => {
-    const z = numericStyle(win.style.zIndex, 0);
-    if (z > topZ) { topZ = z; activeWin = win; }
-  });
-
-  wins.forEach((win) => {
-    if (win === activeWin) {
-      win.classList.remove('is-mobile-collapsed');
-      win.classList.add('is-mobile-active');
-    } else {
-      win.classList.add('is-mobile-collapsed');
-      win.classList.remove('is-mobile-active');
-    }
-  });
-}
-
-function expandMobileWindow(win) {
-  getDesktopWindows().forEach((w) => {
-    w.classList.add('is-mobile-collapsed');
-    w.classList.remove('is-mobile-active');
-  });
-  win.classList.remove('is-mobile-collapsed');
-  win.classList.add('is-mobile-active');
-  bringWindowForward(win);
-  win.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
