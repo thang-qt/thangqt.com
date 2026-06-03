@@ -16,15 +16,9 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
-const coverMode = post.data.coverMode ?? 'inline';
 const contentBackground = post.data.contentBackground;
 const themeColor = post.data.themeColor;
 const themeColorDark = post.data.themeColorDark;
-
-// Get optimized cover image URL for background usage
-const coverBgImage = post.data.cover && coverMode === 'title-background'
-  ? await getImage({ src: post.data.cover, width: 1920 })
-  : null;
 
 // SEO image fallback order: explicit SEO image -> cover -> first content image -> site default.
 // This affects metadata only; it does not render a visual cover.
@@ -68,18 +62,7 @@ function formatDate(date: Date): string {
   jsonLdType="article"
   desktopTitle={post.data.title}
 >
-  <section
-    class:list={['col-content post-header', coverMode === 'title-background' ? 'has-title-bg' : '']}
-    style={coverBgImage ? `--post-cover-url: url('${coverBgImage.src}')` : undefined}
-    data-window-title={post.data.title}
-  >
-    <a href="/writing" class="back-link" aria-label="Back to writing">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-      </svg>
-      <span>Back</span>
-    </a>
+  <section class="col-content post-header" data-window-title={post.data.title}>
     <div class="post-header-content">
       <p class="post-page-date">{formatDate(post.data.date)}</p>
       <h1 class="post-page-title">{post.data.title}</h1>

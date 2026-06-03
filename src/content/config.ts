@@ -23,7 +23,6 @@ const writing = defineCollection({
       tags: z.array(z.string()).optional(),
       cover: image().optional(),
       seoImage: image().optional(),
-      coverMode: z.enum(['inline', 'title-background']).optional(),
       contentBackground: z.string().optional(),
       themeColor: z.string().optional(),
       themeColorDark: z.string().optional(),

@@ -2,33 +2,25 @@
 import Layout from '../layouts/Layout.astro';
 import PaginationNav from '../components/PaginationNav.astro';
 import {
-  formatLinkDate,
-  formatLinkKind,
   getHostnameLabel,
   getLinkHref,
   getLinkTitle,
   getPublishedLinks,
-  resolveVia,
 } from '../utils/links';
 import { paginateItems } from '../utils/pagination';
 
 const PAGE_SIZE = 12;
 
-const { links, slugMap } = await getPublishedLinks();
+const { links } = await getPublishedLinks();
 
-const linksWithVia = links.map((link) => ({
-  link,
-  via: resolveVia(link.data.via, slugMap),
-}));
+const linksWithVia = links.map((link) => ({ link }));
 const paginatedLinks = paginateItems(linksWithVia, 1, PAGE_SIZE);
 ---
 
 <Layout title="Links - ThangQT" description="A public bookmark archive of things I want to remember.">
-  <section class="col-content links-page" data-window-title="Links">
-    <header class="links-header">
-      <p class="links-kicker">Bookmark archive</p>
+  <section class="col-content archive-page archive-page--links" data-window-title="Links">
+    <header class="archive-hero">
       <h1>Links</h1>
-      <p class="links-status">{linksWithVia.length} bookmarks archived.</p>
     </header>
 
     {linksWithVia.length === 0 ? (
@@ -39,61 +31,20 @@ const paginatedLinks = paginateItems(linksWithVia, 1, PAGE_SIZE);
       </div>
     ) : (
       <>
-        <div class="links-list">
-          {paginatedLinks.items.map(({ link, via }) => (
-            <article class="link-item" data-preview-trigger={link.slug}>
-              <div class="link-item-main">
-                <h2 class="link-title">
-                  <a href={link.data.url} class="link-title-link" target="_blank" rel="noreferrer">
-                    {getLinkTitle(link)}
-                  </a>
-                </h2>
+        <div class="bookmark-stack">
+          {paginatedLinks.items.map(({ link }) => (
+            <article class="bookmark-card" data-preview-trigger={link.slug}>
+              <a href={link.data.url} target="_blank" rel="noreferrer" class="bookmark-card__main">
+                <span class="bookmark-card__domain">{getHostnameLabel(link.data.url)}</span>
+                <span class="bookmark-card__content">
+                  <h2>{getLinkTitle(link)}</h2>
+                  {link.data.note && <span class="bookmark-card__note">{link.data.note}</span>}
+                </span>
+                <span class="bookmark-card__external" aria-hidden="true">↗</span>
+              </a>
 
-                <p class="link-meta">
-                  <span class="link-domain-chip">{getHostnameLabel(link.data.url)}</span>
-                  {formatLinkKind(link.data.kind) && <span>{formatLinkKind(link.data.kind)}</span>}
-                  {formatLinkDate(link.data.date) && <span>{formatLinkDate(link.data.date)}</span>}
-                </p>
-
-                {link.data.note && <p class="link-note">{link.data.note}</p>}
-
-                {via.length > 0 && (
-                  <p class="link-via">
-                    <span>via</span>
-                    {via.map((item) => (
-                      <span class="link-via-item">
-                        <a
-                          href={item.href}
-                          class="link-inline"
-                          target={item.type === 'external' ? '_blank' : undefined}
-                          rel={item.type === 'external' ? 'noreferrer' : undefined}
-                        >
-                          {item.label}
-                        </a>
-                      </span>
-                    ))}
-                  </p>
-                )}
-
-                {link.data.tags && link.data.tags.length > 0 && (
-                  <ul class="link-tags" aria-label="Tags">
-                    {link.data.tags.map((tag) => (
-                      <li>{tag}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              <a
-                href={getLinkHref(link)}
-                class="link-permalink"
-                aria-label={`Open permalink for ${getLinkTitle(link)}`}
-                data-tooltip="Permalink"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.2 4.72" />
-                  <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 1 0 0 7.07 7.07L12.8 19.28" />
-                </svg>
+              <a href={getLinkHref(link)} class="bookmark-card__permalink" aria-label={`Open permalink for ${getLinkTitle(link)}`}>
+                <span aria-hidden="true">#</span>
               </a>
             </article>
           ))}

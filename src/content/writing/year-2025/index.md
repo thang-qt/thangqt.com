@@ -4,8 +4,6 @@ description: A soft look back at the year that passed, and a small promise for t
 date: 2026-02-17
 tags:
   - personal
-cover: ./cover.webp
-coverMode: title-background
 themeColor: "#bc6f58"
 themeColorDark: "#b83838"
 ---

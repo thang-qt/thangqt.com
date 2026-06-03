@@ -13,51 +13,30 @@ const posts = await getCollection('writing', ({ data }) => {
 const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const paginatedPosts = paginateItems(sortedPosts, 1, PAGE_SIZE);
 
-// Group posts by year for timeline
-const postsByYear = paginatedPosts.items.reduce((acc, post) => {
-  const year = String(post.data.date.getFullYear());
-  if (!acc[year]) acc[year] = [];
-  acc[year].push(post);
-  return acc;
-}, {} as Record<string, typeof sortedPosts>);
-
-const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
-
-function formatShortDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
+
 ---
 
 <Layout title="Writing - ThangQT" description="My various thoughts on life, tech, and everything in between">
-  <section class="col-content writing-page" data-window-title="Writing">
-    <header class="writing-header">
-      <p class="writing-kicker">Writing</p>
-      <h1>Journal</h1>
-      <p class="writing-status">{paginatedPosts.totalItems} posts archived.</p>
+  <section class="col-content archive-page archive-page--writing" data-window-title="Writing">
+    <header class="archive-hero">
+      <h1>Writing</h1>
     </header>
 
-    <div class="writing-timeline">
-      {years.map((year) => (
-        <div class="timeline-year-group">
-          <div class="timeline-year-marker" aria-label={`Year ${year}`}>{year}</div>
-          <div class="timeline-posts">
-            {postsByYear[year].map((post) => (
-              <article class="timeline-post-item">
-                <a href={`/writing/${post.slug}`} class="timeline-link">
-                  <time class="timeline-post-date" datetime={post.data.date.toISOString()}>
-                    {formatShortDate(post.data.date)}
-                  </time>
-                  <div class="timeline-post-content">
-                    <h2 class="timeline-post-title">{post.data.title}</h2>
-                    {post.data.description && (
-                      <p class="timeline-post-desc">{post.data.description}</p>
-                    )}
-                  </div>
-                </a>
-              </article>
-            ))}
-          </div>
-        </div>
+    <div class="writing-ledger" aria-label="Writing archive">
+      {paginatedPosts.items.map((post, index) => (
+        <article class="ledger-row">
+          <a href={`/writing/${post.slug}`} class="ledger-row__link">
+            <div class="ledger-row__meta">
+              <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+            </div>
+            <div class="ledger-row__body">
+              <h2>{post.data.title}</h2>
+            </div>
+          </a>
+        </article>
       ))}
     </div>
 

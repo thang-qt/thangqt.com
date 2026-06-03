@@ -25,6 +25,7 @@ interface Props {
   tags?: string[];
   jsonLdType?: 'website' | 'article' | 'person';
   desktopTitle?: string;
+  windowBleed?: boolean;
 }
 
 const {
@@ -39,6 +40,7 @@ const {
   tags = [],
   jsonLdType = 'website',
   desktopTitle,
+  windowBleed = false,
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -133,7 +135,9 @@ const initialWindow = currentPage.window;
         minHeight={initialWindow.minHeight}
         data-window-url={currentPath}
         data-window-app={initialAppKey}
+        data-window-bleed={windowBleed ? 'true' : undefined}
         data-window-base-app={currentPage.id}
+        data-window-flags={windowBleed ? 'bleed' : undefined}
         style={`width: ${initialWindow.width}; height: ${initialWindow.height};`}
       >
         <div class="desktop-document">
