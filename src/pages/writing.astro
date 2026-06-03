@@ -4,58 +4,78 @@ import PaginationNav from '../components/PaginationNav.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '../utils/pagination';
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 40; // show more in timeline view
 
 const posts = await getCollection('writing', ({ data }) => {
   return import.meta.env.PROD ? data.draft !== true : true;
 });
+
 const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const paginatedPosts = paginateItems(sortedPosts, 1, PAGE_SIZE);
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+// Group posts by year for timeline
+const postsByYear = paginatedPosts.items.reduce((acc, post) => {
+  const year = String(post.data.date.getFullYear());
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<string, typeof sortedPosts>);
+
+const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
+
+function formatShortDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 ---
 
 <Layout title="Writing - ThangQT" description="My various thoughts on life, tech, and everything in between">
-  <section class="col-content list-app list-app--writing" data-window-title="Writing">
-    <div class="list-mobile-header">
-      <div>
-        <p class="list-kicker">Journal index</p>
-        <h1 class="list-page-title">Writing</h1>
+  <section class="writing-app col-content list-app list-app--writing" data-window-title="Writing">
+
+    <div class="writing-app-header">
+      <div class="app-title-group">
+        <p class="app-kicker">Writing</p>
+        <h1 class="app-title">Journal</h1>
       </div>
       <div class="list-toolbar" aria-label="Writing display options">
-        <span>View</span>
-        <button type="button" data-list-view="list">List</button>
-        <button type="button" data-list-view="grid">Grid</button>
-        <button type="button" data-list-view="compact">Compact</button>
+        <button class="ds-button" type="button" data-list-view="list" aria-pressed="true">List</button>
+        <button class="ds-button" type="button" data-list-view="grid">Grid</button>
+        <button class="ds-button" type="button" data-list-view="compact">Compact</button>
       </div>
     </div>
-    <p class="list-status">{paginatedPosts.totalItems} posts sorted by newest first.</p>
 
-    {paginatedPosts.items.map((post) => (
-      <article class="post-item">
-        <a href={`/writing/${post.slug}`} class="list-link">
-          <span class="list-row-main">
-            <h2 class="post-title">{post.data.title}</h2>
-            {post.data.description && <p class="list-description">{post.data.description}</p>}
-          </span>
-          <span class="post-meta">{formatDate(post.data.date)}</span>
-        </a>
-      </article>
+    <p class="list-status">{paginatedPosts.totalItems} posts</p>
+
+    {years.map(year => (
+      <div class="writing-year-group">
+        <div class="writing-year-marker" aria-label={`Year ${year}`}>{year}</div>
+        <div class="writing-year-posts">
+          {postsByYear[year].map(post => (
+            <article class="post-item">
+              <a href={`/writing/${post.slug}`} class="list-link">
+                <span class="list-row-main">
+                  <h2 class="post-title">{post.data.title}</h2>
+                  {post.data.description && (
+                    <p class="list-description">{post.data.description}</p>
+                  )}
+                </span>
+                <time class="post-meta" datetime={post.data.date.toISOString()}>
+                  {formatShortDate(post.data.date)}
+                </time>
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
     ))}
 
-    <PaginationNav
-      basePath="/writing"
-      currentPage={paginatedPosts.currentPage}
-      totalPages={paginatedPosts.totalPages}
-      label="Writing pagination"
-    />
-  </section>
+    {paginatedPosts.totalPages > 1 && (
+      <PaginationNav
+        basePath="/writing"
+        currentPage={paginatedPosts.currentPage}
+        totalPages={paginatedPosts.totalPages}
+        label="Writing pagination"
+      />
+    )}
 
-  <aside class="col-detail">
-    <div class="is-visible">
-      <h2>Writing</h2>
-    </div>
-  </aside>
+  </section>
 </Layout>

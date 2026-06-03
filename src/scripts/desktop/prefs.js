@@ -3,8 +3,14 @@ import { safeRead, safeWrite, storageKeys } from './storage.js';
 const defaultPrefs = {
   mode: 'light',
   pack: 'poolsuite',
-  pattern: 'tiles',
+  pattern: 'grid',
 };
+
+const legacyPatternMap = { tiles: 'grid', rings: 'dots' };
+
+function normalizePattern(pattern) {
+  return legacyPatternMap[pattern] || pattern || defaultPrefs.pattern;
+}
 
 function normalizePack(pack) {
   return pack === 'oxide' ? 'bloom' : pack || defaultPrefs.pack;
@@ -19,7 +25,7 @@ export function getDesktopPrefs() {
   return {
     mode: safeRead(storageKeys.prefsMode, defaultPrefs.mode),
     pack,
-    pattern: safeRead(storageKeys.prefsPattern, defaultPrefs.pattern),
+    pattern: normalizePattern(safeRead(storageKeys.prefsPattern, defaultPrefs.pattern)),
   };
 }
 
@@ -28,7 +34,7 @@ export function applyDesktopPrefs(nextPrefs = {}) {
   const prefs = {
     mode: nextPrefs.mode || current.mode,
     pack: normalizePack(nextPrefs.pack || current.pack),
-    pattern: nextPrefs.pattern || current.pattern,
+    pattern: normalizePattern(nextPrefs.pattern || current.pattern),
   };
 
   document.documentElement.dataset.colorMode = prefs.mode;

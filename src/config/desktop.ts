@@ -139,23 +139,33 @@ export const desktopThemePacks = [
 
 export const desktopBackgroundPatterns = [
   {
-    id: 'tiles',
-    label: 'Pool Tiles',
-    note: 'Isometric resort tiles.',
-  },
-  {
     id: 'grid',
     label: 'Desk Grid',
     note: 'Quiet graph paper field.',
   },
   {
-    id: 'rings',
-    label: 'Signal Rings',
-    note: 'Soft radar marks.',
-  },
-  {
     id: 'noise',
     label: 'Static Wash',
     note: 'Fine retro monitor texture.',
+  },
+  {
+    id: 'weave',
+    label: 'Paper Weave',
+    note: 'Diagonal linen crosshatch.',
+  },
+  {
+    id: 'dots',
+    label: 'Dot Field',
+    note: 'Faint halftone dot grid.',
+  },
+  {
+    id: 'circuit',
+    label: 'Circuit Lines',
+    note: 'Angled PCB trace pattern.',
+  },
+  {
+    id: 'topography',
+    label: 'Contour',
+    note: 'Topographic elevation curves.',
   },
 ];

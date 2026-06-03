@@ -49,7 +49,7 @@ const initialWindow = currentPage.window;
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-color-mode="light" data-theme-pack="poolsuite" data-bg-pattern="tiles">
+<html lang="en" data-theme="light" data-color-mode="light" data-theme-pack="poolsuite" data-bg-pattern="grid">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -85,8 +85,12 @@ const initialWindow = currentPage.window;
       const mode = localStorage.getItem('desktop-color-mode') || 'light';
       const savedPack = localStorage.getItem('desktop-theme-pack') || 'poolsuite';
       const pack = savedPack === 'oxide' ? 'bloom' : savedPack;
-      const pattern = localStorage.getItem('desktop-bg-pattern') || 'tiles';
+      const savedPattern = localStorage.getItem('desktop-bg-pattern') || 'grid';
+      // Migrate removed patterns to their closest replacement
+      const patternMap = { tiles: 'grid', rings: 'dots' };
+      const pattern = patternMap[savedPattern] || savedPattern;
       if (savedPack === 'oxide') localStorage.setItem('desktop-theme-pack', 'bloom');
+      if (patternMap[savedPattern]) localStorage.setItem('desktop-bg-pattern', pattern);
       document.documentElement.dataset.colorMode = mode;
       document.documentElement.dataset.themePack = pack;
       document.documentElement.dataset.bgPattern = pattern;

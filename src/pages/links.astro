@@ -12,7 +12,7 @@ import {
 } from '../utils/links';
 import { paginateItems } from '../utils/pagination';
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 12;
 
 const { links, slugMap } = await getPublishedLinks();
 
@@ -24,81 +24,91 @@ const paginatedLinks = paginateItems(linksWithVia, 1, PAGE_SIZE);
 ---
 
 <Layout title="Links - ThangQT" description="A public bookmark archive of things I want to remember.">
-  <section class="col-content links-list-column">
-    <div class="list-mobile-header">
-      <h1 class="list-page-title">Links</h1>
+  <section class="col-content links-list-column" data-window-title="Links">
+
+    <div class="writing-app-header">
+      <div class="app-title-group">
+        <p class="app-kicker">Bookmark archive</p>
+        <h1 class="app-title">Links</h1>
+      </div>
     </div>
 
     {linksWithVia.length === 0 ? (
-      <div class="links-empty-state">
-        <p>No links yet.</p>
-        <p>Add entries in <code>src/content/links/</code> with a <code>slug</code> and <code>url</code>.</p>
+      <div class="ds-empty">
+        <span class="ds-empty__icon">↗</span>
+        <p class="ds-empty__title">No links yet</p>
+        <p class="ds-empty__body">Add entries in <code>src/content/links/</code> with a <code>slug</code> and <code>url</code>.</p>
       </div>
     ) : (
-      <div class="links-list">
-        {paginatedLinks.items.map(({ link, via }) => (
-          <article class="link-item" data-preview-trigger={link.slug}>
-            <div class="link-item-main">
-              <h2 class="link-title">
-                <a href={link.data.url} class="link-title-link" target="_blank" rel="noreferrer">
-                  {getLinkTitle(link)}
-                </a>
-              </h2>
+      <>
+        <p class="list-status">{linksWithVia.length} links saved</p>
+        <div class="links-list">
+          {paginatedLinks.items.map(({ link, via }) => (
+            <article class="link-item" data-preview-trigger={link.slug}>
+              <div class="link-item-main">
+                <h2 class="link-title">
+                  <a href={link.data.url} class="link-title-link" target="_blank" rel="noreferrer">
+                    {getLinkTitle(link)}
+                  </a>
+                </h2>
 
-              <p class="link-meta">
-                <span>{getHostnameLabel(link.data.url)}</span>
-                {formatLinkKind(link.data.kind) && <span>{formatLinkKind(link.data.kind)}</span>}
-                {formatLinkDate(link.data.date) && <span>{formatLinkDate(link.data.date)}</span>}
-              </p>
-
-              {link.data.note && <p class="link-note">{link.data.note}</p>}
-
-              {via.length > 0 && (
-                <p class="link-via">
-                  <span>via</span>
-                  {via.map((item) => (
-                    <span class="link-via-item">
-                      <a href={item.href} class="link-inline" target={item.type === 'external' ? '_blank' : undefined} rel={item.type === 'external' ? 'noreferrer' : undefined}>
-                        {item.label}
-                      </a>
-                    </span>
-                  ))}
+                <p class="link-meta">
+                  <span class="link-domain-chip">{getHostnameLabel(link.data.url)}</span>
+                  {formatLinkKind(link.data.kind) && <span>{formatLinkKind(link.data.kind)}</span>}
+                  {formatLinkDate(link.data.date) && <span>{formatLinkDate(link.data.date)}</span>}
                 </p>
-              )}
 
-              {link.data.tags && link.data.tags.length > 0 && (
-                <ul class="link-tags" aria-label="Tags">
-                  {link.data.tags.map((tag) => (
-                    <li>{tag}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
+                {link.data.note && <p class="link-note">{link.data.note}</p>}
 
-            <a href={getLinkHref(link)} class="link-permalink link-permalink-icon" aria-label={`Open permalink for ${getLinkTitle(link)}`}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.2 4.72" />
-                <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 1 0 7.07 7.07L12.8 19.28" />
-              </svg>
-            </a>
-          </article>
-        ))}
-      </div>
+                {via.length > 0 && (
+                  <p class="link-via">
+                    <span>via</span>
+                    {via.map((item) => (
+                      <span class="link-via-item">
+                        <a
+                          href={item.href}
+                          class="link-inline"
+                          target={item.type === 'external' ? '_blank' : undefined}
+                          rel={item.type === 'external' ? 'noreferrer' : undefined}
+                        >
+                          {item.label}
+                        </a>
+                      </span>
+                    ))}
+                  </p>
+                )}
+
+                {link.data.tags && link.data.tags.length > 0 && (
+                  <ul class="link-tags" aria-label="Tags">
+                    {link.data.tags.map((tag) => (
+                      <li>{tag}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <a
+                href={getLinkHref(link)}
+                class="link-permalink"
+                aria-label={`Open permalink for ${getLinkTitle(link)}`}
+                data-tooltip="Permalink"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.2 4.72" />
+                  <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 1 0 0 7.07 7.07L12.8 19.28" />
+                </svg>
+              </a>
+            </article>
+          ))}
+        </div>
+
+        <PaginationNav
+          basePath="/links"
+          currentPage={paginatedLinks.currentPage}
+          totalPages={paginatedLinks.totalPages}
+          label="Links pagination"
+        />
+      </>
     )}
-
-    <PaginationNav
-      basePath="/links"
-      currentPage={paginatedLinks.currentPage}
-      totalPages={paginatedLinks.totalPages}
-      label="Links pagination"
-    />
   </section>
-
-  <aside class="col-detail link-preview-detail">
-    <div class="is-visible links-preview-shell">
-      <div class="link-preview-panel is-active">
-        <p class="link-preview-stamp">Stay curious.</p>
-      </div>
-    </div>
-  </aside>
 </Layout>

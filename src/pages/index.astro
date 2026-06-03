@@ -1,36 +1,54 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { desktopNavItems } from '../config/desktop';
 ---
 
 <Layout title="ThangQT" description="Open-source developer and Linux enthusiast">
-  <section class="col-content">
-    <p>
-      Hello there! Welcome to my personal corner of the internet.
-    </p>
-    <p>
-      I'm Thang, a computer science student at UET-VNU who likes tinkering and
-      appreciating the little things along the way.
-    </p>
-    <p>
-      You might want to start with <a href="/writing" class="home-inline-link">writing</a> for notes,
-      thoughts, and things I'm figuring out. Then browse <a href="/projects" class="home-inline-link">projects</a>
-      to see what I've been building, or wander through <a href="/links" class="home-inline-link">links</a>
-      for corners of the web I think are worth keeping around.
-    </p>
-    <p>
-      If you want the fuller version, head over to <a href="/about" class="home-inline-link">about</a>
-      to know more about me.
-    </p>
-  </section>
+  <div class="home-app">
+    <div class="home-content">
+      <header class="home-greeting">
+        <p class="home-greeting-label">Personal site</p>
+        <h1 class="home-greeting-name">Thang Qt.</h1>
+      </header>
 
-  <aside class="col-detail home-detail">
-    <div class="is-visible">
-      <pre
-        class="ascii-anim"
-        aria-hidden="true"
-      ></pre>
+      <div class="home-body col-content">
+        <p>
+          Hello there! Welcome to my personal corner of the internet.
+          I'm Thang, a computer science student at UET-VNU who likes
+          tinkering and appreciating the little things along the way.
+        </p>
+        <p>
+          Start with <a href="/writing" class="home-inline-link" data-window-link>writing</a> for notes,
+          thoughts, and things I'm figuring out. Browse <a href="/projects" class="home-inline-link" data-window-link>projects</a>
+          to see what I've been building, or wander through <a href="/links" class="home-inline-link" data-window-link>links</a>
+          for corners of the web I think are worth keeping around.
+        </p>
+        <p>
+          If you want the fuller version, head over to
+          <a href="/about" class="home-inline-link" data-window-link>about</a>
+          to know more about me.
+        </p>
+      </div>
+
+      <nav class="home-nav-grid" aria-label="Quick navigation">
+        {desktopNavItems.filter(item => item.href !== '/').map(item => (
+          <a
+            href={item.href}
+            class="home-nav-item"
+            data-window-link
+            data-window-title={item.label}
+          >
+            <span class="home-nav-icon" aria-hidden="true">{item.icon}</span>
+            {item.label}
+          </a>
+        ))}
+      </nav>
     </div>
-  </aside>
+
+    <aside class="home-ascii-panel home-detail" aria-hidden="true">
+      <pre class="ascii-anim"></pre>
+    </aside>
+  </div>
 </Layout>
 
 <script is:inline data-astro-rerun>
@@ -52,9 +70,7 @@ import Layout from '../layouts/Layout.astro';
       return x - Math.floor(x);
     }
 
-    // Background stars
     let stars = [];
-    // Trail sparks from cursor
     let sparks = [];
     let meteor = null;
 
@@ -94,7 +110,6 @@ import Layout from '../layouts/Layout.astro';
       const cols = grid.cols;
       const canvas = Array.from({ length: rows }, () => Array(cols).fill(' '));
 
-      // Draw background stars with twinkle + subtle ripple
       stars.forEach((s) => {
         const twinkle = Math.sin(tick * s.speed + s.phase) * 0.5 + 0.5;
         let ripple = 0;
@@ -103,26 +118,22 @@ import Layout from '../layouts/Layout.astro';
           const dy = s.y - pointer.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           const influenceRadius = 6;
-
           if (dist < influenceRadius) {
             const falloff = 1 - dist / influenceRadius;
             ripple = Math.sin(dist * 0.35 - tick * 0.08) * 0.12 * falloff;
           }
         }
         const b = Math.max(0, Math.min(1, s.brightness * twinkle + ripple));
-
         let char = ' ';
         if (b > 0.6) char = '*';
         else if (b > 0.4) char = '+';
         else if (b > 0.25) char = '·';
         else if (b > 0.12) char = '.';
-
         if (char !== ' ' && s.x >= 0 && s.x < cols && s.y >= 0 && s.y < rows) {
           canvas[s.y][s.x] = char;
         }
       });
 
-      // Update and draw cursor sparks
       sparks = sparks.filter((sp) => sp.life > 0);
       sparks.forEach((sp) => {
         sp.life -= 1;
@@ -131,13 +142,11 @@ import Layout from '../layouts/Layout.astro';
         if (fade > 0.7) char = '*';
         else if (fade > 0.4) char = '+';
         else if (fade > 0.2) char = '·';
-
         if (sp.x >= 0 && sp.x < cols && sp.y >= 0 && sp.y < rows) {
           canvas[sp.y][sp.x] = char;
         }
       });
 
-      // Meteor logic
       if (!meteor && Math.random() < 0.0012) {
         meteor = {
           x: Math.random() * cols * 0.4,
@@ -186,8 +195,6 @@ import Layout from '../layouts/Layout.astro';
       const rect = el.getBoundingClientRect();
       const x = Math.floor(((event.clientX - rect.left) / rect.width) * grid.cols);
       const y = Math.floor(((event.clientY - rect.top) / rect.height) * grid.rows);
-
-      // Spawn spark if moved to new cell
       if (x !== lastPointer.x || y !== lastPointer.y) {
         if (x >= 0 && x < grid.cols && y >= 0 && y < grid.rows) {
           sparks.push({ x, y, life: 12, maxLife: 12 });
@@ -211,9 +218,7 @@ import Layout from '../layouts/Layout.astro';
     };
   }
 
-  const runAsciiAnim = () => {
-    requestAnimationFrame(initAsciiAnim);
-  };
+  const runAsciiAnim = () => requestAnimationFrame(initAsciiAnim);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', runAsciiAnim, { once: true });
