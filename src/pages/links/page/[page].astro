@@ -36,7 +36,7 @@ const paginatedLinks = paginateItems(linksWithVia, currentPage, PAGE_SIZE);
 ---
 
 <Layout title={`Links - Page ${paginatedLinks.currentPage} - ThangQT`} description="A public bookmark archive of things I want to remember.">
-  <section class="col-content links-list-column" transition:name="col-content" transition:animate="fade">
+  <section class="col-content links-list-column">
     <div class="list-mobile-header">
       <h1 class="list-page-title">Links</h1>
     </div>
@@ -99,7 +99,7 @@ const paginatedLinks = paginateItems(linksWithVia, currentPage, PAGE_SIZE);
     />
   </section>
 
-  <aside class="col-detail link-preview-detail" transition:name="col-detail" transition:animate="fade">
+  <aside class="col-detail link-preview-detail">
     <div class="is-visible links-preview-shell">
       <div class="link-preview-panel is-active">
         <p class="link-preview-stamp">Stay curious.</p>

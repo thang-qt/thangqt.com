@@ -34,16 +34,29 @@ function formatDate(date: Date): string {
 ---
 
 <Layout title={`Writing - Page ${paginatedPosts.currentPage} - ThangQT`} description="My various thoughts on life, tech, and everything in between">
-  <section class="col-content" transition:name="col-content" transition:animate="fade">
+  <section class="col-content list-app list-app--writing" data-window-title="Writing">
     <div class="list-mobile-header">
-      <h1 class="list-page-title">Writing</h1>
+      <div>
+        <p class="list-kicker">Journal index</p>
+        <h1 class="list-page-title">Writing</h1>
+      </div>
+      <div class="list-toolbar" aria-label="Writing display options">
+        <span>View</span>
+        <button type="button" data-list-view="list">List</button>
+        <button type="button" data-list-view="grid">Grid</button>
+        <button type="button" data-list-view="compact">Compact</button>
+      </div>
     </div>
+    <p class="list-status">{paginatedPosts.totalItems} posts sorted by newest first.</p>
 
     {paginatedPosts.items.map((post) => (
       <article class="post-item">
         <a href={`/writing/${post.slug}`} class="list-link">
-          <h2 class="post-title">{post.data.title}</h2>
-          <p class="post-meta">{formatDate(post.data.date)}</p>
+          <span class="list-row-main">
+            <h2 class="post-title">{post.data.title}</h2>
+            {post.data.description && <p class="list-description">{post.data.description}</p>}
+          </span>
+          <span class="post-meta">{formatDate(post.data.date)}</span>
         </a>
       </article>
     ))}
@@ -56,7 +69,7 @@ function formatDate(date: Date): string {
     />
   </section>
 
-  <aside class="col-detail" transition:name="col-detail" transition:animate="fade">
+  <aside class="col-detail">
     <div class="is-visible">
       <h2>Writing</h2>
     </div>

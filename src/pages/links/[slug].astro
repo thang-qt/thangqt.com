@@ -34,8 +34,9 @@ const pageDescription = link.data.note || `Saved link to ${getHostnameLabel(link
   publishedDate={link.data.date}
   tags={link.data.tags}
   ogType="website"
+  desktopTitle={pageTitle}
 >
-  <section class="col-content post-header link-header link-summary-column" transition:name="col-content" transition:animate="fade">
+  <section class="col-content post-header link-header link-summary-column" data-window-title={pageTitle}>
     <a href="/links" class="back-link" aria-label="Back to links">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -59,7 +60,7 @@ const pageDescription = link.data.note || `Saved link to ${getHostnameLabel(link
     </div>
   </section>
 
-  <aside class="col-detail post-body link-body link-detail-column" transition:name="col-detail" transition:animate="fade">
+  <aside class="col-detail post-body link-body link-detail-column">
     <div class="post-mobile-header" aria-hidden="true">
       <p class="post-page-date link-page-domain">
         <a href={link.data.url} class="link-inline" target="_blank" rel="noreferrer" tabindex="-1">

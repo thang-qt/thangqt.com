@@ -1,7 +1,16 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
 import SEO from '../components/SEO.astro';
 import JsonLD from '../components/JsonLD.astro';
+import DesktopWindow from '../components/DesktopWindow.astro';
+import {
+  desktopApps,
+  desktopBackgroundPatterns,
+  desktopNavItems,
+  desktopProfile,
+  desktopThemePacks,
+  getDesktopAppForPath,
+  getDesktopAppKeyForPath,
+} from '../config/desktop';
 import '../styles/main.css';
 
 interface Props {
@@ -15,10 +24,11 @@ interface Props {
   modifiedDate?: Date;
   tags?: string[];
   jsonLdType?: 'website' | 'article' | 'person';
+  desktopTitle?: string;
 }
 
-const { 
-  title = 'ThangQT', 
+const {
+  title = 'ThangQT',
   description = 'Open-source developer and Linux enthusiast',
   bodyClass = '',
   bodyStyle = '',
@@ -28,30 +38,29 @@ const {
   modifiedDate,
   tags = [],
   jsonLdType = 'website',
+  desktopTitle,
 } = Astro.props;
 
-const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Writing', href: '/writing' },
-  { label: 'Links', href: '/links' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'About', href: '/about' },
-];
-
 const currentPath = Astro.url.pathname;
+const currentPage = getDesktopAppForPath(currentPath);
+const windowTitle = desktopTitle ?? currentPage?.label ?? 'ThangQT';
+const initialAppKey = getDesktopAppKeyForPath(currentPath);
+const initialWindow = currentPage.window;
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="light" data-color-mode="light" data-theme-pack="poolsuite" data-bg-pattern="tiles">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    
-    <!-- SEO Meta Tags -->
-    <SEO 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..800&family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <SEO
       title={title}
       description={description}
       ogImage={ogImage}
@@ -60,9 +69,8 @@ const currentPath = Astro.url.pathname;
       modifiedDate={modifiedDate}
       tags={tags}
     />
-    
-    <!-- Structured Data -->
-    <JsonLD 
+
+    <JsonLD
       type={jsonLdType}
       title={title}
       description={description}
@@ -71,565 +79,110 @@ const currentPath = Astro.url.pathname;
       modifiedDate={modifiedDate}
       tags={tags}
     />
-    
-    <!-- RSS Feed -->
+
     <link rel="alternate" type="application/rss+xml" title="ThangQT's Blog" href="/rss.xml" />
-    
-    <ViewTransitions />
+    <script is:inline>
+      const mode = localStorage.getItem('desktop-color-mode') || 'light';
+      const savedPack = localStorage.getItem('desktop-theme-pack') || 'poolsuite';
+      const pack = savedPack === 'oxide' ? 'bloom' : savedPack;
+      const pattern = localStorage.getItem('desktop-bg-pattern') || 'tiles';
+      if (savedPack === 'oxide') localStorage.setItem('desktop-theme-pack', 'bloom');
+      document.documentElement.dataset.colorMode = mode;
+      document.documentElement.dataset.themePack = pack;
+      document.documentElement.dataset.bgPattern = pattern;
+    </script>
   </head>
 
-  <body class={`ly-default ${bodyClass}`.trim()} style={bodyStyle || undefined}>
-    <div class="nav-progress" id="nav-progress" transition:persist aria-hidden="true"></div>
+  <body class={`ly-default desktop-os ${bodyClass}`.trim()} style={bodyStyle || undefined}>
+    <div class="desktop-bg" aria-hidden="true"></div>
 
-    <!-- Mobile Header (hidden on desktop) -->
-    <header class="mobile-header" transition:persist>
-      <a href="/" class="site-logo">ThangQT</a>
-      
-      <div class="mobile-header-actions">
-        <button class="theme-toggle" id="theme-toggle-mobile" aria-label="Toggle theme">
-          <span class="visually-hidden">Toggle theme</span>
-        </button>
-        
-        <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+    <header class="desktop-menu">
+      <a href="/" class="desktop-menu__brand" aria-label="ThangQT home">
+        <img src="/assets/imgs/dark-logo.svg" alt="" aria-hidden="true" />
+        <strong>{desktopProfile.name}</strong>
+      </a>
+      <nav class="desktop-menu__nav" aria-label="Main navigation">
+        {desktopNavItems.map((item) => (
+          <a
+            href={item.href}
+            data-window-link
+            data-window-title={item.label}
+            aria-current={currentPath === item.href || (item.href !== '/' && currentPath.startsWith(`${item.href}/`)) ? 'page' : undefined}
+          >
+            <span aria-hidden="true">{item.icon}</span>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <div class="desktop-menu__status">
+        <span class="desktop-menu__date" data-desktop-date>WED 3 JUN</span>
+        <span class="desktop-menu__clock" data-desktop-clock>19:37</span>
       </div>
     </header>
 
-    <!-- Mobile Navigation Overlay -->
-    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" transition:persist>
-      <ul>
-        {navItems.map(({ label, href }) => (
-          <li>
-            <a href={href} aria-current={currentPath === href ? 'page' : undefined}>
-              {label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <main class="desktop-stage">
+      <DesktopWindow
+        title={windowTitle.toUpperCase()}
+        class={`desktop-window--site desktop-window--app-${initialAppKey}`}
+        variant="paper"
+        minWidth={initialWindow.minWidth}
+        minHeight={initialWindow.minHeight}
+        data-window-url={currentPath}
+        data-window-app={initialAppKey}
+        data-window-base-app={currentPage.id}
+        style={`width: ${initialWindow.width}; height: ${initialWindow.height};`}
+      >
+        <div class="desktop-document">
+          <slot />
+        </div>
+      </DesktopWindow>
 
-    <!-- Column 1: Navigation panel (desktop only) -->
-    <div class="col-navigation" transition:persist>
-      <div class="col-navigation-top">
-        <a href="/" class="site-logo">ThangQT</a>
-        <button class="theme-toggle" id="theme-toggle-desktop" aria-label="Toggle theme">
-          <span class="visually-hidden">Toggle theme</span>
-        </button>
-      </div>
-      
-      <nav class="col-navigation-bottom desktop-nav" aria-label="Main navigation">
-        <ul>
-          {navItems.map(({ label, href }) => (
-            <li>
-              <a href={href} aria-current={currentPath === href ? 'page' : undefined}>
-                {label}
-              </a>
-            </li>
+      <DesktopWindow title="PROFILE" class="desktop-window--profile" variant="mini" minWidth={260} minHeight={220} resizable={false}>
+        <div class="profile-card">
+          <div class="profile-card__avatar" aria-hidden="true">TQ</div>
+          <div>
+            <p class="profile-card__name">{desktopProfile.name}</p>
+            <p class="profile-card__handle">@{desktopProfile.handle}</p>
+          </div>
+        </div>
+        <p class="profile-card__tagline">{desktopProfile.tagline}</p>
+        <dl class="profile-card__meta">
+          <div>
+            <dt>Role</dt>
+            <dd>{desktopProfile.role}</dd>
+          </div>
+          <div>
+            <dt>Base</dt>
+            <dd>{desktopProfile.location}</dd>
+          </div>
+        </dl>
+        <div class="profile-card__links">
+          {desktopProfile.links.map((link) => (
+            <a href={link.href}>{link.label}</a>
           ))}
-        </ul>
-      </nav>
-    </div>
+        </div>
+      </DesktopWindow>
 
-    <!-- Column 2 & 3: Content and detail panels -->
-    <main>
-      <slot />
     </main>
 
-    <!-- Lightbox for full-screen image preview -->
-    <div class="lightbox" id="lightbox" aria-hidden="true" transition:persist>
+    <div class="lightbox" id="lightbox" aria-hidden="true">
       <button class="lightbox-close" aria-label="Close image preview">&times;</button>
-      <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
-      <button class="lightbox-nav lightbox-next" aria-label="Next image">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </button>
-      <div class="lightbox-zoom-controls">
-        <button class="lightbox-zoom-btn" data-zoom="out" aria-label="Zoom out">−</button>
-        <span class="lightbox-zoom-level">100%</span>
-        <button class="lightbox-zoom-btn" data-zoom="in" aria-label="Zoom in">+</button>
-        <button class="lightbox-zoom-btn" data-zoom="reset" aria-label="Reset zoom">⟲</button>
-      </div>
+      <button class="lightbox-nav lightbox-prev" aria-label="Previous image">‹</button>
+      <button class="lightbox-nav lightbox-next" aria-label="Next image">›</button>
       <div class="lightbox-img-wrapper">
         <img class="lightbox-img" src="" alt="" draggable="false" />
       </div>
       <div class="lightbox-counter"></div>
     </div>
 
+    <script is:inline define:vars={{ desktopThemePacks, desktopBackgroundPatterns, desktopApps }}>
+      window.__DESKTOP_THEME_PACKS = desktopThemePacks;
+      window.__DESKTOP_BG_PATTERNS = desktopBackgroundPatterns;
+      window.__DESKTOP_APPS = desktopApps;
+    </script>
+
     <script>
-      import { themeToggle } from '../scripts/theme-original.js';
-
-      function initMobileMenu() {
-        const menuToggle = document.getElementById('menu-toggle');
-        const mobileNav = document.getElementById('mobile-nav');
-        
-        if (!menuToggle || !mobileNav) return;
-
-        // Remove old listeners by cloning
-        const newMenuToggle = menuToggle.cloneNode(true);
-        menuToggle.parentNode?.replaceChild(newMenuToggle, menuToggle);
-
-        newMenuToggle.addEventListener('click', () => {
-          const isOpen = newMenuToggle.getAttribute('aria-expanded') === 'true';
-          newMenuToggle.setAttribute('aria-expanded', String(!isOpen));
-          newMenuToggle.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
-          mobileNav.classList.toggle('is-open', !isOpen);
-          document.body.classList.toggle('is-mobile-nav-open', !isOpen);
-        });
-
-        // Close menu when clicking nav links
-        mobileNav.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => {
-            newMenuToggle.setAttribute('aria-expanded', 'false');
-            newMenuToggle.setAttribute('aria-label', 'Open menu');
-            mobileNav.classList.remove('is-open');
-            document.body.classList.remove('is-mobile-nav-open');
-          });
-        });
-      }
-
-      function initThemeToggles() {
-        // Handle both mobile and desktop theme toggles
-        const toggles = document.querySelectorAll('.theme-toggle');
-        
-        toggles.forEach(toggle => {
-          const newToggle = toggle.cloneNode(true);
-          toggle.parentNode?.replaceChild(newToggle, toggle);
-          
-          newToggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-          });
-        });
-
-        // Apply saved theme
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-          document.documentElement.setAttribute('data-theme', savedTheme);
-        }
-      }
-
-      function updateActiveLinks() {
-        const currentPath = window.location.pathname;
-        document.querySelectorAll('.mobile-nav a, .desktop-nav a').forEach(link => {
-          const href = link.getAttribute('href');
-          if (href === currentPath || (href === '/' && currentPath === '/')) {
-            link.setAttribute('aria-current', 'page');
-          } else {
-            link.removeAttribute('aria-current');
-          }
-        });
-      }
-
-      function initNavigationProgress() {
-        if (window.__navProgressInitialized) return;
-
-        const progressEl = document.getElementById('nav-progress');
-        if (!progressEl) return;
-
-        window.__navProgressInitialized = true;
-
-        const state = {
-          active: false,
-          value: 0,
-          delayTimer: null,
-          rafId: null,
-          hideTimer: null,
-          shownAt: 0,
-          lastFrameAt: 0,
-        };
-
-        function setProgress(nextValue) {
-          state.value = Math.max(0, Math.min(1, nextValue));
-          progressEl.style.setProperty('--nav-progress', String(state.value));
-        }
-
-        function startTrickle() {
-          cancelAnimationFrame(state.rafId);
-
-          function tick(now) {
-            if (!state.active) return;
-
-            if (!state.lastFrameAt) state.lastFrameAt = now;
-            const delta = Math.min(64, now - state.lastFrameAt);
-            state.lastFrameAt = now;
-
-            const next = Math.min(0.92, state.value + delta * 0.00038);
-            setProgress(next);
-
-            state.rafId = requestAnimationFrame(tick);
-          }
-
-          state.lastFrameAt = 0;
-          state.rafId = requestAnimationFrame(tick);
-        }
-
-        function start() {
-          clearTimeout(state.hideTimer);
-          cancelAnimationFrame(state.rafId);
-          clearTimeout(state.delayTimer);
-
-          progressEl.classList.remove('is-complete');
-
-          state.active = true;
-          setProgress(0.03);
-
-          state.delayTimer = setTimeout(() => {
-            if (!state.active) return;
-            progressEl.classList.add('is-visible');
-            progressEl.classList.add('is-active');
-            state.shownAt = performance.now();
-            setProgress(Math.max(state.value, 0.08));
-            startTrickle();
-          }, 220);
-        }
-
-        function complete() {
-          state.active = false;
-          clearTimeout(state.delayTimer);
-          cancelAnimationFrame(state.rafId);
-
-          if (!progressEl.classList.contains('is-visible')) {
-            setProgress(0);
-            return;
-          }
-
-          const elapsed = state.shownAt ? performance.now() - state.shownAt : 0;
-          const minVisible = 260;
-          const wait = Math.max(0, minVisible - elapsed);
-
-          progressEl.classList.remove('is-active');
-
-          state.hideTimer = setTimeout(() => {
-            setProgress(1);
-            progressEl.classList.add('is-complete');
-
-            state.hideTimer = setTimeout(() => {
-              progressEl.classList.remove('is-visible', 'is-complete');
-              setProgress(0);
-            }, 180);
-          }, wait);
-        }
-
-        document.addEventListener('astro:before-preparation', start);
-        document.addEventListener('astro:after-swap', complete);
-        document.addEventListener('astro:page-load', complete);
-      }
-
-      function initLightbox() {
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = lightbox?.querySelector('.lightbox-img');
-        const lightboxClose = lightbox?.querySelector('.lightbox-close');
-        const lightboxPrev = lightbox?.querySelector('.lightbox-prev');
-        const lightboxNext = lightbox?.querySelector('.lightbox-next');
-        const lightboxCounter = lightbox?.querySelector('.lightbox-counter');
-        const lightboxZoomLevel = lightbox?.querySelector('.lightbox-zoom-level');
-        const lightboxWrapper = lightbox?.querySelector('.lightbox-img-wrapper');
-        
-        if (!lightbox || !lightboxImg) return;
-
-        let images = [];
-        let currentIndex = 0;
-        let zoom = 1;
-        let panX = 0;
-        let panY = 0;
-        let isPanning = false;
-        let startX = 0;
-        let startY = 0;
-        
-        // Touch state for pinch zoom
-        let lastTouchDist = 0;
-        let lastTouchX = 0;
-        let lastTouchY = 0;
-        
-        // Auto-hide controls
-        let controlsTimeout = null;
-        const CONTROLS_HIDE_DELAY = 2500;
-
-        function showControls() {
-          lightbox.classList.remove('controls-hidden');
-          clearTimeout(controlsTimeout);
-          controlsTimeout = setTimeout(() => {
-            if (lightbox.classList.contains('is-open')) {
-              lightbox.classList.add('controls-hidden');
-            }
-          }, CONTROLS_HIDE_DELAY);
-        }
-
-        function hideControlsNow() {
-          clearTimeout(controlsTimeout);
-          lightbox.classList.add('controls-hidden');
-        }
-
-        // Collect all images from prose content
-        function collectImages() {
-          images = Array.from(document.querySelectorAll('.prose img, .post-cover img'));
-        }
-
-        function updateCounter() {
-          if (images.length > 1) {
-            lightboxCounter.textContent = `${currentIndex + 1} / ${images.length}`;
-            lightboxCounter.style.display = 'block';
-            lightboxPrev.style.display = 'flex';
-            lightboxNext.style.display = 'flex';
-          } else {
-            lightboxCounter.style.display = 'none';
-            lightboxPrev.style.display = 'none';
-            lightboxNext.style.display = 'none';
-          }
-        }
-
-        function updateZoom() {
-          lightboxZoomLevel.textContent = `${Math.round(zoom * 100)}%`;
-          lightboxImg.style.transform = `scale(${zoom}) translate(${panX / zoom}px, ${panY / zoom}px)`;
-          lightboxWrapper.style.cursor = zoom > 1 ? 'grab' : 'zoom-in';
-        }
-
-        function resetZoom() {
-          zoom = 1;
-          panX = 0;
-          panY = 0;
-          updateZoom();
-        }
-
-        function showImage(index) {
-          if (index < 0) index = images.length - 1;
-          if (index >= images.length) index = 0;
-          currentIndex = index;
-          
-          const img = images[currentIndex];
-          lightboxImg.src = img.src;
-          lightboxImg.alt = img.alt || '';
-          resetZoom();
-          updateCounter();
-        }
-
-        // Click on images to open lightbox
-        collectImages();
-        images.forEach((img, index) => {
-          img.style.cursor = 'zoom-in';
-          img.addEventListener('click', (e) => {
-            e.preventDefault();
-            collectImages();
-            currentIndex = images.indexOf(img);
-            showImage(currentIndex);
-            lightbox.classList.add('is-open');
-            lightbox.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-            showControls();
-          });
-        });
-
-        // Navigation
-        lightboxPrev?.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showImage(currentIndex - 1);
-          showControls();
-        });
-
-        lightboxNext?.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showImage(currentIndex + 1);
-          showControls();
-        });
-
-        // Zoom controls - keep controls visible on click
-        lightbox.querySelectorAll('.lightbox-zoom-btn').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const action = btn.dataset.zoom;
-            if (action === 'in') {
-              zoom = Math.min(zoom + 0.25, 4);
-            } else if (action === 'out') {
-              zoom = Math.max(zoom - 0.25, 0.5);
-              if (zoom <= 1) { panX = 0; panY = 0; }
-            } else if (action === 'reset') {
-              resetZoom();
-            }
-            updateZoom();
-            showControls();
-          });
-        });
-
-        // Mouse wheel zoom - keep controls visible during use
-        lightboxWrapper?.addEventListener('wheel', (e) => {
-          e.preventDefault();
-          const delta = e.deltaY > 0 ? -0.15 : 0.15;
-          zoom = Math.max(0.5, Math.min(4, zoom + delta));
-          if (zoom <= 1) { panX = 0; panY = 0; }
-          updateZoom();
-          showControls();
-        }, { passive: false });
-
-        // Mouse pan when zoomed
-        lightboxWrapper?.addEventListener('mousedown', (e) => {
-          if (zoom > 1) {
-            isPanning = true;
-            startX = e.clientX - panX;
-            startY = e.clientY - panY;
-            lightboxWrapper.style.cursor = 'grabbing';
-          }
-        });
-
-        document.addEventListener('mousemove', (e) => {
-          if (isPanning) {
-            panX = e.clientX - startX;
-            panY = e.clientY - startY;
-            updateZoom();
-          } else if (lightbox.classList.contains('is-open')) {
-            showControls();
-          }
-        });
-
-        document.addEventListener('mouseup', () => {
-          isPanning = false;
-          if (lightboxWrapper && zoom > 1) {
-            lightboxWrapper.style.cursor = 'grab';
-          }
-        });
-
-        // Touch support for mobile
-        lightboxWrapper?.addEventListener('touchstart', (e) => {
-          if (e.touches.length === 2) {
-            // Pinch zoom start
-            const dx = e.touches[0].clientX - e.touches[1].clientX;
-            const dy = e.touches[0].clientY - e.touches[1].clientY;
-            lastTouchDist = Math.sqrt(dx * dx + dy * dy);
-          } else if (e.touches.length === 1 && zoom > 1) {
-            // Pan start
-            isPanning = true;
-            startX = e.touches[0].clientX - panX;
-            startY = e.touches[0].clientY - panY;
-          }
-          lastTouchX = e.touches[0]?.clientX || 0;
-          lastTouchY = e.touches[0]?.clientY || 0;
-        }, { passive: true });
-
-        lightboxWrapper?.addEventListener('touchmove', (e) => {
-          if (e.touches.length === 2) {
-            // Pinch zoom
-            e.preventDefault();
-            const dx = e.touches[0].clientX - e.touches[1].clientX;
-            const dy = e.touches[0].clientY - e.touches[1].clientY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            
-            if (lastTouchDist > 0) {
-              const scale = dist / lastTouchDist;
-              zoom = Math.max(0.5, Math.min(4, zoom * scale));
-              if (zoom <= 1) { panX = 0; panY = 0; }
-              updateZoom();
-            }
-            lastTouchDist = dist;
-            showControls();
-          } else if (e.touches.length === 1 && isPanning && zoom > 1) {
-            // Pan
-            e.preventDefault();
-            panX = e.touches[0].clientX - startX;
-            panY = e.touches[0].clientY - startY;
-            updateZoom();
-          }
-        }, { passive: false });
-
-        lightboxWrapper?.addEventListener('touchend', (e) => {
-          lastTouchDist = 0;
-          isPanning = false;
-          
-          // Double tap to zoom
-          const now = Date.now();
-          const touch = e.changedTouches[0];
-          if (lightboxWrapper._lastTap && now - lightboxWrapper._lastTap < 300) {
-            if (zoom === 1) {
-              zoom = 2;
-            } else {
-              resetZoom();
-            }
-            updateZoom();
-          }
-          lightboxWrapper._lastTap = now;
-        });
-
-        // Click to zoom in (desktop)
-        lightboxWrapper?.addEventListener('click', (e) => {
-          if (e.target === lightboxImg && !isPanning) {
-            if (zoom === 1) {
-              zoom = 2;
-              updateZoom();
-              showControls();
-            }
-          }
-        });
-
-        // Close lightbox
-        function closeLightbox() {
-          lightbox.classList.remove('is-open');
-          lightbox.classList.remove('controls-hidden');
-          lightbox.setAttribute('aria-hidden', 'true');
-          document.body.style.overflow = '';
-          resetZoom();
-          clearTimeout(controlsTimeout);
-        }
-
-        lightboxClose?.addEventListener('click', closeLightbox);
-        
-        lightbox.addEventListener('click', (e) => {
-          if (e.target === lightbox) closeLightbox();
-        });
-
-        document.addEventListener('keydown', (e) => {
-          if (!lightbox.classList.contains('is-open')) return;
-          
-          if (e.key === 'Escape') closeLightbox();
-          if (e.key === 'ArrowLeft') {
-            showImage(currentIndex - 1);
-            hideControlsNow();
-          }
-          if (e.key === 'ArrowRight') {
-            showImage(currentIndex + 1);
-            hideControlsNow();
-          }
-          if (e.key === '+' || e.key === '=') {
-            zoom = Math.min(zoom + 0.25, 4);
-            updateZoom();
-            hideControlsNow();
-          }
-          if (e.key === '-') {
-            zoom = Math.max(zoom - 0.25, 0.5);
-            if (zoom <= 1) { panX = 0; panY = 0; }
-            updateZoom();
-            hideControlsNow();
-          }
-          if (e.key === '0') {
-            resetZoom();
-            hideControlsNow();
-          }
-        });
-      }
-
-      // Initialize on first load
-      document.addEventListener('DOMContentLoaded', function() {
-        initNavigationProgress();
-        initThemeToggles();
-        initMobileMenu();
-        initLightbox();
-      });
-
-      // Re-init after view transitions
-      document.addEventListener('astro:after-swap', function() {
-        initThemeToggles();
-        initMobileMenu();
-        updateActiveLinks();
-        initLightbox();
-      });
+      import '../scripts/desktop/index.js';
     </script>
   </body>
 </html>

@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="About - ThangQT" description="Computer science student at UET-VNU passionate about open-source software and Linux." jsonLdType="person">
-  <section class="col-content" transition:name="col-content" transition:animate="fade">
+  <section class="col-content">
     <h2 style="font-size: var(--fs-body-m); margin-bottom: var(--margin);">About Me</h2>
     
     <p>
@@ -50,7 +50,7 @@ import Layout from '../layouts/Layout.astro';
     </p>
   </section>
 
-  <aside class="col-detail" transition:name="col-detail" transition:animate="fade">
+  <aside class="col-detail">
     <div class="is-visible">
       <h2>About</h2>
     </div>
@@ -59,9 +59,9 @@ import Layout from '../layouts/Layout.astro';
 
 <style>
   .email-obfuscated {
-    font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-family: var(--font-mono);
     font-size: 0.9em;
-    background: var(--fg-color-light);
+    background: var(--wm-chrome);
     padding: 0.2em 0.5em;
     border-radius: 4px;
   }

@@ -46,8 +46,9 @@ const ogImageUrl = seoImage
   bodyClass={bodyClass}
   bodyStyle={bodyStyle || undefined}
   ogImage={ogImageUrl}
+  desktopTitle={project.data.title}
 >
-  <section class="col-content post-header" transition:name="col-content" transition:animate="fade">
+  <section class="col-content post-header" data-window-title={project.data.title}>
     <a href="/projects" class="back-link" aria-label="Back to projects">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -61,7 +62,7 @@ const ogImageUrl = seoImage
     </div>
   </section>
 
-  <aside class="col-detail post-body project-body" transition:name="col-detail" transition:animate="fade">
+  <aside class="col-detail post-body project-body">
     <div class="post-mobile-header" aria-hidden="true">
       <p class="post-page-date">{project.data.year.slice(0, 4)}</p>
       <p class="post-page-title">{project.data.title}</p>
