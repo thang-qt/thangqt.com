@@ -8,6 +8,7 @@ interface Props {
   maxWidth?: number;
   maxHeight?: number;
   resizable?: boolean;
+  maximizable?: boolean;
   windowTokens?: {
     light: Record<string, string>;
     dark: Record<string, string>;
@@ -24,6 +25,7 @@ const {
   maxWidth,
   maxHeight,
   resizable = true,
+  maximizable = true,
   windowTokens,
   ...attrs
 } = Astro.props;
@@ -36,6 +38,7 @@ const {
   data-window-max-width={maxWidth}
   data-window-max-height={maxHeight}
   data-window-resizable={resizable ? 'true' : 'false'}
+  data-window-maximizable={maximizable ? 'true' : 'false'}
   data-window-tokens={windowTokens ? JSON.stringify(windowTokens) : undefined}
   {...attrs}
 >

@@ -53,15 +53,20 @@ function desktopItems() {
 }
 
 function windowItems(win) {
-  return [
+  const items = [
     menuButton('Bring To Front', () => bringWindowForward(win)),
     menuButton('Minimize', () => {
       win.classList.toggle('is-minimized');
       window.dispatchEvent(new CustomEvent('desktop:window-state-change'));
     }),
-    menuButton('Maximize / Restore', () => win.querySelector('[data-window-action="maximize"]')?.click()),
-    menuButton('Close', () => win.querySelector('[data-window-action="close"]')?.click()),
   ];
+
+  if (win.dataset.windowMaximizable !== 'false') {
+    items.push(menuButton('Maximize / Restore', () => win.querySelector('[data-window-action="maximize"]')?.click()));
+  }
+
+  items.push(menuButton('Close', () => win.querySelector('[data-window-action="close"]')?.click()));
+  return items;
 }
 
 function linkItems(link, win) {

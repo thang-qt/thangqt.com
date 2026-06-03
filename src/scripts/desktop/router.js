@@ -45,6 +45,7 @@ function applyWindowSpec(win, href) {
   if (windowSpec.maxHeight) win.dataset.windowMaxHeight = String(windowSpec.maxHeight);
   else delete win.dataset.windowMaxHeight;
   win.dataset.windowResizable = windowSpec.resizable === false ? 'false' : 'true';
+  win.dataset.windowMaximizable = windowSpec.maximizable === false ? 'false' : 'true';
   return { app, windowSpec };
 }
 

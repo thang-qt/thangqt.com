@@ -8,6 +8,26 @@ import {
 import { bumpTopZ, saveWindowState, scheduleWindowStateSave } from './windowState.js';
 
 const edgeNames = ['top', 'right', 'bottom', 'left'];
+const stackedQuery = '(max-width: 1100px)';
+const desktopWorkAreaTop = 64;
+const desktopWorkAreaPad = 12;
+
+function isStackedViewport() {
+  return window.matchMedia(stackedQuery).matches;
+}
+
+function numericStyle(value, fallback = 0) {
+  const next = Number.parseFloat(value);
+  return Number.isFinite(next) ? next : fallback;
+}
+
+function enforceDesktopWorkArea(win) {
+  if (isStackedViewport() || !win.classList.contains('is-floating')) return;
+  const top = numericStyle(win.style.top, desktopWorkAreaTop);
+  const left = numericStyle(win.style.left, desktopWorkAreaPad);
+  if (top < desktopWorkAreaTop) win.style.top = `${desktopWorkAreaTop}px`;
+  if (left < desktopWorkAreaPad) win.style.left = `${desktopWorkAreaPad}px`;
+}
 
 export function bringWindowForward(win) {
   if (!(win instanceof HTMLElement)) return;
@@ -37,8 +57,8 @@ function canDragFrom(event, dragHandle) {
 
 function floatWindowAtCurrentRect(win, stageRect, winRect) {
   win.classList.add('is-floating');
-  win.style.left = `${winRect.left - stageRect.left}px`;
-  win.style.top = `${winRect.top - stageRect.top}px`;
+  win.style.left = `${Math.max(desktopWorkAreaPad, winRect.left - stageRect.left)}px`;
+  win.style.top = `${Math.max(desktopWorkAreaTop, winRect.top - stageRect.top)}px`;
   win.style.width = `${winRect.width}px`;
   win.style.height = `${winRect.height}px`;
 }
@@ -46,6 +66,7 @@ function floatWindowAtCurrentRect(win, stageRect, winRect) {
 function attachDrag(win, stage) {
   const dragHandle = win.querySelector('.desktop-window__bar');
   win.addEventListener('pointerdown', (event) => {
+    if (isStackedViewport()) return;
     if (!(event instanceof PointerEvent) || !canDragFrom(event, dragHandle)) return;
     event.preventDefault();
     bringWindowForward(win);
@@ -61,8 +82,8 @@ function attachDrag(win, stage) {
     win.setPointerCapture(event.pointerId);
 
     const move = (moveEvent) => {
-      const nextLeft = clamp(startLeft + moveEvent.clientX - startX, 0, stageRect.width - winRect.width);
-      const nextTop = clamp(startTop + moveEvent.clientY - startY, 0, stageRect.height - 40);
+      const nextLeft = clamp(startLeft + moveEvent.clientX - startX, desktopWorkAreaPad, stageRect.width - winRect.width - desktopWorkAreaPad);
+      const nextTop = clamp(startTop + moveEvent.clientY - startY, desktopWorkAreaTop, stageRect.height - 40);
       win.style.left = `${nextLeft}px`;
       win.style.top = `${nextTop}px`;
     };
@@ -84,6 +105,7 @@ function attachDrag(win, stage) {
 function attachResize(win, stage) {
   win.querySelectorAll(':scope > .wm-resize-edge').forEach((handle) => {
     handle.addEventListener('pointerdown', (event) => {
+      if (isStackedViewport()) return;
       if (!(event instanceof PointerEvent)) return;
       event.preventDefault();
       event.stopPropagation();
@@ -127,8 +149,8 @@ function attachResize(win, stage) {
         if (edge === 'left') left = startLeft + (startWidth - width);
         if (edge === 'top') top = startTop + (startHeight - height);
 
-        win.style.left = `${clamp(left, 0, stageRect.width - metrics.minWidth)}px`;
-        win.style.top = `${clamp(top, 0, stageRect.height - metrics.minHeight)}px`;
+        win.style.left = `${clamp(left, desktopWorkAreaPad, stageRect.width - metrics.minWidth - desktopWorkAreaPad)}px`;
+        win.style.top = `${clamp(top, desktopWorkAreaTop, stageRect.height - metrics.minHeight)}px`;
         win.style.width = `${width}px`;
         win.style.height = `${height}px`;
       };
@@ -159,7 +181,14 @@ function attachControls(win) {
     saveWindowState();
   });
 
-  win.querySelector('[data-window-action="maximize"]')?.addEventListener('click', () => {
+  const maximizeButton = win.querySelector('[data-window-action="maximize"]');
+  if (win.dataset.windowMaximizable === 'false') {
+    maximizeButton?.setAttribute('hidden', '');
+    maximizeButton?.setAttribute('aria-hidden', 'true');
+  }
+
+  maximizeButton?.addEventListener('click', () => {
+    if (win.dataset.windowMaximizable === 'false' || isStackedViewport()) return;
     if (win.classList.contains('is-maximized')) {
       win.classList.remove('is-maximized');
       const previous = win.dataset.previousRect;
@@ -182,9 +211,9 @@ function attachControls(win) {
     });
     win.classList.add('is-floating', 'is-maximized');
     win.style.left = '12px';
-    win.style.top = '64px';
+    win.style.top = `${desktopWorkAreaTop}px`;
     win.style.width = 'calc(100vw - 24px)';
-    win.style.height = 'calc(100dvh - 76px)';
+    win.style.height = `calc(100dvh - ${desktopWorkAreaTop + desktopWorkAreaPad}px)`;
     bringWindowForward(win);
     saveWindowState();
   });
@@ -196,6 +225,7 @@ export function initWindowManager() {
 
   getDesktopWindows().forEach((win, index) => {
     applyWindowTokens(win);
+    enforceDesktopWorkArea(win);
     if (win.dataset.wmReady === 'true') return;
     win.dataset.wmReady = 'true';
     win.classList.add('wm-window');

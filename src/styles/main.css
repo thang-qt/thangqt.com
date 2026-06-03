@@ -453,6 +453,10 @@ pre {
   color: var(--wm-accent);
 }
 
+.desktop-window__controls button[hidden] {
+  display: none;
+}
+
 .desktop-window__body {
   flex: 1 1 auto;
   min-height: 0;
@@ -1596,12 +1600,38 @@ pre {
   .desktop-window,
   .desktop-window--site,
   .desktop-window--profile {
-    position: relative;
-    inset: auto;
-    width: min(100%, 48rem);
-    height: auto;
-    min-height: 0;
+    position: relative !important;
+    inset: auto !important;
+    left: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: min(100%, 48rem) !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
     margin: 0 auto 0.75rem;
+    transform: none !important;
+  }
+
+  .desktop-window.is-maximized {
+    width: min(100%, 48rem) !important;
+    height: auto !important;
+  }
+
+  .desktop-window__bar {
+    cursor: default;
+  }
+
+  .desktop-window__body {
+    overflow: visible;
+  }
+
+  .wm-resize-edge,
+  .desktop-window__controls button[data-window-action="maximize"] {
+    display: none !important;
   }
 }
 

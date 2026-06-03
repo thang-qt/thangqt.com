@@ -24,6 +24,8 @@ This site is a desktop shell, not a normal document site with decorative windows
 - Window state persists across reload: open windows, position, size, z-order, minimized/maximized, and view mode.
 - Resize handles are invisible edge hit areas. Do not add decorative resize marks.
 - Unresizable utility windows, like Profile, must explicitly set `resizable={false}`.
+- Utility windows that should never fill the workspace must also set `maximizable={false}`.
+- Window drag, resize, spawn, restore, and maximize must keep the title bar below the floating top bar.
 - Maximize must leave room for the floating top bar.
 - On mobile/narrow screens, windows stack as responsive panels and should not require dragging.
 
