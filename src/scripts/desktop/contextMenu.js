@@ -46,6 +46,7 @@ function showMenu(event, items) {
 function desktopItems() {
   return [
     menuButton('Open Settings', () => openInternalHref('/settings', 'Settings')),
+    menuButton('Open Design Guide', () => openInternalHref('/design', 'Design')),
     menuButton('Open Resume', () => openInternalHref('/resume', 'Resume')),
     menuButton('Open Projects', () => openInternalHref('/projects', 'Projects')),
   ];

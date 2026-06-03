@@ -72,6 +72,14 @@ export const desktopApps = [
     nav: true,
     window: { minWidth: 340, minHeight: 260, width: 'min(46rem, calc(100vw - 5rem))', height: 'min(42rem, calc(100dvh - 8rem))' },
   },
+  {
+    id: 'design',
+    label: 'Design',
+    href: '/design',
+    icon: '◫',
+    nav: true,
+    window: { minWidth: 360, minHeight: 280, width: 'min(72rem, calc(100vw - 5rem))', height: 'min(52rem, calc(100dvh - 8rem))' },
+  },
 ];
 
 export const desktopNavItems = desktopApps.filter((app) => app.nav);

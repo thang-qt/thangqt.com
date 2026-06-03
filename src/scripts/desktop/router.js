@@ -1,6 +1,5 @@
 import { escapeHtml, getStage, getWindowDocument, setWindowTitle } from './dom.js';
 import { getAppKeyForHref, getWindowSpecForHref } from './appRegistry.js';
-import { initLightbox } from './lightbox.js';
 import { syncSettingsControls } from './prefs.js';
 import { applySavedWindowRect, getSavedWindowStates, saveWindowState } from './windowState.js';
 import { bringWindowForward, initWindowManager } from './windowManager.js';
@@ -202,7 +201,6 @@ export async function restoreWindowState() {
 }
 
 export function afterWindowContentChange() {
-  initLightbox();
   syncSettingsControls();
   window.dispatchEvent(new CustomEvent('desktop:content-change'));
 }

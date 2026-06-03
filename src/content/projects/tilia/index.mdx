@@ -4,7 +4,7 @@ year: "2026-04"
 description: Focused modern email client with a separate background daemon
 ---
 
-import FullWidthImage from '../../../components/FullWidthImage.astro';
+import ContentFigure from '../../../components/ContentFigure.astro';
 import inbox from './inbox.png';
 import reader from './reader.png';
 
@@ -14,7 +14,7 @@ The other reason was simpler: I was bored and wanted to experiment with Tauri. E
 
 The architecture became a separate daemon and desktop client. The daemon handles account state, sync, local storage, notifications, and the orchestration around the Pimalaya/email stack. The Tauri app is just the frontend: mailbox UI, reader, compose, settings, themes, and account management.
 
-<FullWidthImage
+<ContentFigure
   src={inbox}
   alt="Tilia inbox with accounts, message list, and message reader"
   caption="The default three-column mailbox layout, with accounts and folders, a message list, and the reader."
@@ -22,7 +22,7 @@ The architecture became a separate daemon and desktop client. The daemon handles
 
 I got it to a basic working state. It can read and send simple email, supports multiple accounts, has unified mailbox views, and includes several built-in themes with custom CSS overrides. Gmail OAuth also works, but that is where more quirks started to show up. The deeper I went into OAuth and backend integration, the more rough edges I found. Then school, internship work, and other interests took over, so I paused it for a while.
 
-<FullWidthImage
+<ContentFigure
   src={reader}
   alt="Tilia two-column reader layout with the account sidebar collapsed"
   caption="A more focused two-column view, with the sidebar collapsed and the message content taking the main space."

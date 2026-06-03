@@ -16,7 +16,10 @@ export function bringWindowForward(win) {
 }
 
 function ensureResizeEdges(win) {
-  if (win.dataset.windowResizable === 'false') return;
+  if (win.dataset.windowResizable === 'false') {
+    win.querySelectorAll(':scope > .wm-resize-edge').forEach((edge) => edge.remove());
+    return;
+  }
   edgeNames.forEach((edge) => {
     if (win.querySelector(`:scope > .wm-resize-edge--${edge}`)) return;
     const handle = document.createElement('span');

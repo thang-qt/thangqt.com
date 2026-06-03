@@ -1,7 +1,6 @@
 import { initDesktopClock } from './clock.js';
 import { initContextMenus } from './contextMenu.js';
 import { initDisplayControls } from './displayControls.js';
-import { initLightbox } from './lightbox.js';
 import { initSettingsControls, applyDesktopPrefs, syncSettingsControls } from './prefs.js';
 import { restoreWindowState, setActiveRoute } from './router.js';
 import { saveWindowState } from './windowState.js';
@@ -14,7 +13,6 @@ function initDesktop() {
     replace: true,
   });
   initDesktopClock();
-  initLightbox();
   initWindowManager();
   initWindowLinks();
   initSettingsControls();

@@ -4,7 +4,7 @@ year: "2026-01"
 description: Personal Rust media browser for streaming a seedbox library through mpv
 ---
 
-import FullWidthImage from '../../../components/FullWidthImage.astro';
+import ContentFigure from '../../../components/ContentFigure.astro';
 import tvShows from './tv-shows.png';
 
 DavPlay is a small personal media browser I made for my own seedbox setup. It is not something I plan to release or open source. The provider has a pretty good desktop client, but it does not support Linux. Without it, I had to open the web UI, find a video, copy the play link, and pass it to mpv every time.
@@ -13,7 +13,7 @@ That got old quickly. I also did not want to download files just to watch them o
 
 I built it in Rust with egui, partly because I had been curious about egui for a while. It is easy enough to get something working, and I do not have to worry much about styling or customization, which makes it a good fit for internal apps and personal tools. The first version only listed files over WebDAV, which is where the name came from. Later it grew into a proper local library app. It scans the remote files, parses movie and TV filenames, fetches metadata from TMDB, caches artwork, and stores everything in a local SQLite database. Now I can open the app, browse the remote library, and play something directly in mpv.
 
-<FullWidthImage
+<ContentFigure
   src={tvShows}
   alt="DavPlay TV shows page showing Happy Endings"
   caption="The TV shows library view, with TMDB metadata and cached poster artwork."
