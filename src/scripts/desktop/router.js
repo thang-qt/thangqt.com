@@ -186,7 +186,13 @@ export async function openHrefInWindow(win, href, title = 'Window') {
   }
 }
 
+function isMobileViewport() {
+  return window.matchMedia('(max-width: 768px)').matches;
+}
+
 export async function restoreWindowState() {
+  if (isMobileViewport()) return;
+
   const states = getSavedWindowStates();
   if (states.length === 0) return;
 

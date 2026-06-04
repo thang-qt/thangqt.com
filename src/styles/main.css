@@ -355,8 +355,19 @@ pre {
 .desktop-menu__brand {
   gap: 0.5rem;
   padding: 0 0.85rem;
+  border: 0;
   border-right: 1px solid var(--wm-border);
+  background: transparent;
+  color: var(--wm-ink);
+  font-family: var(--font-mono);
+  font-size: inherit;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.desktop-menu__brand:hover,
+.desktop-menu__brand:focus-visible {
+  background: var(--wm-accent-soft);
 }
 
 .desktop-menu__brand-icon {
@@ -1470,6 +1481,7 @@ pre {
     margin: 0;
     transform: none !important;
     flex-shrink: 0;
+    border-radius: var(--wm-window-radius);
   }
 
   .desktop-window.is-maximized {
@@ -1491,39 +1503,83 @@ pre {
   }
 }
 
-/* Mobile accordion: windows collapse to title bars except active */
 @media (max-width: 768px) {
+  body {
+    overflow: hidden;
+  }
+
+  .desktop-menu {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: calc(100vw - 0.8rem);
+    margin: 0.4rem auto 0;
+    transform: none;
+  }
+
   .desktop-stage {
-    padding: 4rem 0.4rem 1rem;
-    gap: 0.4rem;
+    position: relative;
+    height: calc(100dvh - 3.5rem);
+    min-height: 0;
+    padding: 0;
+    display: block;
+    overflow: hidden;
   }
 
   .desktop-window,
-  .desktop-window--site,
-  .desktop-window--profile {
-    width: min(100%, 100%) !important;
-    border-radius: var(--wm-window-radius);
+  .desktop-window--site {
+    position: absolute !important;
+    width: calc(100vw - 0.8rem) !important;
+    height: calc(100dvh - 4.15rem) !important;
+    min-height: 0 !important;
+    max-height: none !important;
   }
 
-  /* Collapsed window — title bar only */
+  .desktop-window--profile {
+    display: none !important;
+  }
+
+  .desktop-window:nth-of-type(1) {
+    left: 0.4rem !important;
+    top: 0.5rem !important;
+  }
+
+  .desktop-window:nth-of-type(2) {
+    left: 0.6rem !important;
+    top: 0.82rem !important;
+  }
+
+  .desktop-window:nth-of-type(3) {
+    left: 0.8rem !important;
+    top: 1.14rem !important;
+  }
+
+  .desktop-window:nth-of-type(n + 4) {
+    left: 1rem !important;
+    top: 1.46rem !important;
+  }
+
+  .desktop-window__body {
+    overflow: auto;
+  }
+
   .desktop-window.is-mobile-collapsed .desktop-window__body {
-    display: none;
+    display: block;
   }
 
   .desktop-window.is-mobile-collapsed {
-    height: auto !important;
-    min-height: 31px;
+    height: calc(100dvh - 4.15rem) !important;
+    min-height: 0;
   }
 
-  /* Collapsed bar looks like a pressable strip */
   .desktop-window.is-mobile-collapsed .desktop-window__bar {
-    cursor: pointer;
-    border-radius: var(--wm-window-radius);
+    cursor: default;
+    border-radius: 0;
   }
 
-  /* Active window gets accent top border */
   .desktop-window.is-mobile-active {
-    box-shadow: 0 -3px 0 0 var(--wm-accent), var(--wm-shadow);
+    box-shadow: var(--wm-shadow);
   }
 
   .desktop-window__controls button[data-window-action="minimize"],
@@ -1534,20 +1590,27 @@ pre {
 
 @media (max-width: 640px) {
   .desktop-menu {
-    grid-template-columns: auto auto;
-    width: auto;
-    left: 12px;
-    right: 12px;
+    grid-template-columns: auto 1fr auto;
+    width: calc(100vw - 0.8rem);
+    left: auto;
+    right: auto;
     transform: none;
     justify-content: space-between;
   }
 
   .desktop-menu__brand {
-    border-right: 0;
+    border-right: 1px solid var(--wm-border);
   }
 
-  .desktop-menu__brand strong,
+  .desktop-menu__brand strong {
+    display: none;
+  }
+
   .desktop-menu__nav {
+    display: flex;
+  }
+
+  .desktop-menu__nav a:not(:first-child) {
     display: none;
   }
 
