@@ -1,11 +1,8 @@
+import { addGlobalListenerOnce, isTypingTarget } from './events.js';
 import { openInternalHref } from './router.js';
 
 function getApps() {
   return Array.isArray(window.__DESKTOP_APPS) ? window.__DESKTOP_APPS.filter((app) => app.nav !== false) : [];
-}
-
-function isTypingTarget(target) {
-  return target instanceof HTMLElement && Boolean(target.closest('input, textarea, select, [contenteditable="true"]'));
 }
 
 function normalize(value) {
@@ -118,10 +115,7 @@ function toggleLauncher() {
 }
 
 function initLauncherEvents() {
-  if (window.__desktopLauncherReady) return;
-  window.__desktopLauncherReady = true;
-
-  document.addEventListener('click', (event) => {
+  addGlobalListenerOnce('desktop-launcher:click', document, 'click', (event) => {
     const openButton = event.target?.closest?.('[data-launcher-open]');
     if (openButton) {
       event.preventDefault();
@@ -141,11 +135,11 @@ function initLauncherEvents() {
     }
   });
 
-  document.addEventListener('input', (event) => {
+  addGlobalListenerOnce('desktop-launcher:input', document, 'input', (event) => {
     if (event.target?.matches?.('[data-launcher-input]')) renderLauncher();
   });
 
-  document.addEventListener('keydown', (event) => {
+  addGlobalListenerOnce('desktop-launcher:keydown', document, 'keydown', (event) => {
     const launcher = getLauncher();
     const isLauncherOpen = launcher && !launcher.hidden;
     const key = event.key.toLowerCase();

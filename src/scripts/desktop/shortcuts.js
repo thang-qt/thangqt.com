@@ -1,4 +1,6 @@
+import { addGlobalListenerOnce, isTypingTarget } from './events.js';
 import { clamp, getDesktopWindows, getWindowDocument, readWindowMetrics } from './dom.js';
+import { isStackedViewport } from './viewport.js';
 import { bringWindowForward } from './windowManager.js';
 import { saveWindowState } from './windowState.js';
 
@@ -8,10 +10,6 @@ const selectableQuery = [
   '.project-color-section__link',
   '.list-link',
 ].join(', ');
-
-function isTypingTarget(target) {
-  return target instanceof HTMLElement && Boolean(target.closest('input, textarea, select, [contenteditable="true"]'));
-}
 
 function getHelper() {
   return document.querySelector('[data-shortcuts-helper]');
@@ -77,10 +75,6 @@ function scrollActiveWindow(win, key) {
   const left = key === 'l' ? amount : key === 'h' ? -amount : 0;
   scroller.scrollBy({ top, left, behavior: 'smooth' });
   return true;
-}
-
-function isStackedViewport() {
-  return window.matchMedia('(max-width: 1100px)').matches;
 }
 
 function focusWindow(key) {
@@ -239,16 +233,13 @@ function toggleShortcutsHelper() {
 }
 
 export function initShortcutHelper() {
-  if (window.__desktopShortcutHelperReady) return;
-  window.__desktopShortcutHelperReady = true;
-
-  document.addEventListener('click', (event) => {
+  addGlobalListenerOnce('desktop-shortcuts:click', document, 'click', (event) => {
     if (event.target?.closest?.('[data-shortcuts-close]')) {
       closeShortcutsHelper();
     }
   });
 
-  document.addEventListener('keydown', (event) => {
+  addGlobalListenerOnce('desktop-shortcuts:keydown', document, 'keydown', (event) => {
     if (isTypingTarget(event.target)) return;
 
     if (event.key === '?') {

@@ -1,0 +1,482 @@
+/* =========================================================
+   WINDOW APPEAR ANIMATION
+   ========================================================= */
+
+@keyframes wm-window-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.desktop-window {
+  animation: wm-window-appear 120ms ease-out both;
+}
+
+/* Empty state */
+.ds-empty {
+  display: grid;
+  place-items: center;
+  gap: 0.5rem;
+  padding: 3rem 1.5rem;
+  border: 1px dashed color-mix(in srgb, var(--wm-border) 40%, transparent);
+  border-radius: var(--wm-window-radius);
+  text-align: center;
+  color: color-mix(in srgb, var(--wm-ink) 50%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.ds-empty__icon {
+  font-size: 2rem;
+  line-height: 1;
+  opacity: 0.5;
+}
+
+.ds-empty__title {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--wm-ink) 65%, transparent);
+}
+
+.ds-empty__body {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* CSS tooltip */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--wm-border);
+  border-radius: 5px;
+  background: var(--wm-chrome);
+  color: var(--wm-ink);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 80ms;
+  z-index: 9999;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
+  opacity: 1;
+}
+
+/* Palette Strip styles */
+.palette-strip {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.palette-swatch {
+  flex: 1;
+  height: 100%;
+}
+
+/* Card Covers and Grid Layout adjustments */
+.project-cover-container,
+.post-cover-container {
+  display: none;
+}
+
+.desktop-window[data-list-view="grid"] .project-cover-container,
+.desktop-window[data-list-view="grid"] .post-cover-container {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-bottom: 1px solid var(--wm-border);
+  overflow: hidden;
+  position: relative;
+  background: var(--wm-chrome);
+}
+
+.desktop-window[data-list-view="grid"] .project-card-cover,
+.desktop-window[data-list-view="grid"] .post-card-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.desktop-window[data-list-view="grid"] .list-link:hover .project-card-cover,
+.desktop-window[data-list-view="grid"] .list-link:hover .post-card-cover {
+  transform: scale(1.03);
+}
+
+.desktop-window[data-list-view="grid"] .project-cover-placeholder,
+.desktop-window[data-list-view="grid"] .post-cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--wm-chrome);
+}
+
+.desktop-window[data-list-view="grid"] .project-placeholder-icon,
+.desktop-window[data-list-view="grid"] .post-placeholder-icon {
+  font-size: 2.2rem;
+  opacity: 0.25;
+}
+
+/* Projects grid overrides */
+.desktop-window[data-list-view="grid"] .project-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+
+.desktop-window[data-list-view="grid"] .project-list-grid .project-item {
+  display: block;
+}
+
+.desktop-window[data-list-view="grid"] .project-list-grid .list-link {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-window-radius);
+  background: var(--wm-raised);
+  box-shadow: var(--wm-shadow);
+  align-content: stretch;
+  min-height: auto;
+  text-decoration: none;
+}
+
+.desktop-window[data-list-view="grid"] .project-list-grid .list-row-main {
+  padding: 0.8rem 1rem;
+  flex: 1;
+}
+
+.desktop-window[data-list-view="grid"] .project-list-grid .project-meta {
+  padding: 0 1rem 0.8rem;
+  text-align: right;
+  margin-top: auto;
+  border-top: 0;
+}
+
+/* Writing grid overrides */
+.desktop-window[data-list-view="grid"] .writing-year-posts .list-link {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-window-radius);
+  background: var(--wm-raised);
+  box-shadow: var(--wm-shadow);
+  text-decoration: none;
+  min-height: auto;
+  align-items: stretch;
+}
+
+.desktop-window[data-list-view="grid"] .writing-year-posts .list-row-main {
+  padding: 0.8rem 1rem;
+  flex: 1;
+}
+
+.desktop-window[data-list-view="grid"] .writing-year-posts .post-meta {
+  padding: 0 1rem 0.8rem;
+  text-align: right;
+  margin-top: auto;
+}
+
+/* =========================================================
+   APP STYLES v2 — BOLD REDESIGNS
+   ========================================================= */
+
+/* ── Shared primitives ─────────────────────────────── */
+
+.app-kicker {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--wm-ink) 50%, transparent);
+}
+
+.app-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.8rem);
+  font-weight: 700;
+  line-height: 0.95;
+}
+
+/* ── ARCHIVES — shared window-native layout ───────────────── */
+.archive-page { gap: 1.65rem; }
+
+.desktop-document > .archive-page {
+  display: grid;
+  gap: 1.65rem;
+}
+
+.archive-hero {
+  padding-bottom: 0;
+}
+
+.desktop-window[data-window-bleed="true"] .archive-hero {
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 2vw, 1.5rem) 0;
+}
+
+.desktop-window[data-window-bleed="true"] .list-pagination {
+  margin-inline: clamp(1rem, 2vw, 1.5rem);
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+}
+.archive-kicker { margin: 0 0 0.35rem; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: color-mix(in srgb, var(--wm-ink) 56%, transparent); }
+.archive-hero h1 { margin: 0; font-family: var(--font-display); font-size: clamp(2.5rem, 8vw, 5rem); line-height: 0.86; letter-spacing: -0.035em; }
+.archive-intro { margin: 0 !important; max-width: 32rem; font-size: 0.9rem !important; line-height: 1.45 !important; color: color-mix(in srgb, var(--wm-ink) 72%, transparent); }
+.archive-counter { display: grid; place-items: center; min-width: 5.2rem; aspect-ratio: 1; border: 1px solid var(--wm-border); border-radius: 999px; background: var(--wm-raised); box-shadow: 2px 2px 0 var(--wm-border); font-family: var(--font-mono); text-transform: uppercase; }
+.archive-counter strong { font-size: 1.35rem; line-height: 1; }
+.archive-counter span { font-size: 0.62rem; color: color-mix(in srgb, var(--wm-ink) 55%, transparent); }
+@media (max-width: 760px) { .archive-hero { grid-template-columns: 1fr; align-items: start; } .archive-counter { display: flex; gap: 0.35rem; justify-content: center; width: fit-content; min-width: 0; padding: 0.35rem 0.7rem; aspect-ratio: auto; } }
+
+/* ── WRITING — minimal archive list ────────────────── */
+.writing-feature__link:hover, .showcase-card__link:hover, .shelf-card__link:hover, .bookmark-card:hover, .resume-contact-grid a:hover { border-color: var(--wm-accent); background: color-mix(in srgb, var(--wm-accent-soft) 12%, var(--wm-raised)); }
+
+.writing-ledger {
+  display: grid;
+  border-top: 1px solid color-mix(in srgb, var(--wm-border) 42%, transparent);
+}
+
+.ledger-row {
+  border-bottom: 1px solid color-mix(in srgb, var(--wm-border) 42%, transparent);
+}
+
+.ledger-row__link {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 1.2rem;
+  padding: 1rem 0;
+  color: inherit;
+  text-decoration: none;
+  transition: background 100ms ease, color 100ms ease;
+}
+
+.ledger-row__link:hover {
+  background: color-mix(in srgb, var(--wm-accent-soft) 10%, transparent);
+}
+
+.ledger-row__meta {
+  display: grid;
+  place-content: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  text-align: center;
+}
+
+.ledger-row time {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--wm-ink) 52%, transparent);
+}
+
+.ledger-row__body {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+}
+
+.ledger-row h2, .showcase-card h2, .shelf-card h2, .bookmark-card h2, .resume-hero h1, .resume-work-card h3, .resume-product-card h3 { margin: 0; }
+.ledger-row h2 { font-family: var(--font-display); font-size: clamp(1.25rem, 3vw, 1.75rem); line-height: 1; }
+
+@media (max-width: 680px) {
+  .ledger-row__link { grid-template-columns: 1fr; }
+  .ledger-row__meta { display: flex; justify-content: space-between; }
+}
+
+/* ── PROJECTS — full-width color sections ──────────── */
+.resume-product-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+
+.project-color-stack {
+  display: grid;
+  gap: 0;
+}
+
+.project-color-section {
+  color: var(--project-ink);
+  background: var(--project-bg);
+  border-top: 1px solid color-mix(in srgb, var(--project-ink) 16%, transparent);
+}
+
+.project-color-section:last-child {
+  border-bottom: 1px solid color-mix(in srgb, var(--project-ink) 16%, transparent);
+}
+
+.project-color-section__link {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(14rem, 1.1fr);
+  gap: clamp(1rem, 4vw, 2.4rem);
+  align-items: center;
+  min-height: clamp(18rem, 38vw, 28rem);
+  padding: clamp(1.1rem, 4vw, 2.4rem);
+  color: inherit;
+  text-decoration: none;
+  transition: background 100ms ease;
+}
+
+.project-color-section__link:hover {
+  background: color-mix(in srgb, var(--project-accent) 8%, transparent);
+}
+
+.project-color-section__copy {
+  display: grid;
+  gap: 0.65rem;
+  align-content: center;
+}
+
+.project-color-section__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 28rem;
+  margin: 0 0 0.35rem !important;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--project-ink) 20%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.7rem !important;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--project-ink) 66%, transparent);
+}
+
+.project-color-section h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 9vw, 6.4rem);
+  line-height: 0.84;
+  letter-spacing: -0.045em;
+  color: var(--project-ink);
+}
+
+.project-color-section__copy > p:not(.project-color-section__meta) {
+  margin: 0 !important;
+  max-width: 34rem;
+  font-size: clamp(0.98rem, 2vw, 1.18rem) !important;
+  line-height: 1.55 !important;
+  color: color-mix(in srgb, var(--project-ink) 72%, transparent);
+}
+
+.project-color-section__cta {
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--project-ink) 58%, transparent);
+}
+
+.project-color-section__visual {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  min-height: 15rem;
+  max-height: 24rem;
+  background: color-mix(in srgb, var(--project-bg) 72%, white 28%);
+  color: color-mix(in srgb, var(--project-ink) 32%, transparent);
+  font-size: 3rem;
+}
+
+.project-color-section__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 760px) {
+  .project-color-section__link,
+  .resume-product-grid { grid-template-columns: minmax(0, 1fr); }
+
+  .project-color-section__link {
+    gap: 1rem;
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .project-color-section__visual {
+    order: -1;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 16 / 10;
+    justify-self: center;
+  }
+
+  .project-color-section__image {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .project-color-section h2 {
+    font-size: clamp(2.3rem, 16vw, 4rem);
+  }
+}
+
+/* ── LINKS — bookmark cards ────────────────────────── */
+.bookmark-stack { display: grid; border-top: 1px solid color-mix(in srgb, var(--wm-border) 42%, transparent); }
+.bookmark-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem; border-bottom: 1px solid color-mix(in srgb, var(--wm-border) 42%, transparent); }
+.bookmark-card__main { display: grid; grid-template-columns: 9rem minmax(0, 1fr) auto; gap: 1rem; align-items: center; min-width: 0; padding: 0.95rem 0; color: inherit; text-decoration: none; transition: background 100ms ease; }
+.bookmark-card__main:hover { background: color-mix(in srgb, var(--wm-accent-soft) 10%, transparent); }
+.bookmark-card__domain { overflow: hidden; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; color: color-mix(in srgb, var(--wm-ink) 52%, transparent); }
+.bookmark-card__content { display: grid; gap: 0.25rem; min-width: 0; }
+.bookmark-card h2 { overflow: hidden; font-family: var(--font-display); font-size: clamp(1.2rem, 2.6vw, 1.65rem); line-height: 1; text-overflow: ellipsis; white-space: nowrap; }
+.bookmark-card__note { overflow: hidden; max-width: 46rem; font-size: 0.82rem; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; color: color-mix(in srgb, var(--wm-ink) 58%, transparent); }
+.bookmark-card__external { font-family: var(--font-mono); font-size: 0.8rem; color: color-mix(in srgb, var(--wm-ink) 45%, transparent); }
+.link-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0; padding: 0; list-style: none; }
+.link-tags li { padding: 0.1rem 0.38rem; border: 1px solid color-mix(in srgb, var(--wm-border) 42%, transparent); border-radius: 999px; font-family: var(--font-mono); font-size: 0.66rem; line-height: 1.2; }
+.bookmark-card__permalink { display: grid; place-items: center; align-self: center; width: 2rem; height: 2rem; color: color-mix(in srgb, var(--wm-ink) 45%, transparent); font-family: var(--font-mono); text-decoration: none; }
+.bookmark-card__permalink:hover { color: var(--wm-accent); }
+@media (max-width: 680px) { .bookmark-card__main { grid-template-columns: 1fr auto; gap: 0.35rem 0.75rem; } .bookmark-card__domain { grid-column: 1 / -1; } }
+
+/* ── RESUME — minimal document flow ────────────────── */
+.resume-page { font-size: 0.92rem; }
+.resume-sheet { display: grid; gap: clamp(1.4rem, 3vw, 2.2rem); max-width: 66rem; margin: 0 auto; }
+.resume-hero { display: grid; gap: clamp(1.1rem, 3vw, 1.8rem); padding: 0.4rem 0 1.65rem; border-bottom: 2px solid color-mix(in srgb, var(--wm-border) 58%, transparent); background: transparent; }
+.resume-hero h1 { margin: 0; font-family: var(--font-display); font-size: clamp(3.4rem, 10vw, 7rem); font-weight: 800; line-height: 0.8; letter-spacing: -0.065em; }
+.resume-hero p { margin: 0 !important; max-width: none; font-family: var(--font-mono); font-size: clamp(0.78rem, 1.6vw, 0.95rem) !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.035em; color: color-mix(in srgb, var(--wm-ink) 62%, transparent); }
+.resume-contact-line { display: flex; flex-wrap: wrap; gap: 0.55rem 1.25rem; padding-bottom: 1.35rem; border-bottom: 1px solid color-mix(in srgb, var(--wm-border) 42%, transparent); font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700; }
+.resume-contact-line a { color: inherit; text-decoration: none; }
+.resume-contact-line a:hover { color: var(--wm-accent); }
+.resume-main-flow { display: grid; gap: clamp(1.4rem, 3vw, 2rem); }
+.resume-intro p { margin: 0 !important; max-width: 58rem; font-size: clamp(1.05rem, 2vw, 1.25rem) !important; line-height: 1.55 !important; color: color-mix(in srgb, var(--wm-ink) 78%, transparent); }
+.resume-section { display: grid; gap: 0; border-top: 2px solid color-mix(in srgb, var(--wm-border) 46%, transparent); }
+.resume-section > h2 { margin: 0; padding: 1rem 0 0.9rem; font-family: var(--font-display); font-size: clamp(1.55rem, 4vw, 2.45rem); font-weight: 800; line-height: 0.9; letter-spacing: -0.035em; color: var(--wm-ink); }
+.resume-entry { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: clamp(1.2rem, 3vw, 2.2rem); padding: 1.2rem 0; border-top: 1px solid color-mix(in srgb, var(--wm-border) 28%, transparent); }
+.resume-section > h2 + .resume-entry { border-top: 0; padding-top: 0.2rem; }
+.resume-entry__meta { display: grid; align-content: start; gap: 0.3rem; padding-top: 0.12rem; font-family: var(--font-mono); font-size: 0.74rem; font-weight: 700; line-height: 1.35; text-transform: uppercase; color: color-mix(in srgb, var(--wm-ink) 52%, transparent); }
+.resume-entry__meta a { color: inherit; text-decoration: none; }
+.resume-entry__meta a:hover { color: var(--wm-accent); }
+.resume-entry__body { display: grid; gap: 0.45rem; min-width: 0; }
+.resume-entry h3 { margin: 0; font-family: var(--font-body); font-size: clamp(1.05rem, 2vw, 1.28rem); font-weight: 800; line-height: 1.12; letter-spacing: -0.015em; }
+.resume-entry h3 span { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: color-mix(in srgb, var(--wm-ink) 48%, transparent); }
+.resume-entry p { margin: 0 !important; font-size: 0.94rem !important; line-height: 1.55 !important; color: color-mix(in srgb, var(--wm-ink) 68%, transparent); }
+.resume-entry ul { display: grid; gap: 0.42rem; margin: 0.2rem 0 0; padding-left: 1.05rem; }
+.resume-entry li { font-size: 0.9rem !important; line-height: 1.52 !important; }
+.resume-entry--compact { padding-bottom: 0.4rem; }
+.resume-entry--compact h3 { font-size: clamp(1rem, 1.8vw, 1.16rem); }
+.resume-skill-line { margin: 0 !important; max-width: 76ch; font-size: 1rem !important; font-weight: 600; line-height: 1.7 !important; color: color-mix(in srgb, var(--wm-ink) 76%, transparent); }
+@media (max-width: 720px) { .resume-entry { grid-template-columns: 1fr; gap: 0.45rem; } .resume-entry__meta { display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; } }
+@media print { body { overflow: visible; } .desktop-bg, .desktop-menu, .desktop-window--profile, .desktop-window__titlebar { display: none !important; } .desktop-stage, .desktop-window, .desktop-window__body, .desktop-document { position: static !important; width: auto !important; height: auto !important; overflow: visible !important; box-shadow: none !important; border: 0 !important; } .resume-sheet { max-width: none; } }
+

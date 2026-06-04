@@ -1,10 +1,8 @@
+import { addGlobalListenerOnce } from './events.js';
 import { saveWindowState } from './windowState.js';
 
 export function initDisplayControls() {
-  if (window.__desktopDisplayControlsReady) return;
-  window.__desktopDisplayControlsReady = true;
-
-  document.addEventListener('click', (event) => {
+  addGlobalListenerOnce('desktop-display-controls:click', document, 'click', (event) => {
     const button = event.target?.closest?.('[data-list-view]');
     if (!(button instanceof HTMLButtonElement)) return;
     const win = button.closest('.desktop-window');

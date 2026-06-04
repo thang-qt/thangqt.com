@@ -7,14 +7,12 @@ import {
   getLinkTitle,
   getPublishedLinks,
 } from '../utils/links';
-import { paginateItems } from '../utils/pagination';
-
-const PAGE_SIZE = 12;
+import { LINKS_PAGE_SIZE, paginateItems } from '../utils/pagination';
 
 const { links } = await getPublishedLinks();
 
 const linksWithVia = links.map((link) => ({ link }));
-const paginatedLinks = paginateItems(linksWithVia, 1, PAGE_SIZE);
+const paginatedLinks = paginateItems(linksWithVia, 1, LINKS_PAGE_SIZE);
 ---
 
 <Layout title="Links - ThangQT" description="A public bookmark archive of things I want to remember.">

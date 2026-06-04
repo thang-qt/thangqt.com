@@ -1,13 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
 import { getFirstContentImage } from '../../utils/contentImages';
+import { getPublishedProjects } from '../../utils/collections';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
+  const projects = await getPublishedProjects();
   return projects.map((project) => ({
     params: { slug: project.slug },
     props: { project },

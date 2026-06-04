@@ -1,7 +1,8 @@
-import { createChatCompletion, fetchModels } from './llmClient.js';
-import { buildSystemPrompt } from './llmContext.js';
-import { getSettingsFields, loadSettings, readSettingsFromDom, saveSettings } from './llmSettings.js';
-import { buildMessage, getConfigurationPrompt, getConversation, scrollToBottom } from './chatMessages.js';
+import { createChatCompletion, fetchModels } from './llm/client.js';
+import { buildSystemPrompt } from './llm/context.js';
+import { getSettingsFields, loadSettings, readSettingsFromDom, saveSettings } from './llm/settings.js';
+import { buildMessage, getConfigurationPrompt, getConversation, scrollToBottom } from './chat/messages.js';
+import { addGlobalListenerOnce } from './events.js';
 
 function getModelDatalist(root) {
   return root.querySelector('[data-llm-chat-model-options]');
@@ -86,10 +87,7 @@ function resetChat(root) {
 }
 
 function initClearChatControl() {
-  if (window.__desktopChatClearReady) return;
-  window.__desktopChatClearReady = true;
-
-  window.addEventListener('desktop:chat-clear', (event) => {
+  addGlobalListenerOnce('desktop-chat:clear', window, 'desktop:chat-clear', (event) => {
     const win = event.detail?.window;
     const root = win?.querySelector?.('[data-llm-chat]');
     if (root) resetChat(root);

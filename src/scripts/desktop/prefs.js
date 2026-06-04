@@ -1,3 +1,4 @@
+import { addGlobalListenerOnce } from './events.js';
 import { safeRead, safeWrite, storageKeys } from './storage.js';
 
 const defaultPrefs = {
@@ -73,15 +74,12 @@ export function syncSettingsControls() {
 }
 
 export function initSettingsControls() {
-  if (window.__desktopSettingsReady) return;
-  window.__desktopSettingsReady = true;
-
-  document.addEventListener('change', (event) => {
+  addGlobalListenerOnce('desktop-settings:change', document, 'change', (event) => {
     const target = event.target;
     if (target?.matches?.('[data-settings-mode]')) applyDesktopPrefs({ mode: target.value });
     if (target?.matches?.('[data-settings-pack]')) applyDesktopPrefs({ pack: target.value });
     if (target?.matches?.('[data-settings-pattern]')) applyDesktopPrefs({ pattern: target.value });
   });
 
-  window.addEventListener('desktop:prefs-change', syncSettingsControls);
+  addGlobalListenerOnce('desktop-settings:prefs-change', window, 'desktop:prefs-change', syncSettingsControls);
 }

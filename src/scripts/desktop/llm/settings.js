@@ -1,3 +1,5 @@
+import { safeReadJson, safeWriteJson } from '../storage.js';
+
 export const llmSettingsKey = 'desktop-llm-chat-settings';
 
 export function getSettingsFields(root) {
@@ -5,11 +7,7 @@ export function getSettingsFields(root) {
 }
 
 export function readStoredSettings() {
-  try {
-    return JSON.parse(localStorage.getItem(llmSettingsKey) || '{}');
-  } catch {
-    return {};
-  }
+  return safeReadJson(llmSettingsKey, {});
 }
 
 export function readSettingsFromDom(root) {
@@ -30,7 +28,7 @@ export function loadSettings(root) {
 
 export function saveSettings(root) {
   const settings = readSettingsFromDom(root);
-  localStorage.setItem(llmSettingsKey, JSON.stringify(settings));
+  safeWriteJson(llmSettingsKey, settings);
   return settings;
 }
 

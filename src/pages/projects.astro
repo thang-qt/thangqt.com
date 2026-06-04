@@ -1,22 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PaginationNav from '../components/PaginationNav.astro';
-import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import { paginateItems } from '../utils/pagination';
+import { getPublishedProjects } from '../utils/collections';
+import { paginateItems, PROJECTS_PAGE_SIZE } from '../utils/pagination';
 import { getFirstContentImage } from '../utils/contentImages';
 
-const PAGE_SIZE = 12;
-
-const projects = await getCollection('projects', ({ data }) => {
-  return import.meta.env.PROD ? data.draft !== true : true;
-});
-
-const getSortKey = (value: string) => (value.includes('-') ? value : `${value}-00`);
-const sortedProjects = projects.sort((a, b) =>
-  getSortKey(b.data.year).localeCompare(getSortKey(a.data.year))
-);
-const paginatedProjects = paginateItems(sortedProjects, 1, PAGE_SIZE);
+const projects = await getPublishedProjects();
+const paginatedProjects = paginateItems(projects, 1, PROJECTS_PAGE_SIZE);
 
 const projectPalettes: Record<string, { bg: string; ink: string; accent: string }> = {
   tilia: { bg: '#edf7f4', ink: '#10231f', accent: '#2f7f6f' },
@@ -41,7 +32,7 @@ function readableInk(hex: string | undefined) {
   return luminance > 0.62 ? '#101010' : '#fffaf0';
 }
 
-function getProjectPalette(project: (typeof sortedProjects)[number]) {
+function getProjectPalette(project: (typeof projects)[number]) {
   const themeColor = project.data.themeColor;
   if (themeColor) {
     return {

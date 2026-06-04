@@ -1,18 +1,11 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { getContainerRenderer as getMDXRenderer } from '@astrojs/mdx';
+import { getPublishedWriting } from '../utils/collections';
 
 export async function GET(context: APIContext) {
-  const posts = await getCollection('writing', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-  
-  // Sort posts by date (newest first)
-  const sortedPosts = posts.sort(
-    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-  );
+  const sortedPosts = await getPublishedWriting();
 
   // Create container for rendering content
   const container = await AstroContainer.create({

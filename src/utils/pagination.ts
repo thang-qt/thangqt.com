@@ -1,3 +1,7 @@
+export const WRITING_PAGE_SIZE = 40;
+export const PROJECTS_PAGE_SIZE = 12;
+export const LINKS_PAGE_SIZE = 12;
+
 export interface PaginationData<T> {
   items: T[];
   currentPage: number;
@@ -26,6 +30,23 @@ export function paginateItems<T>(items: T[], currentPage: number, pageSize: numb
 
 export function buildPageHref(basePath: string, page: number) {
   return page <= 1 ? basePath : `${basePath}/page/${page}`;
+}
+
+export function getPaginationStaticPaths(totalItems: number, pageSize: number) {
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
+    params: { page: String(index + 2) },
+  }));
+}
+
+export function parsePageParam(page: string | number | undefined) {
+  const parsedPage = Number(page);
+  return Number.isFinite(parsedPage) && parsedPage > 0 ? Math.floor(parsedPage) : 1;
+}
+
+export function formatShortDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 export function getPageNumbers(totalPages: number) {

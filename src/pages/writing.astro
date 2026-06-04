@@ -1,21 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PaginationNav from '../components/PaginationNav.astro';
-import { getCollection } from 'astro:content';
-import { paginateItems } from '../utils/pagination';
+import { getPublishedWriting } from '../utils/collections';
+import { formatShortDate, paginateItems, WRITING_PAGE_SIZE } from '../utils/pagination';
 
-const PAGE_SIZE = 40;
-
-const posts = await getCollection('writing', ({ data }) => {
-  return import.meta.env.PROD ? data.draft !== true : true;
-});
-
-const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const paginatedPosts = paginateItems(sortedPosts, 1, PAGE_SIZE);
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
+const posts = await getPublishedWriting();
+const paginatedPosts = paginateItems(posts, 1, WRITING_PAGE_SIZE);
 
 ---
 
@@ -30,7 +20,7 @@ function formatDate(date: Date): string {
         <article class="ledger-row">
           <a href={`/writing/${post.slug}`} class="ledger-row__link" data-window-title={post.data.title}>
             <div class="ledger-row__meta">
-              <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+              <time datetime={post.data.date.toISOString()}>{formatShortDate(post.data.date)}</time>
             </div>
             <div class="ledger-row__body">
               <h2>{post.data.title}</h2>

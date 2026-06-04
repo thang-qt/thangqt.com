@@ -1,3 +1,4 @@
+import { addGlobalListenerOnce } from './events.js';
 import { openInternalHref } from './router.js';
 
 export function getInternalHref(anchor) {
@@ -28,10 +29,7 @@ export function openLink(anchor, mode = 'auto') {
 }
 
 export function initWindowLinks() {
-  if (window.__desktopLinkDelegateReady) return;
-  window.__desktopLinkDelegateReady = true;
-
-  document.addEventListener('click', (event) => {
+  addGlobalListenerOnce('desktop-links:click', document, 'click', (event) => {
     const link = event.target?.closest?.('a');
     if (!(link instanceof HTMLAnchorElement)) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -41,7 +39,7 @@ export function initWindowLinks() {
     openLink(link, link.dataset.windowTarget === 'new' ? 'new-window' : 'auto');
   });
 
-  window.addEventListener('popstate', (event) => {
+  addGlobalListenerOnce('desktop-links:popstate', window, 'popstate', (event) => {
     const href = event.state?.href || `${window.location.pathname}${window.location.search}${window.location.hash}`;
     const title = event.state?.title || 'Window';
     openInternalHref(href, title, { updateHistory: false });

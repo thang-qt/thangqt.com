@@ -1,3 +1,4 @@
+import { addGlobalListenerOnce } from './events.js';
 import { getInternalHref, getLinkTitle, openLink } from './links.js';
 import { openHrefInWindow, openInternalHref } from './router.js';
 import { bringWindowForward } from './windowManager.js';
@@ -91,10 +92,7 @@ function linkItems(link, win) {
 }
 
 export function initContextMenus() {
-  if (window.__desktopContextMenuReady) return;
-  window.__desktopContextMenuReady = true;
-
-  document.addEventListener('contextmenu', (event) => {
+  addGlobalListenerOnce('desktop-context-menu:contextmenu', document, 'contextmenu', (event) => {
     const link = event.target?.closest?.('a');
     const win = event.target?.closest?.('.desktop-window');
     const isDesktop = event.target?.closest?.('.desktop-stage, .desktop-bg');
@@ -106,8 +104,8 @@ export function initContextMenus() {
     else showMenu(event, desktopItems());
   });
 
-  document.addEventListener('click', closeMenu);
-  document.addEventListener('keydown', (event) => {
+  addGlobalListenerOnce('desktop-context-menu:click', document, 'click', closeMenu);
+  addGlobalListenerOnce('desktop-context-menu:keydown', document, 'keydown', (event) => {
     if (event.key === 'Escape') closeMenu();
   });
 }

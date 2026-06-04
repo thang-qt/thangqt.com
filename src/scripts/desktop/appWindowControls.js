@@ -1,3 +1,5 @@
+import { addGlobalListenerOnce } from './events.js';
+
 const appWindowControls = {
   chat: [
     {
@@ -53,10 +55,7 @@ export function syncAppWindowControls() {
 }
 
 function initAppWindowControlEvents() {
-  if (window.__desktopAppWindowControlsReady) return;
-  window.__desktopAppWindowControlsReady = true;
-
-  document.addEventListener('click', (event) => {
+  addGlobalListenerOnce('desktop-app-window-controls:click', document, 'click', (event) => {
     const button = event.target?.closest?.('[data-app-window-control]');
     if (!(button instanceof HTMLButtonElement)) return;
 

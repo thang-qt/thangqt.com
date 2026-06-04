@@ -10,21 +10,19 @@ import {
   getPublishedLinks,
   resolveVia,
 } from '../../../utils/links';
-import { paginateItems } from '../../../utils/pagination';
-
-const PAGE_SIZE = 3;
+import {
+  getPaginationStaticPaths,
+  LINKS_PAGE_SIZE,
+  paginateItems,
+  parsePageParam,
+} from '../../../utils/pagination';
 
 export async function getStaticPaths() {
-  const pageSize = 3;
   const { links } = await getPublishedLinks();
-  const totalPages = Math.max(1, Math.ceil(links.length / pageSize));
-
-  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
-    params: { page: String(index + 2) },
-  }));
+  return getPaginationStaticPaths(links.length, LINKS_PAGE_SIZE);
 }
 
-const currentPage = Number(Astro.params.page);
+const currentPage = parsePageParam(Astro.params.page);
 const { links, slugMap } = await getPublishedLinks();
 
 const linksWithVia = links.map((link) => ({
@@ -32,7 +30,7 @@ const linksWithVia = links.map((link) => ({
   via: resolveVia(link.data.via, slugMap),
 }));
 
-const paginatedLinks = paginateItems(linksWithVia, currentPage, PAGE_SIZE);
+const paginatedLinks = paginateItems(linksWithVia, currentPage, LINKS_PAGE_SIZE);
 ---
 
 <Layout title={`Links - Page ${paginatedLinks.currentPage} - ThangQT`} description="A public bookmark archive of things I want to remember.">

@@ -1,36 +1,23 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import PaginationNav from '../../../components/PaginationNav.astro';
-import { getCollection } from 'astro:content';
-import { paginateItems } from '../../../utils/pagination';
-
-const PAGE_SIZE = 8;
+import { getPublishedWriting } from '../../../utils/collections';
+import {
+  formatShortDate,
+  getPaginationStaticPaths,
+  paginateItems,
+  parsePageParam,
+  WRITING_PAGE_SIZE,
+} from '../../../utils/pagination';
 
 export async function getStaticPaths() {
-  const pageSize = 8;
-  const posts = await getCollection('writing', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-
-  const totalPages = Math.max(1, Math.ceil(posts.length / pageSize));
-
-  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
-    params: { page: String(index + 2) },
-  }));
+  const posts = await getPublishedWriting();
+  return getPaginationStaticPaths(posts.length, WRITING_PAGE_SIZE);
 }
 
-const currentPage = Number(Astro.params.page);
-
-const posts = await getCollection('writing', ({ data }) => {
-  return import.meta.env.PROD ? data.draft !== true : true;
-});
-
-const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const paginatedPosts = paginateItems(sortedPosts, currentPage, PAGE_SIZE);
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
+const currentPage = parsePageParam(Astro.params.page);
+const posts = await getPublishedWriting();
+const paginatedPosts = paginateItems(posts, currentPage, WRITING_PAGE_SIZE);
 ---
 
 <Layout title={`Writing - Page ${paginatedPosts.currentPage} - ThangQT`} description="My various thoughts on life, tech, and everything in between">
@@ -56,7 +43,7 @@ function formatDate(date: Date): string {
             <h2 class="post-title">{post.data.title}</h2>
             {post.data.description && <p class="list-description">{post.data.description}</p>}
           </span>
-          <span class="post-meta">{formatDate(post.data.date)}</span>
+          <span class="post-meta">{formatShortDate(post.data.date)}</span>
         </a>
       </article>
     ))}

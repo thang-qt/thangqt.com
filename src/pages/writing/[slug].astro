@@ -1,13 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
 import { getFirstContentImage } from '../../utils/contentImages';
+import { getPublishedWriting } from '../../utils/collections';
+import { formatShortDate } from '../../utils/pagination';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('writing', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
+  const posts = await getPublishedWriting();
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -43,10 +42,6 @@ const bodyStyle = [
 ]
   .filter(Boolean)
   .join('; ');
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
 ---
 
 <Layout
@@ -64,7 +59,7 @@ function formatDate(date: Date): string {
 >
   <section class="col-content post-header" data-window-title={post.data.title}>
     <div class="post-header-content">
-      <p class="post-page-date">{formatDate(post.data.date)}</p>
+      <p class="post-page-date">{formatShortDate(post.data.date)}</p>
       <h1 class="post-page-title">{post.data.title}</h1>
     </div>
   </section>
@@ -74,7 +69,7 @@ function formatDate(date: Date): string {
     style={contentBackground ? `--post-content-bg-url: url('${contentBackground}')` : undefined}
   >
     <div class="post-mobile-header" aria-hidden="true">
-      <p class="post-page-date">{formatDate(post.data.date)}</p>
+      <p class="post-page-date">{formatShortDate(post.data.date)}</p>
       <p class="post-page-title">{post.data.title}</p>
     </div>
     {post.data.cover && (

@@ -1,4 +1,4 @@
-import { normalizeEndpoint } from './llmSettings.js';
+import { normalizeEndpoint } from './settings.js';
 
 function ensureConfig(settings) {
   const endpoint = normalizeEndpoint(settings.endpoint || '');

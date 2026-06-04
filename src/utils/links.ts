@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { isPublishedContent } from './collections';
 
 export type LinkEntry = CollectionEntry<'links'>;
 export type LinkVia = LinkEntry['data']['via'][number];
@@ -19,9 +20,7 @@ export interface ResolvedExternalVia {
 export type ResolvedVia = ResolvedInternalVia | ResolvedExternalVia;
 
 export async function getPublishedLinks() {
-  const links = await getCollection('links', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
+  const links = await getCollection('links', ({ data }) => isPublishedContent(data));
 
   const slugMap = new Map<string, LinkEntry>();
 

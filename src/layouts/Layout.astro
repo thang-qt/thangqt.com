@@ -3,7 +3,7 @@ import SEO from '../components/SEO.astro';
 import JsonLD from '../components/JsonLD.astro';
 import DesktopWindow from '../components/DesktopWindow.astro';
 import { Icon } from 'astro-icon/components';
-import { getCollection } from 'astro:content';
+import { getLlmChatContext } from '../utils/llmContext';
 import {
   desktopApps,
   desktopBackgroundPatterns,
@@ -52,29 +52,7 @@ const windowTitle = desktopTitle ?? currentPage?.label ?? 'ThangQT';
 const initialAppKey = getDesktopAppKeyForPath(currentPath);
 const initialWindow = currentPage.window;
 
-const [llmProjects, llmWriting] = await Promise.all([
-  getCollection('projects', ({ data }) => import.meta.env.PROD ? data.draft !== true : true),
-  getCollection('writing', ({ data }) => import.meta.env.PROD ? data.draft !== true : true),
-]);
-
-const llmChatContext = {
-  projects: llmProjects
-    .sort((a, b) => String(b.data.year).localeCompare(String(a.data.year)))
-    .map((project) => ({
-      title: project.data.title,
-      year: project.data.year,
-      description: project.data.description,
-      href: `/projects/${project.slug}`,
-    })),
-  writing: llmWriting
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-    .map((post) => ({
-      title: post.data.title,
-      date: post.data.date.toISOString().slice(0, 10),
-      description: post.data.description,
-      href: `/writing/${post.slug}`,
-    })),
-};
+const llmChatContext = await getLlmChatContext();
 ---
 
 <!DOCTYPE html>
