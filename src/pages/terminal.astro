@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Terminal - ThangQT" description="A small browser terminal for the desktop." desktopTitle="Terminal">
+  <section class="col-content terminal-app" data-window-title="Terminal" data-terminal-app>
+    <div class="terminal-screen" data-terminal-screen aria-label="Terminal output">
+      <p><span class="terminal-muted">Type</span> <button type="button" class="terminal-inline-command" data-terminal-run="help">help</button> <span class="terminal-muted">to begin.</span></p>
+    </div>
+
+    <form class="terminal-command-line" data-terminal-form autocomplete="off">
+      <label class="visually-hidden" for="terminal-input">Command</label>
+      <div class="terminal-prompt-label" data-terminal-prompt-label aria-hidden="true">guest@thangqt ~</div>
+      <div class="terminal-input-row">
+        <span class="terminal-prompt-mark" aria-hidden="true">❯</span>
+        <input id="terminal-input" name="command" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" data-terminal-input />
+      </div>
+    </form>
+  </section>
+</Layout>

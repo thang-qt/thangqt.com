@@ -16,7 +16,7 @@ export default defineConfig({
     mdx(),
     icon({
       include: {
-        ph: ['house', 'pencil-simple', 'cube', 'link', 'info', 'file-text', 'gear', 'chat-circle', 'paper-plane-tilt', 'broom'],
+        ph: ['house', 'pencil-simple', 'cube', 'link', 'info', 'file-text', 'gear', 'chat-circle', 'terminal', 'paper-plane-tilt', 'broom'],
       },
     }),
     sitemap({

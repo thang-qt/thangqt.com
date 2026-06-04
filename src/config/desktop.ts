@@ -21,6 +21,7 @@ export const desktopAppIcons = {
   resume: 'ph:file-text',
   settings: 'ph:gear',
   chat: 'ph:chat-circle',
+  terminal: 'ph:terminal',
 };
 
 export const desktopApps = [
@@ -106,6 +107,16 @@ export const desktopApps = [
     nav: true,
     pinned: false,
     window: { minWidth: 360, minHeight: 320, width: 'min(48rem, calc(100vw - 5rem))', height: 'min(44rem, calc(100dvh - 8rem))' },
+  },
+  {
+    id: 'terminal',
+    label: 'Terminal',
+    href: '/terminal',
+    icon: '▣',
+    iconName: desktopAppIcons.terminal,
+    nav: true,
+    pinned: false,
+    window: { minWidth: 380, minHeight: 280, width: 'min(46rem, calc(100vw - 5rem))', height: 'min(34rem, calc(100dvh - 8rem))' },
   },
 ];
 

@@ -2749,3 +2749,93 @@ pre {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── TERMINAL ─────────────────────────────────────── */
+
+.desktop-window--app-terminal .desktop-window__body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.desktop-window--app-terminal .desktop-document {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.desktop-window--app-terminal .desktop-document > .terminal-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.terminal-screen {
+  display: block;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  padding: 0.2rem 0 0.5rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  scrollbar-color: color-mix(in srgb, var(--wm-border) 38%, transparent) transparent;
+}
+
+.terminal-screen p {
+  margin: 0 !important;
+  max-width: none;
+  font: inherit !important;
+  color: inherit;
+}
+
+.terminal-muted,
+.terminal-history-prompt {
+  color: color-mix(in srgb, var(--wm-ink) 58%, transparent);
+}
+
+.terminal-inline-command {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--wm-accent);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.terminal-command-line {
+  display: grid;
+  gap: 0.08rem;
+  margin-top: 0.1rem;
+}
+
+.terminal-input-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.terminal-prompt-label {
+  color: color-mix(in srgb, var(--wm-ink) 58%, transparent);
+  white-space: nowrap;
+}
+
+.terminal-prompt-mark {
+  color: var(--wm-accent);
+  font-weight: 800;
+}
+
+.terminal-input-row input {
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--wm-ink);
+  font: inherit;
+  outline: 0;
+  caret-color: var(--wm-accent);
+}

@@ -9,6 +9,7 @@ import { saveWindowState } from './windowState.js';
 import { initWindowLinks } from './links.js';
 import { initLauncher } from './launcher.js';
 import { initShortcutHelper } from './shortcuts.js';
+import { initTerminalApp } from './terminal.js';
 import { initWindowManager } from './windowManager.js';
 
 function initDesktop() {
@@ -25,6 +26,7 @@ function initDesktop() {
   initLauncher();
   initShortcutHelper();
   initChatApp();
+  initTerminalApp();
   initAppWindowControls();
   syncSettingsControls();
 }
@@ -38,4 +40,5 @@ document.addEventListener('astro:page-load', initDesktop);
 window.addEventListener('desktop:window-state-change', saveWindowState);
 window.addEventListener('desktop:prefs-change', initWindowManager);
 window.addEventListener('desktop:content-change', initChatApp);
+window.addEventListener('desktop:content-change', initTerminalApp);
 window.addEventListener('desktop:content-change', initAppWindowControls);
