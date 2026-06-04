@@ -6,11 +6,7 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
 <Layout title="Settings - ThangQT" description="Desktop shell settings and credits.">
   <section class="col-content settings-page" data-window-title="Settings">
     <header class="settings-hero">
-      <p class="settings-kicker">Desktop control panel</p>
       <h1>Settings</h1>
-      <p>
-        Tune the shell without touching page content. Preferences are saved locally in this browser.
-      </p>
     </header>
 
     <div class="settings-sections">
@@ -18,9 +14,12 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
       <section class="settings-panel" aria-labelledby="settings-mode">
         <div class="settings-panel-head">
           <h2 id="settings-mode">Mode</h2>
-          <p>Choose the base contrast for the whole desktop.</p>
         </div>
         <div class="settings-segmented" role="radiogroup" aria-label="Color mode">
+          <label>
+            <input type="radio" name="desktop-mode" value="auto" data-settings-mode />
+            <span>Auto</span>
+          </label>
           <label>
             <input type="radio" name="desktop-mode" value="light" data-settings-mode />
             <span>Light</span>
@@ -36,7 +35,6 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
       <section class="settings-panel settings-panel--packs" aria-labelledby="settings-packs">
         <div class="settings-panel-head">
           <h2 id="settings-packs">Theme Packs</h2>
-          <p>Theme packs control color tokens, app chrome, text, and contrast.</p>
         </div>
         <div class="settings-pack-grid">
           {desktopThemePacks.map((pack) => (
@@ -64,7 +62,6 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
       <section class="settings-panel settings-panel--patterns" aria-labelledby="settings-patterns">
         <div class="settings-panel-head">
           <h2 id="settings-patterns">Background Pattern</h2>
-          <p>Choose the generative desktop field separately from the color pack.</p>
         </div>
         <div class="settings-pack-grid settings-pattern-grid">
           {desktopBackgroundPatterns.map((pattern) => (

@@ -78,7 +78,7 @@ const llmChatContext = {
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-color-mode="light" data-theme-pack="poolsuite" data-bg-pattern="grid">
+<html lang="en" data-theme="light" data-color-mode="light" data-theme-pack="bloom" data-bg-pattern="dots" data-color-mode-pref="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -111,16 +111,20 @@ const llmChatContext = {
 
     <link rel="alternate" type="application/rss+xml" title="ThangQT's Blog" href="/rss.xml" />
     <script is:inline>
-      const mode = localStorage.getItem('desktop-color-mode') || 'light';
-      const savedPack = localStorage.getItem('desktop-theme-pack') || 'poolsuite';
+      const modePref = localStorage.getItem('desktop-color-mode') || 'light';
+      const mode = modePref === 'auto'
+        ? (new Date().getHours() >= 18 || new Date().getHours() < 6 ? 'dark' : 'light')
+        : modePref;
+      const savedPack = localStorage.getItem('desktop-theme-pack') || 'bloom';
       const pack = savedPack === 'oxide' ? 'bloom' : savedPack;
-      const savedPattern = localStorage.getItem('desktop-bg-pattern') || 'grid';
+      const savedPattern = localStorage.getItem('desktop-bg-pattern') || 'dots';
       // Migrate removed patterns to their closest replacement
       const patternMap = { tiles: 'grid', rings: 'dots' };
       const pattern = patternMap[savedPattern] || savedPattern;
       if (savedPack === 'oxide') localStorage.setItem('desktop-theme-pack', 'bloom');
       if (patternMap[savedPattern]) localStorage.setItem('desktop-bg-pattern', pattern);
       document.documentElement.dataset.colorMode = mode;
+      document.documentElement.dataset.colorModePref = modePref;
       document.documentElement.dataset.themePack = pack;
       document.documentElement.dataset.bgPattern = pattern;
     </script>

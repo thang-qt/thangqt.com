@@ -2520,12 +2520,12 @@ pre {
 
 .settings-segmented {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
   border: 1px solid var(--wm-border);
-  border-radius: 999px;
+  border-radius: var(--wm-window-radius);
   overflow: hidden;
   background: var(--wm-chrome);
-  max-width: 14rem;
 }
 
 .settings-segmented label { min-width: 0; position: relative; }
@@ -2544,11 +2544,16 @@ pre {
 .settings-segmented span {
   display: grid;
   place-items: center;
-  min-height: 2rem;
+  min-height: 2.35rem;
+  border-right: 1px solid color-mix(in srgb, var(--wm-border) 38%, transparent);
   font-family: var(--font-mono);
   font-size: 0.76rem;
   cursor: pointer;
   transition: background 80ms;
+}
+
+.settings-segmented label:last-child span {
+  border-right: 0;
 }
 
 .settings-segmented input:checked + span {
