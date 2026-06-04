@@ -1,10 +1,7 @@
 import { getPublishedProjects, getPublishedWriting } from './collections';
 
 export async function getLlmChatContext() {
-  const [projects, writing] = await Promise.all([
-    getPublishedProjects(),
-    getPublishedWriting(),
-  ]);
+  const [projects, writing] = await Promise.all([getPublishedProjects(), getPublishedWriting()]);
 
   return {
     projects: projects.map((project) => ({

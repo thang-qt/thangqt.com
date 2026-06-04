@@ -33,7 +33,12 @@ export const desktopApps = [
     iconName: desktopAppIcons.home,
     nav: true,
     pinned: true,
-    window: { minWidth: 320, minHeight: 240, width: 'min(64rem, calc(100vw - 5rem))', height: 'min(46rem, calc(100dvh - 8rem))' },
+    window: {
+      minWidth: 320,
+      minHeight: 240,
+      width: 'min(64rem, calc(100vw - 5rem))',
+      height: 'min(46rem, calc(100dvh - 8rem))',
+    },
   },
   {
     id: 'writing',
@@ -44,7 +49,12 @@ export const desktopApps = [
     nav: true,
     pinned: true,
     detailWindows: true,
-    window: { minWidth: 340, minHeight: 260, width: 'min(58rem, calc(100vw - 5rem))', height: 'min(48rem, calc(100dvh - 8rem))' },
+    window: {
+      minWidth: 340,
+      minHeight: 260,
+      width: 'min(58rem, calc(100vw - 5rem))',
+      height: 'min(48rem, calc(100dvh - 8rem))',
+    },
   },
   {
     id: 'projects',
@@ -55,7 +65,12 @@ export const desktopApps = [
     nav: true,
     pinned: true,
     detailWindows: true,
-    window: { minWidth: 360, minHeight: 260, width: 'min(66rem, calc(100vw - 5rem))', height: 'min(49rem, calc(100dvh - 8rem))' },
+    window: {
+      minWidth: 360,
+      minHeight: 260,
+      width: 'min(66rem, calc(100vw - 5rem))',
+      height: 'min(49rem, calc(100dvh - 8rem))',
+    },
   },
   {
     id: 'links',
@@ -66,7 +81,12 @@ export const desktopApps = [
     nav: true,
     pinned: true,
     detailWindows: true,
-    window: { minWidth: 320, minHeight: 240, width: 'min(54rem, calc(100vw - 5rem))', height: 'min(44rem, calc(100dvh - 8rem))' },
+    window: {
+      minWidth: 320,
+      minHeight: 240,
+      width: 'min(54rem, calc(100vw - 5rem))',
+      height: 'min(44rem, calc(100dvh - 8rem))',
+    },
   },
   {
     id: 'about',
@@ -76,7 +96,12 @@ export const desktopApps = [
     iconName: desktopAppIcons.about,
     nav: true,
     pinned: false,
-    window: { minWidth: 320, minHeight: 220, width: 'min(50rem, calc(100vw - 5rem))', height: 'min(38rem, calc(100dvh - 8rem))' },
+    window: {
+      minWidth: 320,
+      minHeight: 220,
+      width: 'min(50rem, calc(100vw - 5rem))',
+      height: 'min(38rem, calc(100dvh - 8rem))',
+    },
   },
   {
     id: 'resume',
@@ -86,7 +111,12 @@ export const desktopApps = [
     iconName: desktopAppIcons.resume,
     nav: true,
     pinned: false,
-    window: { minWidth: 380, minHeight: 300, width: 'min(68rem, calc(100vw - 5rem))', height: 'min(50rem, calc(100dvh - 8rem))' },
+    window: {
+      minWidth: 380,
+      minHeight: 300,
+      width: 'min(68rem, calc(100vw - 5rem))',
+      height: 'min(50rem, calc(100dvh - 8rem))',
+    },
   },
   {
     id: 'settings',
@@ -96,7 +126,12 @@ export const desktopApps = [
     iconName: desktopAppIcons.settings,
     nav: true,
     pinned: false,
-    window: { minWidth: 340, minHeight: 260, width: 'min(46rem, calc(100vw - 5rem))', height: 'min(42rem, calc(100dvh - 8rem))' },
+    window: {
+      minWidth: 340,
+      minHeight: 260,
+      width: 'min(46rem, calc(100vw - 5rem))',
+      height: 'min(42rem, calc(100dvh - 8rem))',
+    },
   },
   {
     id: 'chat',
@@ -106,7 +141,12 @@ export const desktopApps = [
     iconName: desktopAppIcons.chat,
     nav: true,
     pinned: false,
-    window: { minWidth: 360, minHeight: 320, width: 'min(48rem, calc(100vw - 5rem))', height: 'min(44rem, calc(100dvh - 8rem))' },
+    window: {
+      minWidth: 360,
+      minHeight: 320,
+      width: 'min(48rem, calc(100vw - 5rem))',
+      height: 'min(44rem, calc(100dvh - 8rem))',
+    },
   },
   {
     id: 'terminal',
@@ -116,7 +156,12 @@ export const desktopApps = [
     iconName: desktopAppIcons.terminal,
     nav: true,
     pinned: false,
-    window: { minWidth: 380, minHeight: 280, width: 'min(46rem, calc(100vw - 5rem))', height: 'min(34rem, calc(100dvh - 8rem))' },
+    window: {
+      minWidth: 380,
+      minHeight: 280,
+      width: 'min(46rem, calc(100vw - 5rem))',
+      height: 'min(34rem, calc(100dvh - 8rem))',
+    },
   },
 ];
 
@@ -125,12 +170,14 @@ export const desktopPinnedItems = desktopApps.filter((app) => app.pinned);
 
 export function getDesktopAppForPath(pathname: string) {
   const normalized = pathname === '/' ? '/' : pathname.replace(/\/$/, '');
-  return [...desktopApps]
-    .sort((a, b) => b.href.length - a.href.length)
-    .find((app) => {
-      if (app.href === '/') return normalized === '/';
-      return normalized === app.href || normalized.startsWith(`${app.href}/`);
-    }) ?? desktopApps[0];
+  return (
+    [...desktopApps]
+      .sort((a, b) => b.href.length - a.href.length)
+      .find((app) => {
+        if (app.href === '/') return normalized === '/';
+        return normalized === app.href || normalized.startsWith(`${app.href}/`);
+      }) ?? desktopApps[0]
+  );
 }
 
 export function getDesktopAppKeyForPath(pathname: string) {

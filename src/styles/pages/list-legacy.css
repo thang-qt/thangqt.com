@@ -114,41 +114,48 @@
 }
 
 /* post/project/link item baseline — overridden by v2 styles below */
-.post-item, .project-item { padding: 0; }
+.post-item,
+.project-item {
+  padding: 0;
+}
 
 /* list-link — full definition in v2 section */
-.list-row-main { display: grid; gap: 0.25rem; min-width: 0; }
+.list-row-main {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
 
 /* compact and grid view overrides */
-.desktop-window[data-list-view="compact"] .list-link {
+.desktop-window[data-list-view='compact'] .list-link {
   min-height: 0;
   grid-template-columns: 1fr auto;
   align-items: baseline;
   padding: 0.38rem 0;
 }
 
-.desktop-window[data-list-view="compact"] .list-description {
+.desktop-window[data-list-view='compact'] .list-description {
   display: none;
 }
 
-.desktop-window[data-list-view="compact"] .post-title,
-.desktop-window[data-list-view="compact"] .project-title {
+.desktop-window[data-list-view='compact'] .post-title,
+.desktop-window[data-list-view='compact'] .project-title {
   font-size: 1rem;
 }
 
-.desktop-window[data-list-view="grid"] .col-content {
+.desktop-window[data-list-view='grid'] .col-content {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
-.desktop-window[data-list-view="grid"] .list-mobile-header,
-.desktop-window[data-list-view="grid"] .list-status,
-.desktop-window[data-list-view="grid"] .list-pagination {
+.desktop-window[data-list-view='grid'] .list-mobile-header,
+.desktop-window[data-list-view='grid'] .list-status,
+.desktop-window[data-list-view='grid'] .list-pagination {
   grid-column: 1 / -1;
 }
 
-.desktop-window[data-list-view="grid"] .list-link {
+.desktop-window[data-list-view='grid'] .list-link {
   grid-template-columns: 1fr;
   min-height: 10rem;
   height: 100%;
@@ -160,62 +167,135 @@
 }
 
 /* post/project meta */
-.post-meta, .project-meta, .resume-entry-meta {
+.post-meta,
+.project-meta,
+.resume-entry-meta {
   font-family: var(--font-mono);
   font-size: var(--fs-caption);
 }
 
 /* tags */
-.link-tags, .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0; list-style: none; }
-.link-tags li, .tag { display: inline-flex; padding: 0.18rem 0.38rem; border: 1px solid var(--wm-border); background: var(--wm-chrome); font-family: var(--font-mono); font-size: 0.72rem; }
+.link-tags,
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  list-style: none;
+}
+.link-tags li,
+.tag {
+  display: inline-flex;
+  padding: 0.18rem 0.38rem;
+  border: 1px solid var(--wm-border);
+  background: var(--wm-chrome);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
 
 /* pagination */
-.list-pagination { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.2rem; }
-.list-pagination-link { display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid var(--wm-border); background: var(--wm-chrome); text-decoration: none; }
-.list-pagination-link.is-disabled { opacity: 0.35; }
+.list-pagination {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+}
+.list-pagination-link {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--wm-border);
+  background: var(--wm-chrome);
+  text-decoration: none;
+}
+.list-pagination-link.is-disabled {
+  opacity: 0.35;
+}
 
 /* resume, settings, about — full definitions in v2 section below */
 
 .settings-pattern--grid .settings-pack__preview {
   background:
     linear-gradient(var(--wm-border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--wm-border) 1px, transparent 1px),
-    var(--wm-background);
+    linear-gradient(90deg, var(--wm-border) 1px, transparent 1px), var(--wm-background);
   background-size: 14px 14px;
   opacity: 0.85;
 }
 
 .settings-pattern--noise .settings-pack__preview {
   background:
-    repeating-linear-gradient(0deg, color-mix(in srgb, var(--wm-border) 28%, transparent) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--wm-accent) 28%, transparent) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--wm-border) 28%, transparent) 0 1px,
+      transparent 1px 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--wm-accent) 28%, transparent) 0 1px,
+      transparent 1px 5px
+    ),
     var(--wm-background);
 }
 
 .settings-pattern--weave .settings-pack__preview {
   background:
-    repeating-linear-gradient(45deg, color-mix(in srgb, var(--wm-border) 30%, transparent) 0, color-mix(in srgb, var(--wm-border) 30%, transparent) 1px, transparent 1px, transparent 9px),
-    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--wm-border) 30%, transparent) 0, color-mix(in srgb, var(--wm-border) 30%, transparent) 1px, transparent 1px, transparent 9px),
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--wm-border) 30%, transparent) 0,
+      color-mix(in srgb, var(--wm-border) 30%, transparent) 1px,
+      transparent 1px,
+      transparent 9px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, var(--wm-border) 30%, transparent) 0,
+      color-mix(in srgb, var(--wm-border) 30%, transparent) 1px,
+      transparent 1px,
+      transparent 9px
+    ),
     var(--wm-background);
 }
 
 .settings-pattern--dots .settings-pack__preview {
   background:
-    radial-gradient(circle, color-mix(in srgb, var(--wm-border) 55%, transparent) 1px, transparent 1px),
+    radial-gradient(
+      circle,
+      color-mix(in srgb, var(--wm-border) 55%, transparent) 1px,
+      transparent 1px
+    ),
     var(--wm-background);
   background-size: 10px 10px;
 }
 
 .settings-pattern--circuit .settings-pack__preview {
   background:
-    repeating-linear-gradient(90deg, transparent, transparent 18px, color-mix(in srgb, var(--wm-border) 30%, transparent) 18px, color-mix(in srgb, var(--wm-border) 30%, transparent) 19px),
-    repeating-linear-gradient(0deg, transparent, transparent 18px, color-mix(in srgb, var(--wm-border) 18%, transparent) 18px, color-mix(in srgb, var(--wm-border) 18%, transparent) 19px),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 18px,
+      color-mix(in srgb, var(--wm-border) 30%, transparent) 18px,
+      color-mix(in srgb, var(--wm-border) 30%, transparent) 19px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 18px,
+      color-mix(in srgb, var(--wm-border) 18%, transparent) 18px,
+      color-mix(in srgb, var(--wm-border) 18%, transparent) 19px
+    ),
     var(--wm-background);
 }
 
 .settings-pattern--topography .settings-pack__preview {
   background:
-    repeating-radial-gradient(ellipse at 30% 55%, transparent 0, transparent 10px, color-mix(in srgb, var(--wm-border) 28%, transparent) 10px, color-mix(in srgb, var(--wm-border) 28%, transparent) 11px),
+    repeating-radial-gradient(
+      ellipse at 30% 55%,
+      transparent 0,
+      transparent 10px,
+      color-mix(in srgb, var(--wm-border) 28%, transparent) 10px,
+      color-mix(in srgb, var(--wm-border) 28%, transparent) 11px
+    ),
     var(--wm-background);
 }
 
@@ -228,20 +308,16 @@
 .settings-pack--bloom .settings-pack__preview {
   background:
     radial-gradient(circle at 24% 24%, #ffc0a8, transparent 1.8rem),
-    radial-gradient(circle at 78% 70%, #77bf7e, transparent 2rem),
-    #fff9ea;
+    radial-gradient(circle at 78% 70%, #77bf7e, transparent 2rem), #fff9ea;
 }
 
 .settings-pack--paper .settings-pack__preview {
-  background:
-    repeating-linear-gradient(0deg, #fffaf0 0 13px, #e7cf9a 13px 14px),
-    #fffaf0;
+  background: repeating-linear-gradient(0deg, #fffaf0 0 13px, #e7cf9a 13px 14px), #fffaf0;
 }
 
 .settings-pack--signal .settings-pack__preview {
   background:
-    repeating-radial-gradient(circle at 70% 35%, #1d7dff 0 1px, transparent 1px 10px),
-    #bddff2;
+    repeating-radial-gradient(circle at 70% 35%, #1d7dff 0 1px, transparent 1px 10px), #bddff2;
 }
 
 .settings-pack__body {
@@ -418,7 +494,7 @@
   }
 
   .wm-resize-edge,
-  .desktop-window__controls button[data-window-action="maximize"] {
+  .desktop-window__controls button[data-window-action='maximize'] {
     display: none !important;
   }
 }
@@ -507,8 +583,8 @@
     box-shadow: var(--wm-shadow);
   }
 
-  .desktop-window__controls button[data-window-action="minimize"],
-  .desktop-window__controls button[data-window-action="maximize"] {
+  .desktop-window__controls button[data-window-action='minimize'],
+  .desktop-window__controls button[data-window-action='maximize'] {
     display: none !important;
   }
 }
@@ -542,6 +618,4 @@
   .desktop-menu__nav a {
     padding: 0 0.58rem;
   }
-
 }
-

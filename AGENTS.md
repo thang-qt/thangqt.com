@@ -20,18 +20,25 @@ Core concepts:
 Use `pnpm`.
 
 ```sh
-pnpm dev       # local dev server
-pnpm build     # production build / validation
-pnpm preview   # preview built site
+pnpm dev            # local dev server
+pnpm build          # production build
+pnpm preview        # preview built site
+pnpm check          # Astro/TypeScript diagnostics
+pnpm lint           # oxlint
+pnpm lint:fix       # oxlint auto-fix
+pnpm format         # Prettier write
+pnpm format:check   # Prettier check
+pnpm knip           # unused files/dependencies/unresolved import hygiene
+pnpm validate       # check + lint + format:check + build
 ```
 
 Before finishing non-trivial code changes, run:
 
 ```sh
-pnpm build
+pnpm validate
 ```
 
-A successful build is the main validation gate. Existing Astro content warnings may appear if unrelated to your changes; do not hide warnings unless you fix the root cause.
+Also run `pnpm knip` after dependency, file move, or architecture/refactor work. A successful `pnpm validate` is the main validation gate. Existing warnings should generally be fixed rather than ignored; do not hide warnings unless you fix the root cause or the warning is clearly unrelated and pre-existing.
 
 ## Important architecture paths
 
@@ -296,13 +303,17 @@ For writing/projects, prefer Markdown/MDX content under `src/content/`. Use fron
 
 After refactors or behavior changes:
 
-1. Run `pnpm build`.
-2. Check for import/path mistakes caused by file moves.
-3. For desktop JS changes, think through repeated initialization after:
+1. Run `pnpm validate`.
+2. Run `pnpm knip` when you add/remove dependencies, move files, split modules, or change import structure.
+3. Check for import/path mistakes caused by file moves.
+4. For desktop JS changes, think through repeated initialization after:
    - `DOMContentLoaded`
    - `astro:page-load`
    - `desktop:content-change`
-4. Ensure global listeners are not duplicated.
+5. Ensure global listeners are not duplicated.
+6. Before committing, review `git status`, `git diff --stat`, and relevant `git diff` hunks for suspicious formatting churn, generated files, accidental content edits, or unrelated changes.
+
+`pnpm validate` runs Astro diagnostics, oxlint, Prettier checking, and the production build. `pnpm knip` is scoped to unused files/dependencies/unlisted dependencies/unresolved imports; it intentionally does not fail on unused public exports because many modules expose facade/helper APIs.
 
 ## Current high-level mental model
 

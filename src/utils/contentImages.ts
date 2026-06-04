@@ -2,7 +2,7 @@ import type { ImageMetadata } from 'astro';
 
 const contentImages = import.meta.glob<{ default: ImageMetadata }>(
   '../content/**/*.{png,jpg,jpeg,webp,gif}',
-  { eager: true }
+  { eager: true },
 );
 
 function normalizePath(path: string): string {
@@ -21,7 +21,7 @@ function stripQuotes(value: string): string {
 function resolveContentImage(
   collection: string,
   entryId: string,
-  imagePath: string
+  imagePath: string,
 ): ImageMetadata | undefined {
   if (!imagePath || /^(https?:)?\/\//.test(imagePath) || imagePath.startsWith('/')) {
     return undefined;
@@ -30,7 +30,7 @@ function resolveContentImage(
   const entryDir = dirname(entryId);
   const normalizedImagePath = normalizePath(imagePath);
   const key = normalizePath(
-    `../content/${collection}/${entryDir ? `${entryDir}/` : ''}${normalizedImagePath}`
+    `../content/${collection}/${entryDir ? `${entryDir}/` : ''}${normalizedImagePath}`,
   );
 
   return contentImages[key]?.default;
@@ -44,7 +44,8 @@ function getFirstMarkdownImagePath(body: string): string | undefined {
 
 function getFirstMdxComponentImagePath(body: string): string | undefined {
   const imports = new Map<string, string>();
-  const importRegex = /import\s+([A-Za-z_$][\w$]*)\s+from\s+['"](\.\.?\/[^'"]+\.(?:png|jpe?g|webp|gif))['"];?/gi;
+  const importRegex =
+    /import\s+([A-Za-z_$][\w$]*)\s+from\s+['"](\.\.?\/[^'"]+\.(?:png|jpe?g|webp|gif))['"];?/gi;
 
   for (const match of body.matchAll(importRegex)) {
     imports.set(match[1], match[2]);
@@ -66,7 +67,7 @@ function getFirstMdxComponentImagePath(body: string): string | undefined {
 export function getFirstContentImage(
   collection: string,
   entryId: string,
-  body: string | undefined
+  body: string | undefined,
 ): ImageMetadata | undefined {
   if (!body) return undefined;
 

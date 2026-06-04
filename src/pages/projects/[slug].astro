@@ -18,9 +18,7 @@ const { Content } = await project.render();
 const themeColor = project.data.themeColor;
 const themeColorDark = project.data.themeColorDark;
 
-const bodyClass = ['page-post', themeColor ? 'has-theme-bg' : '']
-  .filter(Boolean)
-  .join(' ');
+const bodyClass = ['page-post', themeColor ? 'has-theme-bg' : ''].filter(Boolean).join(' ');
 
 const bodyStyle = [
   themeColor ? `--post-theme-bg: ${themeColor}` : '',
@@ -33,9 +31,7 @@ const bodyStyle = [
 // This affects metadata only; it does not render a visual cover.
 const firstContentImage = getFirstContentImage('projects', project.id, project.body);
 const seoImage = project.data.seoImage ?? project.data.cover ?? firstContentImage;
-const ogImageUrl = seoImage
-  ? (await getImage({ src: seoImage, width: 1200 })).src
-  : undefined;
+const ogImageUrl = seoImage ? (await getImage({ src: seoImage, width: 1200 })).src : undefined;
 ---
 
 <Layout
@@ -58,11 +54,13 @@ const ogImageUrl = seoImage
       <p class="post-page-date">{project.data.year.slice(0, 4)}</p>
       <p class="post-page-title">{project.data.title}</p>
     </div>
-    {project.data.cover && (
-      <figure class="post-cover">
-        <Image src={project.data.cover} alt={project.data.title} />
-      </figure>
-    )}
+    {
+      project.data.cover && (
+        <figure class="post-cover">
+          <Image src={project.data.cover} alt={project.data.title} />
+        </figure>
+      )
+    }
     <article class="prose">
       <Content />
     </article>

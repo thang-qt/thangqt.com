@@ -11,7 +11,11 @@ export interface PaginationData<T> {
   endIndex: number;
 }
 
-export function paginateItems<T>(items: T[], currentPage: number, pageSize: number): PaginationData<T> {
+export function paginateItems<T>(
+  items: T[],
+  currentPage: number,
+  pageSize: number,
+): PaginationData<T> {
   const totalItems = items.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
   const safePage = Math.min(Math.max(1, currentPage), totalPages);

@@ -5,34 +5,32 @@ import Layout from '../layouts/Layout.astro';
 <Layout title="404 - Page Not Found" description="The page you're looking for doesn't exist">
   <section class="col-content">
     <h1 class="error-title">404</h1>
-    
+
     <div class="error-message error-message--default" style="display: none;">
       <p>
-        Well, this is awkward. The page you're looking for has vanished 
-        into the digital abyss. Maybe it never existed. Maybe it's just hiding. 
-        Who knows.
+        Well, this is awkward. The page you're looking for has vanished into the digital abyss.
+        Maybe it never existed. Maybe it's just hiding. Who knows.
       </p>
       <p>
-        Either way, there's nothing here but confused question marks and 
-        existential dread. Let's get you somewhere useful.
+        Either way, there's nothing here but confused question marks and existential dread. Let's
+        get you somewhere useful.
       </p>
       <p><a href="/">← Back to safety</a></p>
     </div>
 
     <div class="error-message error-message--firefox" style="display: none;">
       <p>
-        Looks like this page got <code>rm -rf</code>'d into the void. 
-        I've checked <code>/dev/null</code>, grepped through the logs, 
-        even tried <code>sudo</code> — nothing.
+        Looks like this page got <code>rm -rf</code>'d into the void. I've checked <code
+          >/dev/null</code
+        >, grepped through the logs, even tried <code>sudo</code> — nothing.
       </p>
       <p>
-        Either you followed a broken symlink, or I maybe completely forgot to push this file. 
+        Either you followed a broken symlink, or I maybe completely forgot to push this file.
         Classic skill issue on someone's part.
       </p>
       <p><a href="/">← cd ~</a></p>
     </div>
   </section>
-
 </Layout>
 
 <style>
@@ -46,14 +44,13 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script>
-
   // Show nerdy message for Firefox users
   function initFirefoxMessage() {
     const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
     const defaultMsg = document.querySelector('.error-message--default');
     const firefoxMsg = document.querySelector('.error-message--firefox');
-    
-    if (defaultMsg && firefoxMsg) {
+
+    if (defaultMsg instanceof HTMLElement && firefoxMsg instanceof HTMLElement) {
       if (isFirefox) {
         firefoxMsg.style.display = 'block';
       } else {

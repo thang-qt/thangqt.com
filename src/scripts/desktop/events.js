@@ -12,5 +12,8 @@ export function addGlobalListenerOnce(key, target, type, listener, options) {
 }
 
 export function isTypingTarget(target) {
-  return target instanceof HTMLElement && Boolean(target.closest('input, textarea, select, [contenteditable="true"]'));
+  return (
+    target instanceof HTMLElement &&
+    Boolean(target.closest('input, textarea, select, [contenteditable="true"]'))
+  );
 }

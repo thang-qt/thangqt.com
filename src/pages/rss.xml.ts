@@ -1,6 +1,7 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { loadRenderers } from 'astro:container';
 import { getContainerRenderer as getMDXRenderer } from '@astrojs/mdx';
 import { getPublishedWriting } from '../utils/collections';
 
@@ -9,7 +10,7 @@ export async function GET(context: APIContext) {
 
   // Create container for rendering content
   const container = await AstroContainer.create({
-    renderers: [await getMDXRenderer()],
+    renderers: await loadRenderers([getMDXRenderer()]),
   });
 
   // Render each post's content
@@ -26,7 +27,7 @@ export async function GET(context: APIContext) {
         categories: post.data.tags || [],
         content,
       };
-    })
+    }),
   );
 
   return rss({

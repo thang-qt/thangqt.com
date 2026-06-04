@@ -20,7 +20,10 @@ const posts = await getPublishedWriting();
 const paginatedPosts = paginateItems(posts, currentPage, WRITING_PAGE_SIZE);
 ---
 
-<Layout title={`Writing - Page ${paginatedPosts.currentPage} - ThangQT`} description="My various thoughts on life, tech, and everything in between">
+<Layout
+  title={`Writing - Page ${paginatedPosts.currentPage} - ThangQT`}
+  description="My various thoughts on life, tech, and everything in between"
+>
   <section class="col-content list-app list-app--writing" data-window-title="Writing">
     <div class="list-mobile-header">
       <div>
@@ -36,17 +39,19 @@ const paginatedPosts = paginateItems(posts, currentPage, WRITING_PAGE_SIZE);
     </div>
     <p class="list-status">{paginatedPosts.totalItems} posts sorted by newest first.</p>
 
-    {paginatedPosts.items.map((post) => (
-      <article class="post-item">
-        <a href={`/writing/${post.slug}`} class="list-link" data-window-title={post.data.title}>
-          <span class="list-row-main">
-            <h2 class="post-title">{post.data.title}</h2>
-            {post.data.description && <p class="list-description">{post.data.description}</p>}
-          </span>
-          <span class="post-meta">{formatShortDate(post.data.date)}</span>
-        </a>
-      </article>
-    ))}
+    {
+      paginatedPosts.items.map((post) => (
+        <article class="post-item">
+          <a href={`/writing/${post.slug}`} class="list-link" data-window-title={post.data.title}>
+            <span class="list-row-main">
+              <h2 class="post-title">{post.data.title}</h2>
+              {post.data.description && <p class="list-description">{post.data.description}</p>}
+            </span>
+            <span class="post-meta">{formatShortDate(post.data.date)}</span>
+          </a>
+        </article>
+      ))
+    }
 
     <PaginationNav
       basePath="/writing"

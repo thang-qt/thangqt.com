@@ -22,9 +22,13 @@ const projectPalettes: Record<string, { bg: string; ink: string; accent: string 
 function readableInk(hex: string | undefined) {
   if (!hex?.startsWith('#')) return 'var(--wm-ink)';
   const value = hex.slice(1);
-  const full = value.length === 3
-    ? value.split('').map((char) => `${char}${char}`).join('')
-    : value;
+  const full =
+    value.length === 3
+      ? value
+          .split('')
+          .map((char) => `${char}${char}`)
+          .join('')
+      : value;
   const r = parseInt(full.slice(0, 2), 16);
   const g = parseInt(full.slice(2, 4), 16);
   const b = parseInt(full.slice(4, 6), 16);
@@ -42,11 +46,13 @@ function getProjectPalette(project: (typeof projects)[number]) {
     };
   }
 
-  return projectPalettes[project.slug] ?? {
-    bg: 'var(--wm-subtle)',
-    ink: 'var(--wm-ink)',
-    accent: 'var(--wm-accent)',
-  };
+  return (
+    projectPalettes[project.slug] ?? {
+      bg: 'var(--wm-subtle)',
+      ink: 'var(--wm-ink)',
+      accent: 'var(--wm-accent)',
+    }
+  );
 }
 ---
 
@@ -57,46 +63,54 @@ function getProjectPalette(project: (typeof projects)[number]) {
     </header>
 
     <div class="project-color-stack" aria-label="Project archive">
-      {paginatedProjects.items.map((project, index) => {
-        const palette = getProjectPalette(project);
-        const firstContentImage = getFirstContentImage('projects', project.id, project.body);
-        const previewImage = project.data.cover ?? firstContentImage;
-        return (
-          <article
-            class="project-color-section"
-            style={`--project-bg: ${palette.bg}; --project-ink: ${palette.ink}; --project-accent: ${palette.accent};`}
-          >
-            <a href={`/projects/${project.slug}`} class="project-color-section__link" data-window-title={project.data.title}>
-              <div class="project-color-section__copy">
-                <p class="project-color-section__meta">
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <span>{project.data.year}</span>
-                </p>
-                <h2>{project.data.title}</h2>
-                {project.data.description && <p>{project.data.description}</p>}
-                <span class="project-color-section__cta">Open project →</span>
-              </div>
+      {
+        paginatedProjects.items.map((project, index) => {
+          const palette = getProjectPalette(project);
+          const firstContentImage = getFirstContentImage('projects', project.id, project.body);
+          const previewImage = project.data.cover ?? firstContentImage;
+          return (
+            <article
+              class="project-color-section"
+              style={`--project-bg: ${palette.bg}; --project-ink: ${palette.ink}; --project-accent: ${palette.accent};`}
+            >
+              <a
+                href={`/projects/${project.slug}`}
+                class="project-color-section__link"
+                data-window-title={project.data.title}
+              >
+                <div class="project-color-section__copy">
+                  <p class="project-color-section__meta">
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <span>{project.data.year}</span>
+                  </p>
+                  <h2>{project.data.title}</h2>
+                  {project.data.description && <p>{project.data.description}</p>}
+                  <span class="project-color-section__cta">Open project →</span>
+                </div>
 
-              <div class="project-color-section__visual">
-                {previewImage ? (
-                  <Image src={previewImage} alt="" class="project-color-section__image" />
-                ) : (
-                  <span aria-hidden="true">▦</span>
-                )}
-              </div>
-            </a>
-          </article>
-        );
-      })}
+                <div class="project-color-section__visual">
+                  {previewImage ? (
+                    <Image src={previewImage} alt="" class="project-color-section__image" />
+                  ) : (
+                    <span aria-hidden="true">▦</span>
+                  )}
+                </div>
+              </a>
+            </article>
+          );
+        })
+      }
     </div>
 
-    {paginatedProjects.totalPages > 1 && (
-      <PaginationNav
-        basePath="/projects"
-        currentPage={paginatedProjects.currentPage}
-        totalPages={paginatedProjects.totalPages}
-        label="Projects pagination"
-      />
-    )}
+    {
+      paginatedProjects.totalPages > 1 && (
+        <PaginationNav
+          basePath="/projects"
+          currentPage={paginatedProjects.currentPage}
+          totalPages={paginatedProjects.totalPages}
+          label="Projects pagination"
+        />
+      )
+    }
   </section>
 </Layout>

@@ -3,7 +3,10 @@ import { normalizeEndpoint } from './settings.js';
 function ensureConfig(settings) {
   const endpoint = normalizeEndpoint(settings.endpoint || '');
   const apiKey = settings.apiKey || '';
-  if (!endpoint) throw new Error('Missing provider endpoint. Open settings and enter an OpenAI-compatible base URL.');
+  if (!endpoint)
+    throw new Error(
+      'Missing provider endpoint. Open settings and enter an OpenAI-compatible base URL.',
+    );
   if (!apiKey) throw new Error('Missing API key. Open settings and enter your provider key.');
   return { endpoint, apiKey, model: settings.model || 'gpt-4o-mini' };
 }
@@ -25,7 +28,12 @@ export async function fetchModels(settings, { signal } = {}) {
 
   if (!response.ok) throw new Error(`Models request failed (${response.status})`);
   const data = await response.json();
-  return Array.isArray(data?.data) ? data.data.map((model) => model.id).filter(Boolean).sort() : [];
+  return Array.isArray(data?.data)
+    ? data.data
+        .map((model) => model.id)
+        .filter(Boolean)
+        .sort()
+    : [];
 }
 
 export async function createChatCompletion(settings, messages, { signal } = {}) {

@@ -48,7 +48,7 @@ export function createDesktopWindow({
   }
 
   const count = stage.querySelectorAll('.desktop-window').length;
-  const { app, window: windowSpec } = getWindowSpecForHref(href);
+  const { window: windowSpec } = getWindowSpecForHref(href);
   const rect = {
     ...defaultWindowRect(count, windowSpec),
     width: windowSpec.width,

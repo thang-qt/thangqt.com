@@ -46,7 +46,8 @@ export function syncAppWindowControls() {
 
     const app = getWindowApp(win);
     const controls = appWindowControls[app] || [];
-    const before = controlsEl.querySelector('[data-window-action="minimize"]') || controlsEl.firstChild;
+    const before =
+      controlsEl.querySelector('[data-window-action="minimize"]') || controlsEl.firstChild;
 
     controls.forEach((control) => {
       controlsEl.insertBefore(renderControl(control), before);

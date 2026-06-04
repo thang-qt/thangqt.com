@@ -29,7 +29,7 @@ export async function getPublishedLinks() {
 
     if (existing) {
       throw new Error(
-        `Duplicate link slug \"${link.slug}\" found in \"${existing.id}\" and \"${link.id}\".`
+        `Duplicate link slug "${link.slug}" found in "${existing.id}" and "${link.id}".`,
       );
     }
 
@@ -41,7 +41,8 @@ export async function getPublishedLinks() {
 
     if (dateDiff !== 0) return dateDiff;
 
-    const orderDiff = (a.data.order ?? Number.MAX_SAFE_INTEGER) - (b.data.order ?? Number.MAX_SAFE_INTEGER);
+    const orderDiff =
+      (a.data.order ?? Number.MAX_SAFE_INTEGER) - (b.data.order ?? Number.MAX_SAFE_INTEGER);
 
     if (orderDiff !== 0) return orderDiff;
 
@@ -87,7 +88,10 @@ export function formatLinkKind(kind?: string) {
   return kind.charAt(0).toUpperCase() + kind.slice(1);
 }
 
-export function resolveVia(via: LinkEntry['data']['via'], slugMap: Map<string, LinkEntry>): ResolvedVia[] {
+export function resolveVia(
+  via: LinkEntry['data']['via'],
+  slugMap: Map<string, LinkEntry>,
+): ResolvedVia[] {
   return via.map((item) => {
     if (item.type === 'internal') {
       const referenced = slugMap.get(item.slug);

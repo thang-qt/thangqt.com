@@ -59,7 +59,9 @@ const files = {
           },
           'definitely-final-v2.txt': {
             type: 'file',
-            content: ['final_v2_revised_REAL_final_use_this_one.txt was moved to another universe.'],
+            content: [
+              'final_v2_revised_REAL_final_use_this_one.txt was moved to another universe.',
+            ],
           },
         },
       },
@@ -102,11 +104,18 @@ const files = {
         children: {
           'ideas.txt': {
             type: 'file',
-            content: ['app idea: calendar that gently judges you', 'site idea: terminal that should probably stop lying'],
+            content: [
+              'app idea: calendar that gently judges you',
+              'site idea: terminal that should probably stop lying',
+            ],
           },
           'meeting-notes.txt': {
             type: 'file',
-            content: ['Attendees: me', 'Decision: postpone decision', 'Action item: create better action item'],
+            content: [
+              'Attendees: me',
+              'Decision: postpone decision',
+              'Action item: create better action item',
+            ],
           },
           'names.txt': {
             type: 'file',
@@ -131,7 +140,10 @@ const files = {
           },
           '.totally-not-a-secret': {
             type: 'file',
-            content: ['The secret is that there is no secret.', 'This has not stopped the folder from acting mysterious.'],
+            content: [
+              'The secret is that there is no secret.',
+              'This has not stopped the folder from acting mysterious.',
+            ],
           },
         },
       },
@@ -147,11 +159,15 @@ export function normalizePath(cwd, target = '') {
   const raw = target || cwd;
   const parts = raw.startsWith('~') ? [] : cwd.replace(/^~\/?/, '').split('/').filter(Boolean);
 
-  raw.replace(/^~\/?/, '').split('/').filter(Boolean).forEach((part) => {
-    if (part === '.') return;
-    if (part === '..') parts.pop();
-    else parts.push(part);
-  });
+  raw
+    .replace(/^~\/?/, '')
+    .split('/')
+    .filter(Boolean)
+    .forEach((part) => {
+      if (part === '.') return;
+      if (part === '..') parts.pop();
+      else parts.push(part);
+    });
 
   return parts.length > 0 ? `~/${parts.join('/')}` : '~';
 }
@@ -168,7 +184,7 @@ export function getNode(path) {
 
 export function formatList(node) {
   return Object.entries(node.children || {})
-    .map(([name, child]) => child.type === 'dir' ? `${name}/` : name)
+    .map(([name, child]) => (child.type === 'dir' ? `${name}/` : name))
     .sort((a, b) => a.localeCompare(b));
 }
 

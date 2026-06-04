@@ -9,7 +9,8 @@ export function getDotConfigStatus() {
   const apiKey = settings.apiKey?.trim();
   const model = settings.model?.trim();
 
-  if (!endpoint || !apiKey) return ['Dot is not connected.', 'Run `connect` to configure endpoint/key from the terminal.'];
+  if (!endpoint || !apiKey)
+    return ['Dot is not connected.', 'Run `connect` to configure endpoint/key from the terminal.'];
   return [
     'Dot is connected.',
     `endpoint: ${endpoint}`,

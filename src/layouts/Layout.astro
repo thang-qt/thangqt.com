@@ -55,8 +55,15 @@ const initialWindow = currentPage.window;
 const llmChatContext = await getLlmChatContext();
 ---
 
-<!DOCTYPE html>
-<html lang="en" data-theme="light" data-color-mode="light" data-theme-pack="bloom" data-bg-pattern="dots" data-color-mode-pref="light">
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+  data-color-mode="light"
+  data-theme-pack="bloom"
+  data-bg-pattern="dots"
+  data-color-mode-pref="light"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -65,7 +72,10 @@ const llmChatContext = await getLlmChatContext();
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..800&family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..800&family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
     <SEO
       title={title}
@@ -90,9 +100,12 @@ const llmChatContext = await getLlmChatContext();
     <link rel="alternate" type="application/rss+xml" title="ThangQT's Blog" href="/rss.xml" />
     <script is:inline>
       const modePref = localStorage.getItem('desktop-color-mode') || 'light';
-      const mode = modePref === 'auto'
-        ? (new Date().getHours() >= 18 || new Date().getHours() < 6 ? 'dark' : 'light')
-        : modePref;
+      const mode =
+        modePref === 'auto'
+          ? new Date().getHours() >= 18 || new Date().getHours() < 6
+            ? 'dark'
+            : 'light'
+          : modePref;
       const savedPack = localStorage.getItem('desktop-theme-pack') || 'bloom';
       const pack = savedPack === 'oxide' ? 'bloom' : savedPack;
       const savedPattern = localStorage.getItem('desktop-bg-pattern') || 'dots';
@@ -112,24 +125,36 @@ const llmChatContext = await getLlmChatContext();
     <div class="desktop-bg" aria-hidden="true"></div>
 
     <header class="desktop-menu">
-      <button type="button" class="desktop-menu__brand" aria-label="Open app launcher" data-launcher-open>
+      <button
+        type="button"
+        class="desktop-menu__brand"
+        aria-label="Open app launcher"
+        data-launcher-open
+      >
         <span class="desktop-menu__brand-icon" aria-hidden="true"></span>
         <strong>ThangQT</strong>
       </button>
       <nav class="desktop-menu__nav" aria-label="Main navigation">
-        {desktopPinnedItems.map((item) => (
-          <a
-            href={item.href}
-            data-window-link
-            data-window-title={item.label}
-            aria-current={currentPath === item.href || (item.href !== '/' && currentPath.startsWith(`${item.href}/`)) ? 'page' : undefined}
-          >
-            <span class="desktop-menu__nav-icon" aria-hidden="true">
-              {item.iconName ? <Icon name={item.iconName} /> : item.icon}
-            </span>
-            {item.label}
-          </a>
-        ))}
+        {
+          desktopPinnedItems.map((item) => (
+            <a
+              href={item.href}
+              data-window-link
+              data-window-title={item.label}
+              aria-current={
+                currentPath === item.href ||
+                (item.href !== '/' && currentPath.startsWith(`${item.href}/`))
+                  ? 'page'
+                  : undefined
+              }
+            >
+              <span class="desktop-menu__nav-icon" aria-hidden="true">
+                {item.iconName ? <Icon name={item.iconName} /> : item.icon}
+              </span>
+              {item.label}
+            </a>
+          ))
+        }
       </nav>
       <div class="desktop-menu__status">
         <span class="desktop-menu__date" data-desktop-date>WED 3 JUN</span>
@@ -184,33 +209,43 @@ const llmChatContext = await getLlmChatContext();
           </div>
         </dl>
         <div class="profile-card__links">
-          {desktopProfile.links.map((link) => (
-            <a href={link.href}>{link.label}</a>
-          ))}
+          {desktopProfile.links.map((link) => <a href={link.href}>{link.label}</a>)}
         </div>
       </DesktopWindow>
-
     </main>
 
     <div class="desktop-icon-templates" hidden aria-hidden="true">
-      {desktopNavItems.map((item) => (
-        item.iconName && (
-          <template data-app-icon-template={item.id}>
-            <Icon name={item.iconName} />
-          </template>
+      {
+        desktopNavItems.map(
+          (item) =>
+            item.iconName && (
+              <template data-app-icon-template={item.id}>
+                <Icon name={item.iconName} />
+              </template>
+            ),
         )
-      ))}
+      }
       <template data-window-control-icon-template="chat-clear">
         <Icon name="ph:broom" />
       </template>
     </div>
 
     <div class="desktop-launcher" data-launcher hidden>
-      <button class="desktop-launcher__backdrop" type="button" data-launcher-backdrop aria-label="Close launcher"></button>
+      <button
+        class="desktop-launcher__backdrop"
+        type="button"
+        data-launcher-backdrop
+        aria-label="Close launcher"></button>
       <section class="desktop-launcher__panel" role="dialog" aria-label="App launcher">
         <div class="desktop-launcher__search">
           <span aria-hidden="true">⌕</span>
-          <input type="search" placeholder="Search apps…" autocomplete="off" spellcheck="false" data-launcher-input />
+          <input
+            type="search"
+            placeholder="Search apps…"
+            autocomplete="off"
+            spellcheck="false"
+            data-launcher-input
+          />
           <kbd>Alt Space</kbd>
         </div>
         <div class="desktop-launcher__list" role="listbox" data-launcher-list></div>
@@ -229,8 +264,12 @@ const llmChatContext = await getLlmChatContext();
         <div><dt><kbd>H</kbd> <kbd>L</kbd></dt><dd>Scroll active window sideways</dd></div>
         <div><dt><kbd>Enter</kbd></dt><dd>Open selected item/app</dd></div>
         <div><dt><kbd>Alt</kbd> <kbd>H/J/K/L</kbd></dt><dd>Focus window by direction</dd></div>
-        <div><dt><kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>H/J/K/L</kbd></dt><dd>Move active window</dd></div>
-        <div><dt><kbd>Alt</kbd> <kbd>Ctrl</kbd> <kbd>H/J/K/L</kbd></dt><dd>Resize active window</dd></div>
+        <div>
+          <dt><kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>H/J/K/L</kbd></dt><dd>Move active window</dd>
+        </div>
+        <div>
+          <dt><kbd>Alt</kbd> <kbd>Ctrl</kbd> <kbd>H/J/K/L</kbd></dt><dd>Resize active window</dd>
+        </div>
         <div><dt><kbd>Alt</kbd> <kbd>Q</kbd></dt><dd>Quit active window</dd></div>
         <div><dt><kbd>Alt</kbd> <kbd>M</kbd></dt><dd>Minimize active window</dd></div>
         <div><dt><kbd>Alt</kbd> <kbd>F</kbd></dt><dd>Maximize active window</dd></div>
@@ -239,7 +278,10 @@ const llmChatContext = await getLlmChatContext();
       </dl>
     </aside>
 
-    <script is:inline define:vars={{ desktopThemePacks, desktopBackgroundPatterns, desktopApps, llmChatContext }}>
+    <script
+      is:inline
+      define:vars={{ desktopThemePacks, desktopBackgroundPatterns, desktopApps, llmChatContext }}
+    >
       window.__DESKTOP_THEME_PACKS = desktopThemePacks;
       window.__DESKTOP_BG_PATTERNS = desktopBackgroundPatterns;
       window.__DESKTOP_APPS = desktopApps;

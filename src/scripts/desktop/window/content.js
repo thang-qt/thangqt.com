@@ -6,7 +6,18 @@ import { applySavedWindowRect, saveWindowState } from '../windowState.js';
 import { bringWindowForward } from './zIndex.js';
 import { applyWindowSpec } from './spec.js';
 
-export function updateWindowContent(win, { title, browserTitle, html, href, updateHistory = true, updateRoute = true, restoreState = null } = {}) {
+export function updateWindowContent(
+  win,
+  {
+    title,
+    browserTitle,
+    html,
+    href,
+    updateHistory = true,
+    updateRoute = true,
+    restoreState = null,
+  } = {},
+) {
   if (!(win instanceof HTMLElement)) return null;
 
   setWindowTitle(win, title.toUpperCase());

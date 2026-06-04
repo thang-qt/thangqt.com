@@ -62,7 +62,11 @@ function windowItems(win) {
   ];
 
   if (win.dataset.windowMaximizable !== 'false') {
-    items.push(menuButton('Maximize / Restore', () => win.querySelector('[data-window-action="maximize"]')?.click()));
+    items.push(
+      menuButton('Maximize / Restore', () =>
+        win.querySelector('[data-window-action="maximize"]')?.click(),
+      ),
+    );
   }
 
   items.push(menuButton('Close', () => win.querySelector('[data-window-action="close"]')?.click()));
@@ -83,7 +87,11 @@ function linkItems(link, win) {
   if (href) {
     items.push(menuButton('Copy Internal URL', () => navigator.clipboard?.writeText(href)));
   } else {
-    items.push(menuButton('Open External Tab', () => window.open(link.href, '_blank', 'noopener,noreferrer')));
+    items.push(
+      menuButton('Open External Tab', () =>
+        window.open(link.href, '_blank', 'noopener,noreferrer'),
+      ),
+    );
     items.push(menuButton('Copy Link', () => navigator.clipboard?.writeText(link.href)));
   }
 

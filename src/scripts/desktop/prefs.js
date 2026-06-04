@@ -56,7 +56,11 @@ export function applyDesktopPrefs(nextPrefs = {}) {
   safeWrite(storageKeys.prefsPack, prefs.pack);
   safeWrite(storageKeys.prefsPattern, prefs.pattern);
 
-  window.dispatchEvent(new CustomEvent('desktop:prefs-change', { detail: { ...prefs, resolvedMode: resolveColorMode(prefs.mode) } }));
+  window.dispatchEvent(
+    new CustomEvent('desktop:prefs-change', {
+      detail: { ...prefs, resolvedMode: resolveColorMode(prefs.mode) },
+    }),
+  );
   return prefs;
 }
 
@@ -81,5 +85,10 @@ export function initSettingsControls() {
     if (target?.matches?.('[data-settings-pattern]')) applyDesktopPrefs({ pattern: target.value });
   });
 
-  addGlobalListenerOnce('desktop-settings:prefs-change', window, 'desktop:prefs-change', syncSettingsControls);
+  addGlobalListenerOnce(
+    'desktop-settings:prefs-change',
+    window,
+    'desktop:prefs-change',
+    syncSettingsControls,
+  );
 }

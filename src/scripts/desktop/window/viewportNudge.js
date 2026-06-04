@@ -32,9 +32,18 @@ function nudgeAllWindowsIntoView(stage) {
     let height = numericStyle(win.style.height, winRect.height);
 
     const maxW = Math.max(metrics.minWidth, stageRect.width - desktopWorkAreaPad * 2);
-    const maxH = Math.max(metrics.minHeight, stageRect.height - desktopWorkAreaTop - desktopWorkAreaPad);
-    if (width > maxW) { width = maxW; win.style.width = `${width}px`; }
-    if (height > maxH) { height = maxH; win.style.height = `${height}px`; }
+    const maxH = Math.max(
+      metrics.minHeight,
+      stageRect.height - desktopWorkAreaTop - desktopWorkAreaPad,
+    );
+    if (width > maxW) {
+      width = maxW;
+      win.style.width = `${width}px`;
+    }
+    if (height > maxH) {
+      height = maxH;
+      win.style.height = `${height}px`;
+    }
 
     const rightEdge = left + width;
     if (rightEdge > maxRight) left = Math.max(desktopWorkAreaPad, maxRight - width);

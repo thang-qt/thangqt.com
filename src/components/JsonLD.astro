@@ -96,17 +96,22 @@ const breadcrumbSchema = {
       name: 'Home',
       item: SITE_URL,
     },
-    ...(type === 'article' ? [{
-      '@type': 'ListItem',
-      position: 2,
-      name: 'Writing',
-      item: `${SITE_URL}/writing`,
-    }, {
-      '@type': 'ListItem',
-      position: 3,
-      name: title,
-      item: absoluteUrl,
-    }] : []),
+    ...(type === 'article'
+      ? [
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Writing',
+            item: `${SITE_URL}/writing`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: title,
+            item: absoluteUrl,
+          },
+        ]
+      : []),
   ],
 };
 
@@ -126,6 +131,8 @@ function getSchema() {
 const schemas = getSchema();
 ---
 
-{schemas.map((schema) => (
-  <script type="application/ld+json" set:html={JSON.stringify(schema, null, 2)} />
-))}
+{
+  schemas.map((schema) => (
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema, null, 2)} />
+  ))
+}

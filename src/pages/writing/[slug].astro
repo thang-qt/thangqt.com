@@ -23,9 +23,7 @@ const themeColorDark = post.data.themeColorDark;
 // This affects metadata only; it does not render a visual cover.
 const firstContentImage = getFirstContentImage('writing', post.id, post.body);
 const seoImage = post.data.seoImage ?? post.data.cover ?? firstContentImage;
-const ogImageUrl = seoImage
-  ? (await getImage({ src: seoImage, width: 1200 })).src
-  : undefined;
+const ogImageUrl = seoImage ? (await getImage({ src: seoImage, width: 1200 })).src : undefined;
 
 const bodyClass = [
   'page-post',
@@ -72,11 +70,13 @@ const bodyStyle = [
       <p class="post-page-date">{formatShortDate(post.data.date)}</p>
       <p class="post-page-title">{post.data.title}</p>
     </div>
-    {post.data.cover && (
-      <figure class="post-cover">
-        <Image src={post.data.cover} alt={post.data.title} />
-      </figure>
-    )}
+    {
+      post.data.cover && (
+        <figure class="post-cover">
+          <Image src={post.data.cover} alt={post.data.title} />
+        </figure>
+      )
+    }
     <article class="prose">
       <Content />
     </article>

@@ -326,6 +326,7 @@
 }
 
 @media (max-width: 640px) {
-  .llm-message--user { max-width: 92%; }
+  .llm-message--user {
+    max-width: 92%;
+  }
 }
-

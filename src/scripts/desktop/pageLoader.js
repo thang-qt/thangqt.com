@@ -4,8 +4,11 @@ export async function fetchDesktopDocument(href, fallbackTitle = 'Window') {
 
   const text = await response.text();
   const doc = new DOMParser().parseFromString(text, 'text/html');
-  const html = doc.querySelector('.desktop-document')?.innerHTML || '<p>Could not load this page.</p>';
-  const documentTitle = doc.querySelector('.desktop-document [data-window-title]')?.getAttribute('data-window-title');
+  const html =
+    doc.querySelector('.desktop-document')?.innerHTML || '<p>Could not load this page.</p>';
+  const documentTitle = doc
+    .querySelector('.desktop-document [data-window-title]')
+    ?.getAttribute('data-window-title');
   const browserTitle = doc.querySelector('title')?.textContent || documentTitle || fallbackTitle;
   const pageTitle = documentTitle || browserTitle.replace(/\s+-\s+ThangQT.*$/, '') || fallbackTitle;
 

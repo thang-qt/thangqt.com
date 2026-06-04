@@ -53,7 +53,8 @@ export function handleConnectInput(root, value) {
   state.connectFlow = null;
   syncPrompt(root);
 
-  if (!settings.endpoint || !settings.apiKey) return ['connect failed: endpoint and API key are required.'];
+  if (!settings.endpoint || !settings.apiKey)
+    return ['connect failed: endpoint and API key are required.'];
   safeWriteJson(llmSettingsKey, settings);
   return [
     'Dot connection saved.',

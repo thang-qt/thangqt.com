@@ -5,7 +5,8 @@ import { bringWindowForward } from './zIndex.js';
 import { desktopWorkAreaPad, desktopWorkAreaTop, floatWindowAtCurrentRect } from './workArea.js';
 
 function canDragFrom(event, dragHandle) {
-  if (event.target.closest('a, button, input, textarea, select, summary, .wm-resize-edge')) return false;
+  if (event.target.closest('a, button, input, textarea, select, summary, .wm-resize-edge'))
+    return false;
   return Boolean(dragHandle?.contains(event.target));
 }
 
@@ -28,8 +29,16 @@ export function attachDrag(win, stage) {
     win.setPointerCapture(event.pointerId);
 
     const move = (moveEvent) => {
-      const nextLeft = clamp(startLeft + moveEvent.clientX - startX, desktopWorkAreaPad, stageRect.width - winRect.width - desktopWorkAreaPad);
-      const nextTop = clamp(startTop + moveEvent.clientY - startY, desktopWorkAreaTop, stageRect.height - 40);
+      const nextLeft = clamp(
+        startLeft + moveEvent.clientX - startX,
+        desktopWorkAreaPad,
+        stageRect.width - winRect.width - desktopWorkAreaPad,
+      );
+      const nextTop = clamp(
+        startTop + moveEvent.clientY - startY,
+        desktopWorkAreaTop,
+        stageRect.height - 40,
+      );
       win.style.left = `${nextLeft}px`;
       win.style.top = `${nextTop}px`;
     };

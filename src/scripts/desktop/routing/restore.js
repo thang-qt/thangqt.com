@@ -22,7 +22,8 @@ export async function restoreWindowState() {
 
   for (const state of states) {
     if (!state.href || state.href === currentHref) continue;
-    if (document.querySelector(`.desktop-stage .desktop-window[data-window-app="${state.app}"]`)) continue;
+    if (document.querySelector(`.desktop-stage .desktop-window[data-window-app="${state.app}"]`))
+      continue;
     await openInternalHref(state.href, state.title, {
       updateHistory: false,
       updateRoute: false,

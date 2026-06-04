@@ -36,7 +36,10 @@ const pageDescription = link.data.note || `Saved link to ${getHostnameLabel(link
   ogType="website"
   desktopTitle={pageTitle}
 >
-  <section class="col-content post-header link-header link-summary-column" data-window-title={pageTitle}>
+  <section
+    class="col-content post-header link-header link-summary-column"
+    data-window-title={pageTitle}
+  >
     <div class="post-header-content">
       <p class="post-page-date link-page-domain">
         <a href={link.data.url} class="link-inline" target="_blank" rel="noreferrer">
@@ -64,55 +67,82 @@ const pageDescription = link.data.note || `Saved link to ${getHostnameLabel(link
 
     <div class="link-detail-top">
       <div class="link-detail-meta-grid">
-        {via.length > 0 && (
-          <div class="link-detail-section">
-            <h3>Via</h3>
-            <p class="link-via link-via-detail">
-              {via.map((item) => (
-                <span class="link-via-item">
-                  <a href={item.href} class="link-inline" target={item.type === 'external' ? '_blank' : undefined} rel={item.type === 'external' ? 'noreferrer' : undefined}>
-                    {item.label}
-                  </a>
-                </span>
-              ))}
-            </p>
-          </div>
-        )}
+        {
+          via.length > 0 && (
+            <div class="link-detail-section">
+              <h3>Via</h3>
+              <p class="link-via link-via-detail">
+                {via.map((item) => (
+                  <span class="link-via-item">
+                    <a
+                      href={item.href}
+                      class="link-inline"
+                      target={item.type === 'external' ? '_blank' : undefined}
+                      rel={item.type === 'external' ? 'noreferrer' : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  </span>
+                ))}
+              </p>
+            </div>
+          )
+        }
 
-        {link.data.tags && link.data.tags.length > 0 && (
-          <div class="link-detail-section">
-            <h3>Tags</h3>
-            <ul class="link-tags" aria-label="Tags">
-              {link.data.tags.map((tag) => (
-                <li>{tag}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {
+          link.data.tags && link.data.tags.length > 0 && (
+            <div class="link-detail-section">
+              <h3>Tags</h3>
+              <ul class="link-tags" aria-label="Tags">
+                {link.data.tags.map((tag) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
 
-        {link.data.archiveUrl && (
-          <div class="link-detail-section">
-            <p class="link-via link-via-detail">
-              <a href={link.data.archiveUrl} target="_blank" rel="noreferrer" class="link-inline link-archive-link">
-                <span>Archive</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 17L17 7" />
-                  <path d="M8 7h9v9" />
-                </svg>
-              </a>
-            </p>
-          </div>
-        )}
+        {
+          link.data.archiveUrl && (
+            <div class="link-detail-section">
+              <p class="link-via link-via-detail">
+                <a
+                  href={link.data.archiveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="link-inline link-archive-link"
+                >
+                  <span>Archive</span>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M7 17L17 7" />
+                    <path d="M8 7h9v9" />
+                  </svg>
+                </a>
+              </p>
+            </div>
+          )
+        }
       </div>
 
       {link.data.note && <p class="link-note link-note-detail link-note-main">{link.data.note}</p>}
-
     </div>
 
-    {hasBody && (
-      <article class="prose link-prose">
-        <Content />
-      </article>
-    )}
+    {
+      hasBody && (
+        <article class="prose link-prose">
+          <Content />
+        </article>
+      )
+    }
   </aside>
 </Layout>

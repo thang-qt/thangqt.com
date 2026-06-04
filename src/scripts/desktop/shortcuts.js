@@ -33,7 +33,9 @@ function getActiveScroller(win) {
 function getSelectableItems(win) {
   const documentEl = getWindowDocument(win);
   if (!documentEl) return [];
-  return [...documentEl.querySelectorAll(selectableQuery)].filter((item) => item instanceof HTMLElement);
+  return [...documentEl.querySelectorAll(selectableQuery)].filter(
+    (item) => item instanceof HTMLElement,
+  );
 }
 
 function getSelectedIndex(items) {
@@ -45,9 +47,12 @@ function selectItem(win, direction) {
   if (items.length === 0) return false;
 
   const previous = getSelectedIndex(items);
-  const next = previous < 0
-    ? (direction > 0 ? 0 : items.length - 1)
-    : clamp(previous + direction, 0, items.length - 1);
+  const next =
+    previous < 0
+      ? direction > 0
+        ? 0
+        : items.length - 1
+      : clamp(previous + direction, 0, items.length - 1);
 
   items.forEach((item, index) => {
     item.classList.toggle('is-key-selected', index === next);
@@ -70,7 +75,10 @@ function scrollActiveWindow(win, key) {
   const scroller = getActiveScroller(win);
   if (!scroller) return false;
 
-  const amount = key === 'j' || key === 'k' ? Math.round(scroller.clientHeight * 0.18) : Math.round(scroller.clientWidth * 0.18);
+  const amount =
+    key === 'j' || key === 'k'
+      ? Math.round(scroller.clientHeight * 0.18)
+      : Math.round(scroller.clientWidth * 0.18);
   const top = key === 'j' ? amount : key === 'k' ? -amount : 0;
   const left = key === 'l' ? amount : key === 'h' ? -amount : 0;
   scroller.scrollBy({ top, left, behavior: 'smooth' });
@@ -148,7 +156,8 @@ function minimizeActiveWindow() {
 
 function toggleMaximizeActiveWindow() {
   const activeWin = getActiveWindow();
-  if (!activeWin || activeWin.dataset.windowMaximizable === 'false' || isStackedViewport()) return false;
+  if (!activeWin || activeWin.dataset.windowMaximizable === 'false' || isStackedViewport())
+    return false;
 
   activeWin.classList.remove('is-minimized');
   if (activeWin.classList.contains('is-maximized')) {
@@ -202,13 +211,19 @@ function resizeWindow(win, key) {
   if (!canMoveFloatingWindow(win) || win.dataset.windowResizable === 'false') return false;
   const metrics = readWindowMetrics(win);
   const step = 32;
-  const width = Number.parseFloat(win.style.width || String(win.getBoundingClientRect().width)) || win.getBoundingClientRect().width;
-  const height = Number.parseFloat(win.style.height || String(win.getBoundingClientRect().height)) || win.getBoundingClientRect().height;
+  const width =
+    Number.parseFloat(win.style.width || String(win.getBoundingClientRect().width)) ||
+    win.getBoundingClientRect().width;
+  const height =
+    Number.parseFloat(win.style.height || String(win.getBoundingClientRect().height)) ||
+    win.getBoundingClientRect().height;
 
   if (key === 'h') win.style.width = `${clamp(width - step, metrics.minWidth, metrics.maxWidth)}px`;
   if (key === 'l') win.style.width = `${clamp(width + step, metrics.minWidth, metrics.maxWidth)}px`;
-  if (key === 'k') win.style.height = `${clamp(height - step, metrics.minHeight, metrics.maxHeight)}px`;
-  if (key === 'j') win.style.height = `${clamp(height + step, metrics.minHeight, metrics.maxHeight)}px`;
+  if (key === 'k')
+    win.style.height = `${clamp(height - step, metrics.minHeight, metrics.maxHeight)}px`;
+  if (key === 'j')
+    win.style.height = `${clamp(height + step, metrics.minHeight, metrics.maxHeight)}px`;
   bringWindowForward(win);
   return true;
 }

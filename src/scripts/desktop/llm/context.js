@@ -20,12 +20,14 @@ export function getSiteContext() {
 
 export function buildSystemPrompt() {
   const { projects = [], writing = [] } = getSiteContext();
-  const projectList = projects.length > 0
-    ? projects.map(formatProject).join('\n')
-    : '- No project list is available in the current page context.';
-  const writingList = writing.length > 0
-    ? writing.map(formatWriting).join('\n')
-    : '- No writing list is available in the current page context.';
+  const projectList =
+    projects.length > 0
+      ? projects.map(formatProject).join('\n')
+      : '- No project list is available in the current page context.';
+  const writingList =
+    writing.length > 0
+      ? writing.map(formatWriting).join('\n')
+      : '- No writing list is available in the current page context.';
 
   return `You are Dot, the AI chat assistant for ThangQT's website.
 

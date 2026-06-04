@@ -17,10 +17,12 @@ export function buildMessage(role, text, { html = null } = {}) {
 }
 
 export function getConversation(messagesEl) {
-  return [...messagesEl.querySelectorAll('[data-llm-message-role]')].map((message) => ({
-    role: message.dataset.llmMessageRole === 'user' ? 'user' : 'assistant',
-    content: message.dataset.llmMessageContent || message.textContent.trim(),
-  })).filter((message) => message.content);
+  return [...messagesEl.querySelectorAll('[data-llm-message-role]')]
+    .map((message) => ({
+      role: message.dataset.llmMessageRole === 'user' ? 'user' : 'assistant',
+      content: message.dataset.llmMessageContent || message.textContent.trim(),
+    }))
+    .filter((message) => message.content);
 }
 
 export function scrollToBottom(messages) {

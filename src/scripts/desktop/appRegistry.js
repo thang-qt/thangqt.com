@@ -22,12 +22,14 @@ export function getAppForHref(href) {
   const url = new URL(href, window.location.origin);
   const pathname = url.pathname === '/' ? '/' : url.pathname.replace(/\/$/, '');
 
-  return [...getApps()]
-    .sort((a, b) => b.href.length - a.href.length)
-    .find((app) => {
-      if (app.href === '/') return pathname === '/';
-      return pathname === app.href || pathname.startsWith(`${app.href}/`);
-    }) || getApps()[0];
+  return (
+    [...getApps()]
+      .sort((a, b) => b.href.length - a.href.length)
+      .find((app) => {
+        if (app.href === '/') return pathname === '/';
+        return pathname === app.href || pathname.startsWith(`${app.href}/`);
+      }) || getApps()[0]
+  );
 }
 
 export function getAppKeyForHref(href) {
@@ -46,7 +48,7 @@ export function getWindowSpecForHref(href) {
       minHeight: 220,
       width: 'min(62rem, calc(100vw - 4rem))',
       height: 'min(48rem, calc(100dvh - 7rem))',
-      ...(app.window || {}),
+      ...app.window,
     },
   };
 }

@@ -2,7 +2,9 @@ import { addGlobalListenerOnce, isTypingTarget } from './events.js';
 import { openInternalHref } from './router.js';
 
 function getApps() {
-  return Array.isArray(window.__DESKTOP_APPS) ? window.__DESKTOP_APPS.filter((app) => app.nav !== false) : [];
+  return Array.isArray(window.__DESKTOP_APPS)
+    ? window.__DESKTOP_APPS.filter((app) => app.nav !== false)
+    : [];
 }
 
 function normalize(value) {
@@ -16,7 +18,11 @@ function appMatches(app, query) {
 }
 
 function escapeAttr(value = '') {
-  return String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function openApp(app) {
@@ -65,16 +71,21 @@ function renderLauncher() {
   const query = normalize(input.value || '');
   const apps = getApps().filter((app) => appMatches(app, query));
 
-  list.innerHTML = apps.length > 0
-    ? apps.map((app, index) => `
+  list.innerHTML =
+    apps.length > 0
+      ? apps
+          .map(
+            (app, index) => `
         <button type="button" class="desktop-launcher__item" data-launcher-item data-app-id="${escapeAttr(app.id)}" data-href="${escapeAttr(app.href)}" data-label="${escapeAttr(app.label)}" role="option" aria-selected="${index === 0 ? 'true' : 'false'}">
           <span class="desktop-launcher__icon" aria-hidden="true">${app.icon || '□'}</span>
           <span class="desktop-launcher__text">
             <strong>${app.label}</strong>
           </span>
         </button>
-      `).join('')
-    : '<p class="desktop-launcher__empty">No matching apps</p>';
+      `,
+          )
+          .join('')
+      : '<p class="desktop-launcher__empty">No matching apps</p>';
 
   list.querySelectorAll('[data-launcher-item]').forEach((item) => {
     const iconSlot = item.querySelector('.desktop-launcher__icon');
@@ -185,7 +196,8 @@ function initLauncherEvents() {
     if (event.key === 'Enter') {
       event.preventDefault();
       const item = rows[getSelectedIndex()];
-      if (item instanceof HTMLElement) openApp({ href: item.dataset.href, label: item.dataset.label });
+      if (item instanceof HTMLElement)
+        openApp({ href: item.dataset.href, label: item.dataset.label });
     }
   });
 }

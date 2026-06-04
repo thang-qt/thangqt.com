@@ -3,11 +3,19 @@ import Layout from '../layouts/Layout.astro';
 import { Icon } from 'astro-icon/components';
 ---
 
-<Layout title="Chat - ThangQT" description="A tiny fake LLM chat app for the desktop." desktopTitle="Chat">
+<Layout
+  title="Chat - ThangQT"
+  description="A tiny fake LLM chat app for the desktop."
+  desktopTitle="Chat"
+>
   <section class="col-content llm-chat-app" data-window-title="Chat" data-llm-chat>
     <div class="llm-chat-panel" role="region" aria-label="Chat conversation">
       <div class="llm-chat-messages" data-llm-chat-messages aria-live="polite">
-        <article class="llm-message llm-message--assistant" data-llm-message-role="assistant" data-llm-message-content="Hey there!">
+        <article
+          class="llm-message llm-message--assistant"
+          data-llm-message-role="assistant"
+          data-llm-message-content="Hey there!"
+        >
           <p>Hey there!</p>
         </article>
       </div>
@@ -20,16 +28,32 @@ import { Icon } from 'astro-icon/components';
           <div class="llm-chat-settings__grid">
             <label>
               <span>Provider endpoint</span>
-              <input type="url" placeholder="https://api.openai.com/v1" autocomplete="off" data-llm-chat-setting="endpoint" />
+              <input
+                type="url"
+                placeholder="https://api.openai.com/v1"
+                autocomplete="off"
+                data-llm-chat-setting="endpoint"
+              />
             </label>
             <label>
               <span>API key</span>
-              <input type="password" placeholder="sk-…" autocomplete="off" data-llm-chat-setting="apiKey" />
+              <input
+                type="password"
+                placeholder="sk-…"
+                autocomplete="off"
+                data-llm-chat-setting="apiKey"
+              />
             </label>
             <label>
               <span>Model</span>
               <span class="llm-chat-model-field">
-                <input type="text" placeholder="gpt-4o-mini" autocomplete="off" data-llm-chat-setting="model" data-llm-chat-model-input />
+                <input
+                  type="text"
+                  placeholder="gpt-4o-mini"
+                  autocomplete="off"
+                  data-llm-chat-setting="model"
+                  data-llm-chat-model-input
+                />
                 <div class="llm-chat-model-menu" data-llm-chat-model-options hidden></div>
               </span>
             </label>
@@ -43,8 +67,7 @@ import { Icon } from 'astro-icon/components';
           rows="1"
           placeholder="Type a message…"
           autocomplete="off"
-          data-llm-chat-input
-        ></textarea>
+          data-llm-chat-input></textarea>
         <button type="submit" aria-label="Send message">
           <Icon name="ph:paper-plane-tilt" />
         </button>

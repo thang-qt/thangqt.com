@@ -1,12 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PaginationNav from '../components/PaginationNav.astro';
-import {
-  getHostnameLabel,
-  getLinkHref,
-  getLinkTitle,
-  getPublishedLinks,
-} from '../utils/links';
+import { getHostnameLabel, getLinkHref, getLinkTitle, getPublishedLinks } from '../utils/links';
 import { LINKS_PAGE_SIZE, paginateItems } from '../utils/pagination';
 
 const { links } = await getPublishedLinks();
@@ -15,46 +10,66 @@ const linksWithVia = links.map((link) => ({ link }));
 const paginatedLinks = paginateItems(linksWithVia, 1, LINKS_PAGE_SIZE);
 ---
 
-<Layout title="Links - ThangQT" description="A public bookmark archive of things I want to remember.">
+<Layout
+  title="Links - ThangQT"
+  description="A public bookmark archive of things I want to remember."
+>
   <section class="col-content archive-page archive-page--links" data-window-title="Links">
     <header class="archive-hero">
       <h1>Links</h1>
     </header>
 
-    {linksWithVia.length === 0 ? (
-      <div class="ds-empty">
-        <span class="ds-empty__icon">↗</span>
-        <p class="ds-empty__title">No links yet</p>
-        <p class="ds-empty__body">Add entries in <code>src/content/links/</code> with a <code>slug</code> and <code>url</code>.</p>
-      </div>
-    ) : (
-      <>
-        <div class="bookmark-stack">
-          {paginatedLinks.items.map(({ link }) => (
-            <article class="bookmark-card" data-preview-trigger={link.slug}>
-              <a href={link.data.url} target="_blank" rel="noreferrer" class="bookmark-card__main">
-                <span class="bookmark-card__domain">{getHostnameLabel(link.data.url)}</span>
-                <span class="bookmark-card__content">
-                  <h2>{getLinkTitle(link)}</h2>
-                  {link.data.note && <span class="bookmark-card__note">{link.data.note}</span>}
-                </span>
-                <span class="bookmark-card__external" aria-hidden="true">↗</span>
-              </a>
-
-              <a href={getLinkHref(link)} class="bookmark-card__permalink" aria-label={`Open permalink for ${getLinkTitle(link)}`} data-window-title={getLinkTitle(link)}>
-                <span aria-hidden="true">#</span>
-              </a>
-            </article>
-          ))}
+    {
+      linksWithVia.length === 0 ? (
+        <div class="ds-empty">
+          <span class="ds-empty__icon">↗</span>
+          <p class="ds-empty__title">No links yet</p>
+          <p class="ds-empty__body">
+            Add entries in <code>src/content/links/</code> with a <code>slug</code> and{' '}
+            <code>url</code>.
+          </p>
         </div>
+      ) : (
+        <>
+          <div class="bookmark-stack">
+            {paginatedLinks.items.map(({ link }) => (
+              <article class="bookmark-card" data-preview-trigger={link.slug}>
+                <a
+                  href={link.data.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="bookmark-card__main"
+                >
+                  <span class="bookmark-card__domain">{getHostnameLabel(link.data.url)}</span>
+                  <span class="bookmark-card__content">
+                    <h2>{getLinkTitle(link)}</h2>
+                    {link.data.note && <span class="bookmark-card__note">{link.data.note}</span>}
+                  </span>
+                  <span class="bookmark-card__external" aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
 
-        <PaginationNav
-          basePath="/links"
-          currentPage={paginatedLinks.currentPage}
-          totalPages={paginatedLinks.totalPages}
-          label="Links pagination"
-        />
-      </>
-    )}
+                <a
+                  href={getLinkHref(link)}
+                  class="bookmark-card__permalink"
+                  aria-label={`Open permalink for ${getLinkTitle(link)}`}
+                  data-window-title={getLinkTitle(link)}
+                >
+                  <span aria-hidden="true">#</span>
+                </a>
+              </article>
+            ))}
+          </div>
+
+          <PaginationNav
+            basePath="/links"
+            currentPage={paginatedLinks.currentPage}
+            totalPages={paginatedLinks.totalPages}
+            label="Links pagination"
+          />
+        </>
+      )
+    }
   </section>
 </Layout>

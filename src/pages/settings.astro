@@ -37,24 +37,30 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
           <h2 id="settings-packs">Theme Packs</h2>
         </div>
         <div class="settings-pack-grid">
-          {desktopThemePacks.map((pack) => (
-            <label class={`settings-pack settings-pack--${pack.id}`}>
-              <input type="radio" name="desktop-theme-pack" value={pack.id} data-settings-pack />
-              <span class="settings-pack__preview" aria-hidden="true">
-                {pack.colors && (
-                  <span class="palette-strip">
-                    {pack.colors.map((color) => (
-                      <span class="palette-swatch" style={`background-color: ${color};`} title={color}></span>
-                    ))}
-                  </span>
-                )}
-              </span>
-              <span class="settings-pack__body">
-                <strong>{pack.label}</strong>
-                <small>{pack.note}</small>
-              </span>
-            </label>
-          ))}
+          {
+            desktopThemePacks.map((pack) => (
+              <label class={`settings-pack settings-pack--${pack.id}`}>
+                <input type="radio" name="desktop-theme-pack" value={pack.id} data-settings-pack />
+                <span class="settings-pack__preview" aria-hidden="true">
+                  {pack.colors && (
+                    <span class="palette-strip">
+                      {pack.colors.map((color) => (
+                        <span
+                          class="palette-swatch"
+                          style={`background-color: ${color};`}
+                          title={color}
+                        />
+                      ))}
+                    </span>
+                  )}
+                </span>
+                <span class="settings-pack__body">
+                  <strong>{pack.label}</strong>
+                  <small>{pack.note}</small>
+                </span>
+              </label>
+            ))
+          }
         </div>
       </section>
 
@@ -64,16 +70,23 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
           <h2 id="settings-patterns">Background Pattern</h2>
         </div>
         <div class="settings-pack-grid settings-pattern-grid">
-          {desktopBackgroundPatterns.map((pattern) => (
-            <label class={`settings-pack settings-pattern settings-pattern--${pattern.id}`}>
-              <input type="radio" name="desktop-bg-pattern" value={pattern.id} data-settings-pattern />
-              <span class="settings-pack__preview" aria-hidden="true"></span>
-              <span class="settings-pack__body">
-                <strong>{pattern.label}</strong>
-                <small>{pattern.note}</small>
-              </span>
-            </label>
-          ))}
+          {
+            desktopBackgroundPatterns.map((pattern) => (
+              <label class={`settings-pack settings-pattern settings-pattern--${pattern.id}`}>
+                <input
+                  type="radio"
+                  name="desktop-bg-pattern"
+                  value={pattern.id}
+                  data-settings-pattern
+                />
+                <span class="settings-pack__preview" aria-hidden="true" />
+                <span class="settings-pack__body">
+                  <strong>{pattern.label}</strong>
+                  <small>{pattern.note}</small>
+                </span>
+              </label>
+            ))
+          }
         </div>
       </section>
 
@@ -86,7 +99,9 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
         <dl>
           <div>
             <dt>Poolsuite</dt>
-            <dd><a href="https://poolsuite.net/" target="_blank" rel="noreferrer">poolsuite.net</a></dd>
+            <dd>
+              <a href="https://poolsuite.net/" target="_blank" rel="noreferrer">poolsuite.net</a>
+            </dd>
           </div>
           <div>
             <dt>PostHog</dt>

@@ -40,7 +40,9 @@ export function initWindowLinks() {
   });
 
   addGlobalListenerOnce('desktop-links:popstate', window, 'popstate', (event) => {
-    const href = event.state?.href || `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    const href =
+      event.state?.href ||
+      `${window.location.pathname}${window.location.search}${window.location.hash}`;
     const title = event.state?.title || 'Window';
     openInternalHref(href, title, { updateHistory: false });
   });

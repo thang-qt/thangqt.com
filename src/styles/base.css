@@ -1,7 +1,7 @@
 :root {
-  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", "Courier New", Courier, monospace;
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-body: 'IBM Plex Sans', 'Helvetica Neue', Arial, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', Courier, monospace;
   --fs-caption: 0.82rem;
   --fs-body: 1rem;
   --fs-title: clamp(2.4rem, 8vw, 5.8rem);
@@ -28,7 +28,7 @@
   --wm-art-c: rgba(0, 0, 0, 0.1);
 }
 
-:root[data-theme-pack="poolsuite"] {
+:root[data-theme-pack='poolsuite'] {
   --wm-accent: #13c3a3;
   --wm-accent-soft: #9de5bd;
   --wm-background: #87cf9d;
@@ -48,7 +48,7 @@
   --wm-art-c: rgba(7, 84, 66, 0.18);
 }
 
-:root[data-theme-pack="bloom"] {
+:root[data-theme-pack='bloom'] {
   --wm-accent: #d66f57;
   --wm-accent-soft: #ffc0a8;
   --wm-background: #9fd6a3;
@@ -68,7 +68,7 @@
   --wm-art-c: rgba(109, 70, 38, 0.12);
 }
 
-:root[data-theme-pack="paper"] {
+:root[data-theme-pack='paper'] {
   --wm-accent: #a35d22;
   --wm-accent-soft: #f1c981;
   --wm-background: #d6bf8d;
@@ -88,7 +88,7 @@
   --wm-art-c: rgba(64, 37, 14, 0.13);
 }
 
-:root[data-theme-pack="signal"] {
+:root[data-theme-pack='signal'] {
   --wm-accent: #1d7dff;
   --wm-accent-soft: #9dd7ff;
   --wm-background: #7db7d9;
@@ -108,7 +108,7 @@
   --wm-art-c: rgba(5, 56, 96, 0.17);
 }
 
-:root[data-color-mode="dark"][data-theme-pack="poolsuite"] {
+:root[data-color-mode='dark'][data-theme-pack='poolsuite'] {
   --wm-background: #163226;
   --wm-surface: #203d30;
   --wm-content: #0d1713;
@@ -124,7 +124,7 @@
   --wm-shadow: 4px 4px 0 rgba(0, 0, 0, 0.42);
 }
 
-:root[data-color-mode="dark"][data-theme-pack="bloom"] {
+:root[data-color-mode='dark'][data-theme-pack='bloom'] {
   --wm-background: #241a14;
   --wm-surface: #33251d;
   --wm-content: #18120e;
@@ -140,7 +140,7 @@
   --wm-shadow: 4px 4px 0 rgba(0, 0, 0, 0.42);
 }
 
-:root[data-color-mode="dark"][data-theme-pack="paper"] {
+:root[data-color-mode='dark'][data-theme-pack='paper'] {
   --wm-background: #2b2116;
   --wm-surface: #3a2d1c;
   --wm-content: #18130d;
@@ -156,7 +156,7 @@
   --wm-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
 }
 
-:root[data-color-mode="dark"][data-theme-pack="signal"] {
+:root[data-color-mode='dark'][data-theme-pack='signal'] {
   --wm-background: #07131d;
   --wm-surface: #112b3d;
   --wm-content: #071018;
@@ -244,24 +244,39 @@ pre {
 
 /* --- Background Patterns --- */
 
-:root[data-bg-pattern="grid"] .desktop-bg {
+:root[data-bg-pattern='grid'] .desktop-bg {
   background:
     linear-gradient(color-mix(in srgb, var(--wm-border) 14%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--wm-border) 14%, transparent) 1px, transparent 1px),
-    radial-gradient(circle at 82% 22%, var(--wm-art-b), transparent 24rem),
-    var(--wm-background);
-  background-size: 28px 28px, 28px 28px, auto, auto;
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--wm-border) 14%, transparent) 1px,
+      transparent 1px
+    ),
+    radial-gradient(circle at 82% 22%, var(--wm-art-b), transparent 24rem), var(--wm-background);
+  background-size:
+    28px 28px,
+    28px 28px,
+    auto,
+    auto;
 }
 
-:root[data-bg-pattern="noise"] .desktop-bg {
+:root[data-bg-pattern='noise'] .desktop-bg {
   background:
-    repeating-linear-gradient(0deg, color-mix(in srgb, var(--wm-border) 8%, transparent) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--wm-accent) 12%, transparent) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--wm-border) 8%, transparent) 0 1px,
+      transparent 1px 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--wm-accent) 12%, transparent) 0 1px,
+      transparent 1px 5px
+    ),
     var(--wm-background);
 }
 
 /* Paper Weave — diagonal linen crosshatch */
-:root[data-bg-pattern="weave"] .desktop-bg {
+:root[data-bg-pattern='weave'] .desktop-bg {
   background:
     repeating-linear-gradient(
       45deg,
@@ -281,16 +296,22 @@ pre {
 }
 
 /* Dot Field — halftone dot grid */
-:root[data-bg-pattern="dots"] .desktop-bg {
+:root[data-bg-pattern='dots'] .desktop-bg {
   background:
-    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--wm-border) 42%, transparent) 1.2px, transparent 1.2px),
-    radial-gradient(circle at 18% 68%, var(--wm-art-b), transparent 28rem),
-    var(--wm-background);
-  background-size: 20px 20px, auto, auto;
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--wm-border) 42%, transparent) 1.2px,
+      transparent 1.2px
+    ),
+    radial-gradient(circle at 18% 68%, var(--wm-art-b), transparent 28rem), var(--wm-background);
+  background-size:
+    20px 20px,
+    auto,
+    auto;
 }
 
 /* Circuit Lines — PCB trace pattern */
-:root[data-bg-pattern="circuit"] .desktop-bg {
+:root[data-bg-pattern='circuit'] .desktop-bg {
   background:
     repeating-linear-gradient(
       90deg,
@@ -317,11 +338,21 @@ pre {
 }
 
 /* Topographic Contour */
-:root[data-bg-pattern="topography"] .desktop-bg {
+:root[data-bg-pattern='topography'] .desktop-bg {
   background:
-    repeating-radial-gradient(ellipse at 30% 55%, transparent 0, transparent 28px, color-mix(in srgb, var(--wm-border) 14%, transparent) 28px, color-mix(in srgb, var(--wm-border) 14%, transparent) 29px),
-    repeating-radial-gradient(ellipse at 72% 28%, transparent 0, transparent 34px, color-mix(in srgb, var(--wm-art-b) 80%, transparent) 34px, color-mix(in srgb, var(--wm-art-b) 80%, transparent) 35px),
-    radial-gradient(ellipse at 50% 50%, var(--wm-art-a), transparent 60%),
-    var(--wm-background);
+    repeating-radial-gradient(
+      ellipse at 30% 55%,
+      transparent 0,
+      transparent 28px,
+      color-mix(in srgb, var(--wm-border) 14%, transparent) 28px,
+      color-mix(in srgb, var(--wm-border) 14%, transparent) 29px
+    ),
+    repeating-radial-gradient(
+      ellipse at 72% 28%,
+      transparent 0,
+      transparent 34px,
+      color-mix(in srgb, var(--wm-art-b) 80%, transparent) 34px,
+      color-mix(in srgb, var(--wm-art-b) 80%, transparent) 35px
+    ),
+    radial-gradient(ellipse at 50% 50%, var(--wm-art-a), transparent 60%), var(--wm-background);
 }
-

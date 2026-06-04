@@ -6,37 +6,49 @@ import { formatShortDate, paginateItems, WRITING_PAGE_SIZE } from '../utils/pagi
 
 const posts = await getPublishedWriting();
 const paginatedPosts = paginateItems(posts, 1, WRITING_PAGE_SIZE);
-
 ---
 
-<Layout title="Writing - ThangQT" description="My various thoughts on life, tech, and everything in between">
+<Layout
+  title="Writing - ThangQT"
+  description="My various thoughts on life, tech, and everything in between"
+>
   <section class="col-content archive-page archive-page--writing" data-window-title="Writing">
     <header class="archive-hero">
       <h1>Writing</h1>
     </header>
 
     <div class="writing-ledger" aria-label="Writing archive">
-      {paginatedPosts.items.map((post, index) => (
-        <article class="ledger-row">
-          <a href={`/writing/${post.slug}`} class="ledger-row__link" data-window-title={post.data.title}>
-            <div class="ledger-row__meta">
-              <time datetime={post.data.date.toISOString()}>{formatShortDate(post.data.date)}</time>
-            </div>
-            <div class="ledger-row__body">
-              <h2>{post.data.title}</h2>
-            </div>
-          </a>
-        </article>
-      ))}
+      {
+        paginatedPosts.items.map((post) => (
+          <article class="ledger-row">
+            <a
+              href={`/writing/${post.slug}`}
+              class="ledger-row__link"
+              data-window-title={post.data.title}
+            >
+              <div class="ledger-row__meta">
+                <time datetime={post.data.date.toISOString()}>
+                  {formatShortDate(post.data.date)}
+                </time>
+              </div>
+              <div class="ledger-row__body">
+                <h2>{post.data.title}</h2>
+              </div>
+            </a>
+          </article>
+        ))
+      }
     </div>
 
-    {paginatedPosts.totalPages > 1 && (
-      <PaginationNav
-        basePath="/writing"
-        currentPage={paginatedPosts.currentPage}
-        totalPages={paginatedPosts.totalPages}
-        label="Writing pagination"
-      />
-    )}
+    {
+      paginatedPosts.totalPages > 1 && (
+        <PaginationNav
+          basePath="/writing"
+          currentPage={paginatedPosts.currentPage}
+          totalPages={paginatedPosts.totalPages}
+          label="Writing pagination"
+        />
+      )
+    }
   </section>
 </Layout>

@@ -8,8 +8,9 @@ function getTopmostWindow() {
   const stage = getStage();
   if (!stage) return null;
 
-  const windows = [...stage.querySelectorAll('.desktop-window')]
-    .filter((win) => win instanceof HTMLElement && !win.classList.contains('is-minimized'));
+  const windows = [...stage.querySelectorAll('.desktop-window')].filter(
+    (win) => win instanceof HTMLElement && !win.classList.contains('is-minimized'),
+  );
   if (windows.length === 0) return null;
 
   return windows.reduce((active, win) => {
@@ -46,7 +47,12 @@ function measureWindowSpec(windowSpec) {
 
 export function defaultWindowRect(count, windowSpec) {
   const stage = getStage();
-  const stageRect = stage?.getBoundingClientRect() || { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+  const stageRect = stage?.getBoundingClientRect() || {
+    left: 0,
+    top: 0,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
   const size = measureWindowSpec(windowSpec);
   const active = getTopmostWindow();
 
@@ -60,7 +66,10 @@ export function defaultWindowRect(count, windowSpec) {
   }
 
   const maxLeft = Math.max(desktopWorkAreaPad, stageRect.width - size.width - desktopWorkAreaPad);
-  const maxTop = Math.max(windowStartPosition.top, stageRect.height - size.height - desktopWorkAreaPad);
+  const maxTop = Math.max(
+    windowStartPosition.top,
+    stageRect.height - size.height - desktopWorkAreaPad,
+  );
 
   if (left > maxLeft || top > maxTop) {
     left = windowStartPosition.left;

@@ -14,9 +14,13 @@ import { initWindowManager } from './windowManager.js';
 
 function initDesktop() {
   applyDesktopPrefs();
-  setActiveRoute(`${window.location.pathname}${window.location.search}${window.location.hash}`, document.title, {
-    replace: true,
-  });
+  setActiveRoute(
+    `${window.location.pathname}${window.location.search}${window.location.hash}`,
+    document.title,
+    {
+      replace: true,
+    },
+  );
   initDesktopClock();
   initWindowManager();
   initWindowLinks();

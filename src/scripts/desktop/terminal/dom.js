@@ -37,9 +37,11 @@ export function syncPrompt(root) {
   const state = root.__terminalState;
 
   if (state?.connectFlow?.step) {
-    const prompt = state.connectFlow.step === 'apiKey' ? 'connect api-key' : `connect ${state.connectFlow.step}`;
+    const prompt =
+      state.connectFlow.step === 'apiKey' ? 'connect api-key' : `connect ${state.connectFlow.step}`;
     if (label) label.textContent = prompt;
-    if (input instanceof HTMLInputElement) input.type = state.connectFlow.step === 'apiKey' ? 'password' : 'text';
+    if (input instanceof HTMLInputElement)
+      input.type = state.connectFlow.step === 'apiKey' ? 'password' : 'text';
     return;
   }
 

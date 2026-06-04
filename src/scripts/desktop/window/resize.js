@@ -4,7 +4,16 @@ import { saveWindowState } from '../windowState.js';
 import { bringWindowForward } from './zIndex.js';
 import { desktopWorkAreaPad, desktopWorkAreaTop, floatWindowAtCurrentRect } from './workArea.js';
 
-const edgeNames = ['top', 'right', 'bottom', 'left', 'top-right', 'bottom-right', 'bottom-left', 'top-left'];
+const edgeNames = [
+  'top',
+  'right',
+  'bottom',
+  'left',
+  'top-right',
+  'bottom-right',
+  'bottom-left',
+  'top-left',
+];
 
 export function ensureResizeEdges(win) {
   if (win.dataset.windowResizable === 'false') {
@@ -64,7 +73,11 @@ export function attachResize(win, stage) {
         }
 
         width = clamp(width, metrics.minWidth, Math.min(metrics.maxWidth, stageRect.width - left));
-        height = clamp(height, metrics.minHeight, Math.min(metrics.maxHeight, stageRect.height - top));
+        height = clamp(
+          height,
+          metrics.minHeight,
+          Math.min(metrics.maxHeight, stageRect.height - top),
+        );
         if (edge.includes('left')) left = startLeft + (startWidth - width);
         if (edge.includes('top')) top = startTop + (startHeight - height);
 

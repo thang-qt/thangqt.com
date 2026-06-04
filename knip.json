@@ -1,0 +1,5 @@
+{
+  "entry": ["astro.config.*", "src/pages/**/*.{astro,ts,js}", "src/scripts/desktop/index.js"],
+  "project": ["src/**/*.{astro,ts,js}"],
+  "ignoreDependencies": ["@iconify-json/ph"]
+}

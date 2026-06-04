@@ -109,11 +109,14 @@ export async function runCommand(root, rawCommand) {
   const command = rawCommand.trim();
   const state = getState(root);
   const promptLabel = state.connectFlow?.step
-    ? (state.connectFlow.step === 'apiKey' ? 'connect api-key' : `connect ${state.connectFlow.step}`)
+    ? state.connectFlow.step === 'apiKey'
+      ? 'connect api-key'
+      : `connect ${state.connectFlow.step}`
     : `guest@thangqt ${state.cwd}`;
-  const displayCommand = state.connectFlow?.step === 'apiKey' && command && command.toLowerCase() !== 'cancel'
-    ? '••••••••'
-    : command;
+  const displayCommand =
+    state.connectFlow?.step === 'apiKey' && command && command.toLowerCase() !== 'cancel'
+      ? '••••••••'
+      : command;
   appendLine(screen, `<span class="terminal-history-prompt">${escapeHtml(promptLabel)}</span>`);
   appendLine(screen, `<span class="terminal-prompt-mark">❯</span> ${escapeHtml(displayCommand)}`);
 
@@ -144,7 +147,8 @@ export async function runCommand(root, rawCommand) {
   if (!state.upgraded) {
     if (name === 'open') {
       const app = openCommands[maybeApp];
-      if (!app) return appendLine(screen, `open: expected one of ${Object.keys(openCommands).join(', ')}`);
+      if (!app)
+        return appendLine(screen, `open: expected one of ${Object.keys(openCommands).join(', ')}`);
       openAppFromTerminal(screen, app);
       return;
     }
@@ -160,7 +164,10 @@ export async function runCommand(root, rawCommand) {
       return;
     }
 
-    appendOutput(screen, [`command not found: ${name}`, 'Run `upgrade` if you want Dot to make an educated mess of it.']);
+    appendOutput(screen, [
+      `command not found: ${name}`,
+      'Run `upgrade` if you want Dot to make an educated mess of it.',
+    ]);
     return;
   }
 

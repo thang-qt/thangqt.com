@@ -1,7 +1,17 @@
 import { createChatCompletion, fetchModels } from './llm/client.js';
 import { buildSystemPrompt } from './llm/context.js';
-import { getSettingsFields, loadSettings, readSettingsFromDom, saveSettings } from './llm/settings.js';
-import { buildMessage, getConfigurationPrompt, getConversation, scrollToBottom } from './chat/messages.js';
+import {
+  getSettingsFields,
+  loadSettings,
+  readSettingsFromDom,
+  saveSettings,
+} from './llm/settings.js';
+import {
+  buildMessage,
+  getConfigurationPrompt,
+  getConversation,
+  scrollToBottom,
+} from './chat/messages.js';
 import { addGlobalListenerOnce } from './events.js';
 
 function getModelDatalist(root) {
@@ -9,7 +19,11 @@ function getModelDatalist(root) {
 }
 
 function escapeAttr(value = '') {
-  return String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function getModelInput(root) {
@@ -26,7 +40,12 @@ function renderModelOptions(root, models) {
   const visible = models.filter((model) => model.toLowerCase().includes(query)).slice(0, 10);
 
   menu.innerHTML = visible.length
-    ? visible.map((model) => `<button type="button" data-llm-chat-model-option="${escapeAttr(model)}">${escapeAttr(model)}</button>`).join('')
+    ? visible
+        .map(
+          (model) =>
+            `<button type="button" data-llm-chat-model-option="${escapeAttr(model)}">${escapeAttr(model)}</button>`,
+        )
+        .join('')
     : '<p>No models found</p>';
   menu.hidden = false;
 }
@@ -52,7 +71,7 @@ async function renderAssistantMessage(text) {
   return buildMessage('assistant', text, { html: renderMarkdown(text) });
 }
 
-async function sendMessage(root, text, messages) {
+async function sendMessage(root, _text, messages) {
   const settings = readSettingsFromDom(root);
   const conversation = [
     { role: 'system', content: buildSystemPrompt() },
@@ -60,7 +79,10 @@ async function sendMessage(root, text, messages) {
   ];
 
   if (!settings.endpoint || !settings.apiKey) {
-    messages.insertAdjacentHTML('beforeend', await renderAssistantMessage(getConfigurationPrompt()));
+    messages.insertAdjacentHTML(
+      'beforeend',
+      await renderAssistantMessage(getConfigurationPrompt()),
+    );
     scrollToBottom(messages);
     return;
   }
@@ -74,7 +96,9 @@ async function sendMessage(root, text, messages) {
     const reply = await createChatCompletion(settings, conversation);
     pendingEl.outerHTML = await renderAssistantMessage(reply);
   } catch (error) {
-    pendingEl.outerHTML = await renderAssistantMessage(`Dot tried to think, tripped over the provider cable, and face-planted. Please check the gear menu settings, then try again.\n\nError: ${error.message || 'Unknown error'}`);
+    pendingEl.outerHTML = await renderAssistantMessage(
+      `Dot tried to think, tripped over the provider cable, and face-planted. Please check the gear menu settings, then try again.\n\nError: ${error.message || 'Unknown error'}`,
+    );
   }
 
   scrollToBottom(messages);
@@ -108,7 +132,8 @@ function initChatRoot(root) {
   getSettingsFields(root).forEach((field) => {
     field.addEventListener('change', () => {
       saveSettings(root);
-      if (field.dataset.llmChatSetting === 'endpoint' || field.dataset.llmChatSetting === 'apiKey') refreshModels(root);
+      if (field.dataset.llmChatSetting === 'endpoint' || field.dataset.llmChatSetting === 'apiKey')
+        refreshModels(root);
     });
   });
 
