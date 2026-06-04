@@ -2135,7 +2135,6 @@ pre {
 .desktop-window--app-chat .desktop-window__body {
   display: flex;
   flex-direction: column;
-  padding-right: 0.45rem;
   overflow: hidden;
 }
 
