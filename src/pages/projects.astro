@@ -75,7 +75,7 @@ function getProjectPalette(project: (typeof sortedProjects)[number]) {
             class="project-color-section"
             style={`--project-bg: ${palette.bg}; --project-ink: ${palette.ink}; --project-accent: ${palette.accent};`}
           >
-            <a href={`/projects/${project.slug}`} class="project-color-section__link">
+            <a href={`/projects/${project.slug}`} class="project-color-section__link" data-window-title={project.data.title}>
               <div class="project-color-section__copy">
                 <p class="project-color-section__meta">
                   <span>{String(index + 1).padStart(2, '0')}</span>

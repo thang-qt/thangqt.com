@@ -463,6 +463,29 @@ pre {
   background: var(--wm-surface);
   cursor: move;
   user-select: none;
+  overflow: hidden;
+}
+
+.desktop-window.is-loading::after {
+  content: "";
+  position: absolute;
+  top: 43px;
+  right: 0.85rem;
+  z-index: 8;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid var(--wm-accent-soft);
+  border-top-color: var(--wm-accent);
+  border-right-color: var(--wm-accent);
+  border-radius: 999px;
+  background: var(--wm-content);
+  box-shadow: 0 0 0 2px var(--wm-content);
+  pointer-events: none;
+  animation: wm-loading-spin 700ms linear infinite;
+}
+
+@keyframes wm-loading-spin {
+  to { transform: rotate(1turn); }
 }
 
 .desktop-window__bar h2 {

@@ -43,7 +43,7 @@ const paginatedLinks = paginateItems(linksWithVia, 1, PAGE_SIZE);
                 <span class="bookmark-card__external" aria-hidden="true">↗</span>
               </a>
 
-              <a href={getLinkHref(link)} class="bookmark-card__permalink" aria-label={`Open permalink for ${getLinkTitle(link)}`}>
+              <a href={getLinkHref(link)} class="bookmark-card__permalink" aria-label={`Open permalink for ${getLinkTitle(link)}`} data-window-title={getLinkTitle(link)}>
                 <span aria-hidden="true">#</span>
               </a>
             </article>

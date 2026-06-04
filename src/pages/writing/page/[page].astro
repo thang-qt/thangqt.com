@@ -51,7 +51,7 @@ function formatDate(date: Date): string {
 
     {paginatedPosts.items.map((post) => (
       <article class="post-item">
-        <a href={`/writing/${post.slug}`} class="list-link">
+        <a href={`/writing/${post.slug}`} class="list-link" data-window-title={post.data.title}>
           <span class="list-row-main">
             <h2 class="post-title">{post.data.title}</h2>
             {post.data.description && <p class="list-description">{post.data.description}</p>}

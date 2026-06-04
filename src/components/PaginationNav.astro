@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { basePath, currentPage, totalPages, label } = Astro.props;
+const windowTitle = basePath.replace(/^\//, '').replace(/^./, (char) => char.toUpperCase()) || 'Window';
 
 const prevHref = currentPage > 1 ? buildPageHref(basePath, currentPage - 1) : null;
 const nextHref = currentPage < totalPages ? buildPageHref(basePath, currentPage + 1) : null;
@@ -17,7 +18,7 @@ const nextHref = currentPage < totalPages ? buildPageHref(basePath, currentPage 
 {totalPages > 1 && (
   <nav class="list-pagination" aria-label={label}>
     {prevHref ? (
-      <a href={prevHref} class="list-pagination-link list-pagination-link-prev" aria-label="Go to newer page">
+      <a href={prevHref} class="list-pagination-link list-pagination-link-prev" aria-label="Go to newer page" data-window-title={windowTitle}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M15 18l-6-6 6-6" />
         </svg>
@@ -31,7 +32,7 @@ const nextHref = currentPage < totalPages ? buildPageHref(basePath, currentPage 
     )}
 
     {nextHref ? (
-      <a href={nextHref} class="list-pagination-link list-pagination-link-next" aria-label="Go to older page">
+      <a href={nextHref} class="list-pagination-link list-pagination-link-next" aria-label="Go to older page" data-window-title={windowTitle}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M9 18l6-6-6-6" />
         </svg>

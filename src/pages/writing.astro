@@ -28,7 +28,7 @@ function formatDate(date: Date): string {
     <div class="writing-ledger" aria-label="Writing archive">
       {paginatedPosts.items.map((post, index) => (
         <article class="ledger-row">
-          <a href={`/writing/${post.slug}`} class="ledger-row__link">
+          <a href={`/writing/${post.slug}`} class="ledger-row__link" data-window-title={post.data.title}>
             <div class="ledger-row__meta">
               <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
             </div>

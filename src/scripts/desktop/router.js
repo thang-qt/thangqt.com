@@ -197,7 +197,61 @@ export function createDesktopWindow({
   return win;
 }
 
+function getExistingWindowForHref(href) {
+  const stage = getStage();
+  if (!stage) return null;
+  const appKey = appKeyFromHref(href);
+  const existing = stage.querySelector(`[data-window-app="${appKey}"]`);
+  return existing instanceof HTMLElement ? existing : null;
+}
+
+function beginWindowLoading(win, delay = 140) {
+  if (!(win instanceof HTMLElement)) return () => {};
+
+  const timer = window.setTimeout(() => {
+    win.classList.add('is-loading');
+  }, delay);
+
+  return () => {
+    window.clearTimeout(timer);
+    win.classList.remove('is-loading');
+  };
+}
+
+function updateWindowContent(win, { title, browserTitle, html, href, updateHistory = true, updateRoute = true, restoreState = null } = {}) {
+  if (!(win instanceof HTMLElement)) return null;
+
+  setWindowTitle(win, title.toUpperCase());
+  const documentEl = getWindowDocument(win);
+  if (documentEl) documentEl.innerHTML = html;
+  win.dataset.windowUrl = href;
+  win.dataset.windowApp = appKeyFromHref(href);
+  applyWindowSpec(win, href);
+  win.classList.remove('is-minimized');
+  bringWindowForward(win);
+  if (restoreState) applySavedWindowRect(win, restoreState);
+  afterWindowContentChange();
+  if (updateRoute) setActiveRoute(href, browserTitle || title, { replace: !updateHistory });
+  saveWindowState();
+  return win;
+}
+
 export async function openInternalHref(href, title = 'Window', options = {}) {
+  let loadingWindow = options.replaceExisting !== false ? getExistingWindowForHref(href) : null;
+  if (!loadingWindow) {
+    loadingWindow = createDesktopWindow({
+      title,
+      browserTitle: title,
+      html: '',
+      href,
+      updateHistory: false,
+      updateRoute: false,
+      restoreState: options.restoreState || null,
+      replaceExisting: options.replaceExisting !== false,
+    });
+  }
+  const stopLoading = beginWindowLoading(loadingWindow);
+
   try {
     const response = await fetch(href);
     if (!response.ok) throw new Error(`Failed to load ${href}: ${response.status}`);
@@ -207,7 +261,7 @@ export async function openInternalHref(href, title = 'Window', options = {}) {
     const documentTitle = doc.querySelector('.desktop-document [data-window-title]')?.getAttribute('data-window-title');
     const browserTitle = doc.querySelector('title')?.textContent || documentTitle || title;
     const pageTitle = documentTitle || browserTitle.replace(/\s+-\s+ThangQT.*$/, '') || title;
-    return createDesktopWindow({
+    return updateWindowContent(loadingWindow, {
       title: pageTitle,
       browserTitle,
       html: content || '<p>Could not load this page.</p>',
@@ -215,17 +269,30 @@ export async function openInternalHref(href, title = 'Window', options = {}) {
       updateHistory: options.updateHistory !== false,
       updateRoute: options.updateRoute !== false,
       restoreState: options.restoreState || null,
-      replaceExisting: options.replaceExisting !== false,
     });
   } catch (error) {
     console.error(error);
+    if (loadingWindow) {
+      updateWindowContent(loadingWindow, {
+        title,
+        browserTitle: title,
+        html: '<p>Could not load this page.</p>',
+        href,
+        updateHistory: false,
+        updateRoute: false,
+      });
+    }
     if (options.fallbackToLocation === true) window.location.assign(href);
     return null;
+  } finally {
+    stopLoading();
   }
 }
 
 export async function openHrefInWindow(win, href, title = 'Window') {
   if (!(win instanceof HTMLElement)) return null;
+
+  const stopLoading = beginWindowLoading(win);
 
   try {
     const response = await fetch(href);
@@ -252,6 +319,8 @@ export async function openHrefInWindow(win, href, title = 'Window') {
   } catch (error) {
     console.error(error);
     return null;
+  } finally {
+    stopLoading();
   }
 }
 

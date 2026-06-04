@@ -54,7 +54,7 @@ const paginatedProjects = paginateItems(sortedProjects, currentPage, PAGE_SIZE);
 
     {paginatedProjects.items.map((project) => (
       <article class="project-item">
-        <a href={`/projects/${project.slug}`} class="list-link">
+        <a href={`/projects/${project.slug}`} class="list-link" data-window-title={project.data.title}>
           <span class="list-row-main">
             <h2 class="project-title">{project.data.title}</h2>
             {project.data.description && <p class="list-description">{project.data.description}</p>}
