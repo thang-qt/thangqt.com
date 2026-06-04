@@ -993,10 +993,6 @@ pre {
   border-top: 0;
 }
 
-.desktop-document .home-detail,
-.desktop-document .ascii-anim {
-  display: none;
-}
 
 .back-link {
   display: grid;
@@ -2616,27 +2612,8 @@ pre {
 
 .home-nav-icon { font-size: 0.9rem; line-height: 1; }
 
-.home-ascii-panel {
-  height: 100%;
-  min-height: 12rem;
-  display: flex;
-  align-items: stretch;
-}
-
-.ascii-anim {
-  flex: 1;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  line-height: 1.18;
-  color: color-mix(in srgb, var(--wm-ink) 40%, transparent);
-  white-space: pre;
-  overflow: hidden;
-  user-select: none;
-}
-
 @media (max-width: 960px) {
   .home-app { grid-template-columns: 1fr; }
-  .home-ascii-panel { display: none; }
 }
 
 
