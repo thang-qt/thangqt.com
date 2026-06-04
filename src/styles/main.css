@@ -488,6 +488,16 @@ pre {
   line-height: 1;
 }
 
+.desktop-window__controls button[data-app-window-control]::before {
+  content: none;
+}
+
+.desktop-window__controls button[data-app-window-control] svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  display: block;
+}
+
 .desktop-window__controls button[data-window-action="minimize"]::before {
   content: "_";
   transform: translateY(-0.18rem);
@@ -2008,6 +2018,338 @@ pre {
 .resume-skill-line { margin: 0 !important; max-width: 76ch; font-size: 1rem !important; font-weight: 600; line-height: 1.7 !important; color: color-mix(in srgb, var(--wm-ink) 76%, transparent); }
 @media (max-width: 720px) { .resume-entry { grid-template-columns: 1fr; gap: 0.45rem; } .resume-entry__meta { display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; } }
 @media print { body { overflow: visible; } .desktop-bg, .desktop-menu, .desktop-window--profile, .desktop-window__titlebar { display: none !important; } .desktop-stage, .desktop-window, .desktop-window__body, .desktop-document { position: static !important; width: auto !important; height: auto !important; overflow: visible !important; box-shadow: none !important; border: 0 !important; } .resume-sheet { max-width: none; } }
+
+/* ── LLM CHAT ─────────────────────────────────────── */
+
+.desktop-window--app-chat .desktop-window__body {
+  display: flex;
+  flex-direction: column;
+  padding-right: 0.45rem;
+  overflow: hidden;
+}
+
+.desktop-window--app-chat .desktop-document {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.desktop-window--app-chat .desktop-document > .llm-chat-app {
+  display: grid;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+}
+
+.llm-chat-panel {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+}
+
+.llm-chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-right: -0.25rem;
+  padding: 0 0.45rem 0.85rem 0;
+  overflow: auto;
+}
+
+.llm-message {
+  max-width: 100%;
+}
+
+.llm-message--user {
+  align-self: end;
+  max-width: 78%;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 45%, transparent);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--wm-accent-soft) 65%, var(--wm-raised));
+}
+
+.llm-message p,
+.llm-message li {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.llm-message p + p,
+.llm-message p + ul,
+.llm-message ul + p,
+.llm-message pre + p,
+.llm-message p + pre,
+.llm-message p + table,
+.llm-message table + p,
+.llm-message p + .llm-message__table-scroll,
+.llm-message .llm-message__table-scroll + p {
+  margin-top: 0.6rem;
+}
+
+.llm-message ul {
+  margin: 0.45rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.llm-message h2,
+.llm-message h3 {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+
+.llm-message pre {
+  max-width: 100%;
+  margin: 0.55rem 0 0;
+  padding: 0.65rem;
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 35%, transparent);
+  border-radius: 6px;
+  background: var(--wm-code-bg);
+  color: var(--wm-code-ink);
+}
+
+.llm-message__table-scroll {
+  width: 100%;
+  max-width: 100%;
+  margin: 0.65rem 0 0;
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 45%, transparent);
+  border-radius: 6px;
+  background: var(--wm-raised);
+}
+
+.llm-message table {
+  width: 100%;
+  min-width: max-content;
+  border-spacing: 0;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.llm-message thead {
+  background: var(--wm-chrome);
+}
+
+.llm-message th,
+.llm-message td {
+  padding: 0.45rem 0.55rem;
+  border-right: 1px solid color-mix(in srgb, var(--wm-border) 22%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--wm-border) 22%, transparent);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.4;
+}
+
+.llm-message th {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.llm-message tr:last-child td {
+  border-bottom: 0;
+}
+
+.llm-message th:last-child,
+.llm-message td:last-child {
+  border-right: 0;
+}
+
+.llm-message code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+}
+
+.llm-message :not(pre) > code {
+  padding: 0.05rem 0.2rem;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 25%, transparent);
+  background: var(--wm-subtle);
+  color: var(--wm-ink);
+}
+
+.llm-chat-compose {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.35rem minmax(0, 1fr) 2.35rem;
+  gap: 0.45rem;
+  padding-top: 0.45rem;
+  background: var(--wm-content);
+}
+
+.llm-chat-compose textarea {
+  height: 2.35rem;
+  min-height: 2.35rem;
+  max-height: 2.35rem;
+  resize: none;
+  overflow: hidden;
+  border: 1px solid var(--wm-border);
+  border-radius: 999px;
+  padding: 0.48rem 0.7rem;
+  background: var(--wm-subtle);
+  color: var(--wm-ink);
+  outline: 0;
+  line-height: 1.35;
+  box-shadow: inset 1px 1px 0 color-mix(in srgb, var(--wm-border) 12%, transparent);
+}
+
+.llm-chat-compose textarea::placeholder {
+  color: color-mix(in srgb, var(--wm-ink) 42%, transparent);
+}
+
+.llm-chat-compose textarea:focus {
+  background: var(--wm-raised);
+  box-shadow:
+    inset 1px 1px 0 color-mix(in srgb, var(--wm-border) 12%, transparent),
+    0 0 0 2px var(--wm-accent-soft);
+}
+
+.llm-chat-compose > button,
+.llm-chat-settings summary {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border: 1px solid var(--wm-border);
+  border-radius: 999px;
+  background: var(--wm-chrome);
+  color: var(--wm-ink);
+  cursor: pointer;
+  box-shadow: 1px 1px 0 color-mix(in srgb, var(--wm-border) 22%, transparent);
+}
+
+.llm-chat-compose > button svg,
+.llm-chat-settings summary svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.llm-chat-compose > button:hover,
+.llm-chat-settings summary:hover {
+  background: var(--wm-accent);
+}
+
+.llm-chat-settings {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.llm-chat-settings summary {
+  list-style: none;
+}
+
+.llm-chat-settings summary::-webkit-details-marker {
+  display: none;
+}
+
+.llm-chat-settings__grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 0.45rem);
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.45rem;
+  padding: 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 35%, transparent);
+  border-radius: 7px;
+  background: var(--wm-subtle);
+  box-shadow: var(--wm-shadow);
+}
+
+.llm-chat-settings label {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.llm-chat-settings input {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--wm-border) 65%, transparent);
+  border-radius: 5px;
+  padding: 0.35rem 0.45rem;
+  background: var(--wm-raised);
+  color: var(--wm-ink);
+  font: inherit;
+  outline: 0;
+}
+
+.llm-chat-settings input:focus {
+  box-shadow: 0 0 0 2px var(--wm-accent-soft);
+}
+
+.llm-chat-model-field {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.llm-chat-model-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 0.3rem);
+  z-index: 5;
+  display: grid;
+  max-height: min(10rem, 34dvh);
+  overflow: auto;
+  border: 1px solid var(--wm-border);
+  border-radius: 6px;
+  background: var(--wm-raised);
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--wm-border) 18%, transparent);
+  scrollbar-color: var(--wm-border) var(--wm-chrome);
+  scrollbar-width: thin;
+}
+
+.llm-chat-model-menu[hidden] {
+  display: none;
+}
+
+.llm-chat-model-menu button,
+.llm-chat-model-menu p {
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0.42rem 0.55rem;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--wm-border) 18%, transparent);
+  background: transparent;
+  box-shadow: none;
+  color: var(--wm-ink);
+  font: inherit;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.llm-chat-model-menu button {
+  display: block;
+  height: auto;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.llm-chat-model-menu button:hover,
+.llm-chat-model-menu button:focus-visible {
+  background: color-mix(in srgb, var(--wm-accent-soft) 72%, var(--wm-raised));
+  outline: 0;
+}
+
+.llm-chat-model-menu button:last-child,
+.llm-chat-model-menu p:last-child {
+  border-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .llm-message--user { max-width: 92%; }
+}
 
 /* ── SETTINGS — Single Column Dashboard Layout ─────── */
 .settings-page {

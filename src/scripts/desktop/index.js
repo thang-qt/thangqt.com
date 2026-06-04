@@ -1,3 +1,5 @@
+import { initAppWindowControls } from './appWindowControls.js';
+import { initChatApp } from './chat.js';
 import { initDesktopClock } from './clock.js';
 import { initContextMenus } from './contextMenu.js';
 import { initDisplayControls } from './displayControls.js';
@@ -22,6 +24,8 @@ function initDesktop() {
   initContextMenus();
   initLauncher();
   initShortcutHelper();
+  initChatApp();
+  initAppWindowControls();
   syncSettingsControls();
 }
 
@@ -33,3 +37,5 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('astro:page-load', initDesktop);
 window.addEventListener('desktop:window-state-change', saveWindowState);
 window.addEventListener('desktop:prefs-change', initWindowManager);
+window.addEventListener('desktop:content-change', initChatApp);
+window.addEventListener('desktop:content-change', initAppWindowControls);

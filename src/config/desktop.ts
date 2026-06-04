@@ -20,6 +20,7 @@ export const desktopAppIcons = {
   about: 'ph:info',
   resume: 'ph:file-text',
   settings: 'ph:gear',
+  chat: 'ph:chat-circle',
 };
 
 export const desktopApps = [
@@ -95,6 +96,16 @@ export const desktopApps = [
     nav: true,
     pinned: false,
     window: { minWidth: 340, minHeight: 260, width: 'min(46rem, calc(100vw - 5rem))', height: 'min(42rem, calc(100dvh - 8rem))' },
+  },
+  {
+    id: 'chat',
+    label: 'Chat',
+    href: '/chat',
+    icon: '◌',
+    iconName: desktopAppIcons.chat,
+    nav: true,
+    pinned: false,
+    window: { minWidth: 360, minHeight: 320, width: 'min(48rem, calc(100vw - 5rem))', height: 'min(44rem, calc(100dvh - 8rem))' },
   },
 ];
 
