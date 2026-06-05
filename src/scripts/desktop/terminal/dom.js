@@ -10,7 +10,7 @@ export function scrollToTerminalBottom(screen) {
 export function appendLine(screen, html, className = '') {
   const line = document.createElement('p');
   if (className) line.className = className;
-  line.innerHTML = html;
+  line.innerHTML = html || '&nbsp;';
   screen.appendChild(line);
   scrollToTerminalBottom(screen);
 }
