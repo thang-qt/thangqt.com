@@ -15,7 +15,7 @@ export function getDotConfigStatus() {
     'Dot is connected.',
     `endpoint: ${endpoint}`,
     `model: ${model || 'default'}`,
-    `api key: ${apiKey.slice(0, 4)}…${apiKey.slice(-4)}`,
+    'api key: saved, not shown',
   ];
 }
 

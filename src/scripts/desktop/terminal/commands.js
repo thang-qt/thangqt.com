@@ -93,7 +93,7 @@ async function runUpgrade(screen, state) {
   state.upgraded = true;
   appendOutput(screen, [
     'Upgrade complete.',
-    'Unknown commands will now be interpreted by Dot. If it hallucinates, please nod politely.',
+    'Dot is now driving the shell. If it hallucinates, please nod politely.',
   ]);
 }
 

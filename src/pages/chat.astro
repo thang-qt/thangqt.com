@@ -5,7 +5,7 @@ import { Icon } from 'astro-icon/components';
 
 <Layout
   title="Chat - ThangQT"
-  description="A tiny fake LLM chat app for the desktop."
+  description="A tiny OpenAI-compatible chat app for the desktop."
   desktopTitle="Chat"
 >
   <section class="col-content llm-chat-app" data-window-title="Chat" data-llm-chat>
@@ -43,6 +43,7 @@ import { Icon } from 'astro-icon/components';
                 autocomplete="off"
                 data-llm-chat-setting="apiKey"
               />
+              <small>Stored locally in this browser; only sent to your configured endpoint.</small>
             </label>
             <label>
               <span>Model</span>

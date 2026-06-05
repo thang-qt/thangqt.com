@@ -12,10 +12,7 @@ const files = {
     children: {
       'disclaimer.txt': {
         type: 'file',
-        content: [
-          "Opinions here are not mine. They are Dot's.",
-          'Or maybe they are for some of them.',
-        ],
+        content: ["Opinions here are not mine. They are Dot's.", 'Or maybe some of them are.'],
       },
       'watch-list.txt': {
         type: 'file',
@@ -53,7 +50,7 @@ const files = {
           '',
           'Several hours later:',
           'Okay, so let us continue.',
-          'Today subject is Go generics.',
+          "Today's subject is Go generics.",
           'Okay, see, that is gonna be totally generic and boring.',
           'Let us just stop procrastinating and focus on prep for the exam.',
           '',
@@ -99,7 +96,7 @@ const files = {
           'Also, who just casually drops into a river and knows how to swim?',
           'Propaganda detected.',
           '',
-          'Okay okay, now I get it. It gets me floating now.',
+          'Okay okay, now I get it. I can float now.',
           'Wait, why do my legs keep sinking while I am grabbing for air lol.',
           '',
           'Just wait. I am gonna do it someday.',
@@ -138,13 +135,13 @@ const files = {
               'Nah, mine is more innovative and gonna be making bank.',
               '',
               'A few nights and several months later:',
-              'Okay cool, it is fucking working now.',
+              'Okay cool, it is finally working now.',
               'I am so brilliant.',
               'Just gonna deploy this.',
               '',
               'Okay, deployed. I am so happy.',
               'Okay, so just need to find users.',
-              'Pff, marketing is for suckers.',
+              'Pff, marketing is for people with meetings.',
               'Mine is cool, just gonna put it on Google and users will find their way.',
               '',
               'Hey, I got this totally cool project idea.',
@@ -323,7 +320,7 @@ const files = {
           },
           'api-key-backup.txt': {
             type: 'file',
-            content: ['u naughty.', 'do not go around looking for people private secrets.'],
+            content: ['u naughty.', "do not go around looking for people's private secrets."],
           },
           'do-not-cat.txt': {
             type: 'file',
@@ -391,7 +388,9 @@ export function getHelpLines(upgraded = false) {
     '  clear             Clear the terminal',
     '  connect           Configure Dot provider credentials',
     '  config            Show Dot connection status',
-    '  upgrade           Invite Dot to handle unknown commands',
-    upgraded ? '' : 'Tip: this shell is intentionally tiny. `upgrade` makes it weirder.',
+    '  upgrade           Let Dot drive the shell',
+    upgraded
+      ? 'Tip: Dot is driving now. Built-ins may get weird.'
+      : 'Tip: this shell is intentionally tiny. `upgrade` makes it weirder.',
   ].filter(Boolean);
 }
