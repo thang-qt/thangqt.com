@@ -12,6 +12,8 @@ function initTerminalRoot(root) {
   const input = root.querySelector('[data-terminal-input]');
   if (!(form instanceof HTMLFormElement) || !(input instanceof HTMLInputElement)) return;
 
+  requestAnimationFrame(() => input.focus({ preventScroll: true }));
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const command = input.value;
