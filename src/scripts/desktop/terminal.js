@@ -1,12 +1,31 @@
+import { showDesktopNotification } from './notifications.js';
 import { runCommand } from './terminal/commands.js';
 import { syncPrompt } from './terminal/dom.js';
 import { getState, navigateCommandHistory, rememberCommand } from './terminal/state.js';
+
+const TERMINAL_CAT_WARNING_KEY = 'desktop-terminal-cat-warning-shown';
+
+function showTerminalCatWarning() {
+  try {
+    if (sessionStorage.getItem(TERMINAL_CAT_WARNING_KEY) === 'true') return;
+    sessionStorage.setItem(TERMINAL_CAT_WARNING_KEY, 'true');
+  } catch {}
+
+  window.setTimeout(() => {
+    showDesktopNotification({
+      title: 'Terminal safety notice',
+      message: 'A dangerous cat is contained somewhere in this filesystem. Do not release it.',
+      duration: 5200,
+    });
+  }, 650);
+}
 
 function initTerminalRoot(root) {
   if (!(root instanceof HTMLElement) || root.dataset.terminalReady === 'true') return;
   root.dataset.terminalReady = 'true';
   getState(root);
   syncPrompt(root);
+  showTerminalCatWarning();
 
   const form = root.querySelector('[data-terminal-form]');
   const input = root.querySelector('[data-terminal-input]');
