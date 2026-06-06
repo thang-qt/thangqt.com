@@ -1,0 +1,81 @@
+.desktop-cat-incident {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  pointer-events: none;
+}
+
+.desktop-cat-incident::before {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at center, rgba(0, 0, 0, 0.16), rgba(0, 0, 0, 0.42)), rgba(0, 0, 0, 0.2);
+  backdrop-filter: saturate(0.75) brightness(0.78);
+  content: '';
+  opacity: 0;
+  animation: cat-incident-dim 4.45s ease-in-out both;
+}
+
+.desktop-cat-incident__stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.desktop-cat-incident__nyan {
+  display: block;
+  width: min(82vw, 56rem);
+  height: auto;
+  image-rendering: pixelated;
+  transform: scale(0.42) translateX(-135vw) rotate(-4deg);
+  animation: cat-incident-nyan-flight 4.45s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+@keyframes cat-incident-dim {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  18%,
+  78% {
+    opacity: 1;
+  }
+}
+
+@keyframes cat-incident-nyan-flight {
+  0% {
+    transform: scale(0.42) translateX(-135vw) rotate(-4deg);
+    opacity: 0;
+  }
+
+  16% {
+    opacity: 1;
+  }
+
+  43%,
+  62% {
+    transform: scale(1) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.62) translateX(135vw) rotate(5deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop-cat-incident::before {
+    opacity: 1;
+    animation: none;
+  }
+
+  .desktop-cat-incident__nyan {
+    width: min(76vw, 42rem);
+    transform: none;
+    animation: none;
+  }
+}

@@ -18,6 +18,14 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function triggerDoNotCatIncident() {
+  window.dispatchEvent(
+    new CustomEvent('desktop:easter-egg', {
+      detail: { id: 'do-not-cat' },
+    }),
+  );
+}
+
 function runBasicCommand(root, args) {
   const state = getState(root);
   const [name, target] = args;
@@ -51,6 +59,7 @@ function runBasicCommand(root, args) {
     const node = getNode(path);
     if (!node) return [`cat: ${target}: No such file or directory`];
     if (node.type !== 'file') return [`cat: ${target}: Is a directory`];
+    if (path === '~/suspicious/do-not-cat.txt') triggerDoNotCatIncident();
     return node.content;
   }
 

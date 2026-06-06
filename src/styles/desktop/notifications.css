@@ -1,0 +1,75 @@
+.desktop-notifications {
+  position: fixed;
+  top: 64px;
+  right: clamp(1rem, 4vw, 2rem);
+  z-index: 3100;
+  display: grid;
+  gap: 0.55rem;
+  width: min(22rem, calc(100vw - 2rem));
+  pointer-events: none;
+  font-family: var(--font-mono);
+  color: var(--wm-ink);
+}
+
+.desktop-notification {
+  display: grid;
+  gap: 0.18rem;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid var(--wm-border);
+  border-radius: var(--wm-window-radius);
+  background: var(--wm-chrome);
+  box-shadow: var(--wm-shadow);
+  animation: desktop-notification-in 180ms ease-out both;
+}
+
+.desktop-notification strong {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.desktop-notification span {
+  color: var(--wm-muted);
+  font-size: 0.74rem;
+}
+
+.desktop-notification.is-leaving {
+  animation: desktop-notification-out 220ms ease-in both;
+}
+
+@keyframes desktop-notification-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.4rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes desktop-notification-out {
+  to {
+    opacity: 0;
+    transform: translateY(-0.35rem) scale(0.98);
+  }
+}
+
+@media (max-width: 640px) {
+  .desktop-notifications {
+    top: calc(56px + env(safe-area-inset-top, 0px));
+    right: 0;
+    left: 0;
+    width: auto;
+    padding-inline: max(0.75rem, env(safe-area-inset-left, 0px))
+      max(0.75rem, env(safe-area-inset-right, 0px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop-notification,
+  .desktop-notification.is-leaving {
+    animation: none;
+  }
+}
