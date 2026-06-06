@@ -191,7 +191,6 @@ src/scripts/desktop/terminal/
 
 ```txt
 src/config/desktop.ts
-src/config/desktop-apps.md
 ```
 
 Desktop app registry, pinned menu items, profile data, theme/background options, and app window specs live here.
