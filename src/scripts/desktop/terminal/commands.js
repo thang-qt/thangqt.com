@@ -1,3 +1,4 @@
+import { FUN_FACT_CODE } from '../challengeConstants.js';
 import { escapeHtml } from '../dom.js';
 import { readStoredSettings } from '../llm/settings.js';
 import { openInternalHref } from '../router.js';
@@ -26,6 +27,66 @@ function triggerDoNotCatIncident() {
   );
 }
 
+function getChallengeLines() {
+  window.dispatchEvent(new CustomEvent('desktop:challenge-activate'));
+
+  return [
+    'CHALLENGE MODE',
+    '',
+    'Find:',
+    '1. the hidden command',
+    '2. the secret code that unlocks it',
+    '',
+    'Clue:',
+    'Dotfiles are shy. The desktop is not.',
+    '',
+    'Try poking around `~/suspicious`.',
+  ];
+}
+
+function getIncidentReportLines() {
+  return [
+    'INCIDENT REPORT UNLOCKED',
+    '',
+    'Subject: small Thang vs household electrical infrastructure',
+    'Status: infrastructure lost immediately',
+    '',
+    'Fun fact:',
+    'When I was little, I watched too many cartoons, imagined myself as a superhero,',
+    'and once poked an iron stick into an electrical outlet.',
+    '',
+    'Magically, the whole house electricity system shut down instantly.',
+    '',
+    'Conclusion:',
+    '- terrible electrical engineer',
+    '- excellent chaos testing intern',
+    '- learned that superpowers and wall sockets are not friends',
+  ];
+}
+
+function unlockIncidentReport(code) {
+  if (!code) {
+    return [
+      'incident-report: missing unlock code',
+      'Hint: the code is where operating systems confess their identity.',
+    ];
+  }
+
+  if (code.trim().toUpperCase() !== FUN_FACT_CODE) {
+    return ['incident-report: invalid code', 'The childhood incident remains classified.'];
+  }
+
+  window.dispatchEvent(new CustomEvent('desktop:challenge-complete'));
+  return getIncidentReportLines();
+}
+
+function parseLsArgs(args, cwd) {
+  const options = args.slice(1);
+  const all = options.includes('-a') || options.includes('--all');
+  const target = options.find((option) => !option.startsWith('-')) || cwd;
+  return { all, target };
+}
+
 function runBasicCommand(root, args) {
   const state = getState(root);
   const [name, target] = args;
@@ -34,13 +95,16 @@ function runBasicCommand(root, args) {
   if (name === 'pwd') return [state.cwd];
   if (name === 'config') return getDotConfigStatus();
   if (name === 'connect' || name === 'configure') return configureDot(root);
+  if (name === 'challenge') return getChallengeLines();
+  if (name === 'incident-report') return unlockIncidentReport(target);
 
   if (name === 'ls') {
-    const path = normalizePath(state.cwd, target || state.cwd);
+    const { all, target: lsTarget } = parseLsArgs(args, state.cwd);
+    const path = normalizePath(state.cwd, lsTarget);
     const node = getNode(path);
-    if (!node) return [`ls: ${target}: No such file or directory`];
-    if (node.type !== 'dir') return [target || path];
-    return formatList(node);
+    if (!node) return [`ls: ${lsTarget}: No such file or directory`];
+    if (node.type !== 'dir') return [lsTarget || path];
+    return formatList(node, { all });
   }
 
   if (name === 'cd') {

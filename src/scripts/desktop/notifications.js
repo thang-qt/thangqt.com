@@ -16,9 +16,53 @@ function getNotificationHost() {
   return host;
 }
 
+function removeNotification(notification) {
+  notification.classList.add('is-leaving');
+  window.setTimeout(() => notification.remove(), 240);
+}
+
+function appendNotificationText(notification, { title, message }) {
+  if (title) {
+    const titleNode = document.createElement('strong');
+    titleNode.textContent = title;
+    notification.append(titleNode);
+  }
+
+  if (message) {
+    const messageNode = document.createElement('span');
+    messageNode.textContent = message;
+    notification.append(messageNode);
+  }
+}
+
+function appendNotificationActions(notification, actions = []) {
+  const validActions = actions.filter((action) => action?.label);
+  if (validActions.length === 0) return;
+
+  const actionList = document.createElement('div');
+  actionList.className = 'desktop-notification__actions';
+
+  validActions.forEach((action) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = action.label;
+    button.addEventListener('click', () => {
+      if (typeof action.onClick === 'function') action.onClick();
+      if (action.event) {
+        window.dispatchEvent(new CustomEvent(action.event, { detail: action.detail || {} }));
+      }
+      if (action.dismiss !== false) removeNotification(notification);
+    });
+    actionList.append(button);
+  });
+
+  notification.append(actionList);
+}
+
 export function showDesktopNotification({
   title,
   message,
+  actions = [],
   duration = DEFAULT_NOTIFICATION_DURATION,
 } = {}) {
   if (!title && !message) return null;
@@ -29,19 +73,16 @@ export function showDesktopNotification({
   notification.dataset.desktopNotification = 'true';
   notification.setAttribute('role', 'status');
 
-  notification.innerHTML = `
-    ${title ? `<strong>${title}</strong>` : ''}
-    ${message ? `<span>${message}</span>` : ''}
-  `;
+  appendNotificationText(notification, { title, message });
+  appendNotificationActions(notification, actions);
 
   host.append(notification);
 
-  const leave = () => notification.classList.add('is-leaving');
-  const remove = () => notification.remove();
-  const leaveAfter = Math.max(0, duration - 260);
-
-  window.setTimeout(leave, leaveAfter);
-  window.setTimeout(remove, duration);
+  if (duration !== Number.POSITIVE_INFINITY) {
+    const leaveAfter = Math.max(0, duration - 260);
+    window.setTimeout(() => notification.classList.add('is-leaving'), leaveAfter);
+    window.setTimeout(() => notification.remove(), duration);
+  }
 
   return notification;
 }

@@ -88,6 +88,16 @@
   border-left: 1px solid var(--wm-border);
 }
 
+.desktop-menu__challenge {
+  background: var(--wm-accent-soft);
+  color: var(--wm-ink);
+  font-weight: 700;
+}
+
+.desktop-menu__challenge[hidden] {
+  display: none !important;
+}
+
 .desktop-stage {
   position: relative;
   z-index: 1;

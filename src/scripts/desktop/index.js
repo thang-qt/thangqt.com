@@ -1,5 +1,6 @@
 import { initAppWindowControls } from './appWindowControls.js';
 import { initChatApp } from './chat.js';
+import { initDesktopChallenge } from './challenge.js';
 import { initDesktopClock } from './clock.js';
 import { initContextMenus } from './contextMenu.js';
 import { initDisplayControls } from './displayControls.js';
@@ -31,6 +32,7 @@ function initDesktop() {
   initContextMenus();
   initDesktopNotifications();
   initEasterEggs();
+  initDesktopChallenge();
   initLauncher();
   initShortcutHelper();
   initChatApp();

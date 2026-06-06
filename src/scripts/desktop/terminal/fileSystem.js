@@ -326,11 +326,26 @@ const files = {
             type: 'file',
             content: ['You had one job.', 'The file is disappointed but not surprised.'],
           },
+          '.cache-index': {
+            type: 'file',
+            content: [
+              'CACHE INDEX',
+              '',
+              'Recovered entry:',
+              '  incident-report',
+              '',
+              'Needs the system codename to unlock.',
+              'The code is not in the filesystem.',
+              'Try the place where operating systems confess their identity.',
+            ],
+          },
           '.totally-not-a-secret': {
             type: 'file',
             content: [
               'The secret is that there is no secret.',
               'This has not stopped the folder from acting mysterious.',
+              '',
+              'Try `.cache-index` if you want the useful secret.',
             ],
           },
         },
@@ -370,8 +385,9 @@ export function getNode(path) {
   return node || null;
 }
 
-export function formatList(node) {
+export function formatList(node, { all = false } = {}) {
   return Object.entries(node.children || {})
+    .filter(([name]) => all || !name.startsWith('.'))
     .map(([name, child]) => (child.type === 'dir' ? `${name}/` : name))
     .sort((a, b) => a.localeCompare(b));
 }
@@ -381,10 +397,11 @@ export function getHelpLines(upgraded = false) {
     'Available commands:',
     '  help              Show this help',
     '  pwd               Print current directory',
-    '  ls [dir]          List files',
+    '  ls [-a] [dir]     List files',
     '  cd [dir]          Change directory',
     '  cat <file>        Read a file',
     '  open <app>        Open projects, writing, links, settings, or chat',
+    '  challenge         Start the hidden-command challenge',
     '  clear             Clear the terminal',
     '  connect           Configure Dot provider credentials',
     '  config            Show Dot connection status',

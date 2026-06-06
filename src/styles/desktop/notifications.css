@@ -15,6 +15,7 @@
   display: grid;
   gap: 0.18rem;
   padding: 0.72rem 0.85rem;
+  pointer-events: auto;
   border: 1px solid var(--wm-border);
   border-radius: var(--wm-window-radius);
   background: var(--wm-chrome);
@@ -31,6 +32,31 @@
 .desktop-notification span {
   color: var(--wm-muted);
   font-size: 0.74rem;
+}
+
+.desktop-notification__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.42rem;
+}
+
+.desktop-notification__actions button {
+  padding: 0.34rem 0.55rem;
+  border: 1px solid var(--wm-border);
+  border-radius: calc(var(--wm-window-radius) - 3px);
+  background: var(--wm-surface);
+  color: var(--wm-ink);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.desktop-notification__actions button:hover,
+.desktop-notification__actions button:focus-visible {
+  background: var(--wm-accent);
+  color: var(--wm-accent-ink, var(--wm-ink));
 }
 
 .desktop-notification.is-leaving {
@@ -64,6 +90,14 @@
     width: auto;
     padding-inline: max(0.75rem, env(safe-area-inset-left, 0px))
       max(0.75rem, env(safe-area-inset-right, 0px));
+  }
+
+  .desktop-notification__actions {
+    display: grid;
+  }
+
+  .desktop-notification__actions button {
+    width: 100%;
   }
 }
 

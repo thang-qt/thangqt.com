@@ -90,6 +90,26 @@ import { desktopBackgroundPatterns, desktopThemePacks } from '../config/desktop'
         </div>
       </section>
 
+      <!-- Section: Challenge Unlock -->
+      <section class="settings-panel settings-challenge-unlock" data-challenge-code hidden>
+        <div class="settings-captcha-box">
+          <label class="settings-captcha">
+            <span class="settings-captcha__control">
+              <input type="checkbox" data-challenge-captcha />
+              <span class="settings-captcha__spinner" aria-hidden="true"></span>
+            </span>
+            <span>I am not a superhero near an outlet</span>
+          </label>
+          <div class="settings-captcha-box__brand" aria-hidden="true">
+            <span>⚡</span>
+            <small>reCAPTCHA-ish</small>
+          </div>
+        </div>
+        <p class="settings-unlock-code" data-challenge-unlock hidden>
+          Unlock code: <code>FUSE-404</code>
+        </p>
+      </section>
+
       <!-- Section: Credits -->
       <section class="settings-panel settings-about" aria-labelledby="settings-credits">
         <div class="settings-panel-head">
