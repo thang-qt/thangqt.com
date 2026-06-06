@@ -2,6 +2,7 @@ import { addGlobalListenerOnce } from './events.js';
 import { showDesktopNotification } from './notifications.js';
 import { openInternalHref } from './router.js';
 import { runCommand } from './terminal/commands.js';
+import { isMobileViewport } from './viewport.js';
 
 const CHALLENGE_PROMPT_KEY = 'desktop-challenge-prompted';
 const CHALLENGE_ACTIVE_KEY = 'desktop-challenge-active';
@@ -33,7 +34,12 @@ function safeRemove(storage, key) {
   } catch {}
 }
 
+function canExposeChallenge() {
+  return !isMobileViewport();
+}
+
 function isChallengeActive() {
+  if (!canExposeChallenge()) return false;
   if (safeGet(sessionStorage, CHALLENGE_ACTIVE_KEY) !== 'true') return false;
   return getChallengeRemainingMs() > 0;
 }
@@ -157,6 +163,7 @@ function updateChallengeTimer() {
 }
 
 function startChallengeTimer() {
+  if (!canExposeChallenge()) return;
   safeSet(sessionStorage, CHALLENGE_PROMPT_KEY, 'true');
   safeSet(sessionStorage, CHALLENGE_ACTIVE_KEY, 'true');
   safeSet(sessionStorage, CHALLENGE_ENDS_AT_KEY, String(Date.now() + CHALLENGE_DURATION));
@@ -170,6 +177,7 @@ function getTerminalRoot() {
 }
 
 async function openTerminalForChallenge() {
+  if (!canExposeChallenge()) return;
   startChallengeTimer();
   await openInternalHref('/terminal', 'Terminal', { replaceExisting: true });
 
@@ -191,6 +199,7 @@ function isPromptEligible() {
 }
 
 function maybeShowChallengePrompt() {
+  if (!canExposeChallenge()) return;
   if (safeGet(localStorage, CHALLENGE_COMPLETE_KEY) === 'true') return;
   if (isChallengeActive()) return;
   if (safeGet(sessionStorage, CHALLENGE_PROMPT_KEY) === 'true') return;
@@ -213,6 +222,7 @@ function maybeShowChallengePrompt() {
 }
 
 function trackChallengeInteraction() {
+  if (!canExposeChallenge()) return;
   if (safeGet(localStorage, CHALLENGE_COMPLETE_KEY) === 'true') return;
   if (isChallengeActive()) return;
   if (safeGet(sessionStorage, CHALLENGE_PROMPT_KEY) === 'true') return;
@@ -223,6 +233,7 @@ function trackChallengeInteraction() {
 }
 
 function markPromptReady() {
+  if (!canExposeChallenge()) return;
   safeSet(sessionStorage, CHALLENGE_PROMPT_READY_KEY, 'true');
   maybeShowChallengePrompt();
 }

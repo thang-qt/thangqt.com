@@ -2,6 +2,7 @@ import { FUN_FACT_CODE } from '../challengeConstants.js';
 import { escapeHtml } from '../dom.js';
 import { readStoredSettings } from '../llm/settings.js';
 import { openInternalHref } from '../router.js';
+import { isMobileViewport } from '../viewport.js';
 import { configureDot, handleConnectInput } from './connect.js';
 import { appendLine, appendOutput, scrollToTerminalBottom, startDots, syncPrompt } from './dom.js';
 import { askDot, getDotConfigStatus } from './dot.js';
@@ -91,7 +92,7 @@ function runBasicCommand(root, args) {
   const state = getState(root);
   const [name, target] = args;
 
-  if (name === 'help') return getHelpLines(state.upgraded);
+  if (name === 'help') return getHelpLines(state.upgraded, { showChallenge: !isMobileViewport() });
   if (name === 'pwd') return [state.cwd];
   if (name === 'config') return getDotConfigStatus();
   if (name === 'connect' || name === 'configure') return configureDot(root);

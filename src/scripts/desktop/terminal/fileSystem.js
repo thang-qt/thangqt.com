@@ -392,7 +392,7 @@ export function formatList(node, { all = false } = {}) {
     .sort((a, b) => a.localeCompare(b));
 }
 
-export function getHelpLines(upgraded = false) {
+export function getHelpLines(upgraded = false, { showChallenge = true } = {}) {
   return [
     'Available commands:',
     '  help              Show this help',
@@ -401,7 +401,7 @@ export function getHelpLines(upgraded = false) {
     '  cd [dir]          Change directory',
     '  cat <file>        Read a file',
     '  open <app>        Open projects, writing, links, settings, or chat',
-    '  challenge         Start the hidden-command challenge',
+    showChallenge && '  challenge         Start the hidden-command challenge',
     '  clear             Clear the terminal',
     '  connect           Configure Dot provider credentials',
     '  config            Show Dot connection status',
