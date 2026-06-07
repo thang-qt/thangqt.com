@@ -5,7 +5,10 @@ function isExternalHttpLink(anchor) {
 
   try {
     const url = new URL(anchor.href, window.location.href);
-    return (url.protocol === 'http:' || url.protocol === 'https:') && url.origin !== window.location.origin;
+    return (
+      (url.protocol === 'http:' || url.protocol === 'https:') &&
+      url.origin !== window.location.origin
+    );
   } catch {
     return false;
   }
