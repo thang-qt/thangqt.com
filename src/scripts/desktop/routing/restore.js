@@ -1,11 +1,12 @@
 import { setWindowTitle } from '../dom.js';
+import { getDesktopPrefs } from '../prefs.js';
 import { isMobileViewport } from '../viewport.js';
 import { applySavedWindowRect, getSavedWindowStates } from '../windowState.js';
 import { initWindowManager } from '../windowManager.js';
 import { openInternalHref } from './open.js';
 
 export async function restoreWindowState() {
-  if (isMobileViewport()) return;
+  if (isMobileViewport() || !getDesktopPrefs().restoreWindows) return;
 
   const states = getSavedWindowStates();
   if (states.length === 0) return;

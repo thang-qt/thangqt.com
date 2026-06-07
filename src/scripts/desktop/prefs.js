@@ -5,6 +5,7 @@ const defaultPrefs = {
   mode: 'light',
   pack: 'bloom',
   pattern: 'dots',
+  restoreWindows: true,
 };
 
 const legacyPatternMap = { tiles: 'grid', rings: 'dots' };
@@ -37,6 +38,7 @@ export function getDesktopPrefs() {
     mode: normalizeMode(safeRead(storageKeys.prefsMode, defaultPrefs.mode)),
     pack,
     pattern: normalizePattern(safeRead(storageKeys.prefsPattern, defaultPrefs.pattern)),
+    restoreWindows: safeRead(storageKeys.prefsRestoreWindows, 'true') !== 'false',
   };
 }
 
@@ -46,6 +48,10 @@ export function applyDesktopPrefs(nextPrefs = {}) {
     mode: normalizeMode(nextPrefs.mode || current.mode),
     pack: normalizePack(nextPrefs.pack || current.pack),
     pattern: normalizePattern(nextPrefs.pattern || current.pattern),
+    restoreWindows:
+      typeof nextPrefs.restoreWindows === 'boolean'
+        ? nextPrefs.restoreWindows
+        : current.restoreWindows,
   };
 
   document.documentElement.dataset.colorMode = resolveColorMode(prefs.mode);
@@ -55,6 +61,7 @@ export function applyDesktopPrefs(nextPrefs = {}) {
   safeWrite(storageKeys.prefsMode, prefs.mode);
   safeWrite(storageKeys.prefsPack, prefs.pack);
   safeWrite(storageKeys.prefsPattern, prefs.pattern);
+  safeWrite(storageKeys.prefsRestoreWindows, String(prefs.restoreWindows));
 
   window.dispatchEvent(
     new CustomEvent('desktop:prefs-change', {
@@ -65,7 +72,7 @@ export function applyDesktopPrefs(nextPrefs = {}) {
 }
 
 export function syncSettingsControls() {
-  const { mode, pack, pattern } = getDesktopPrefs();
+  const { mode, pack, pattern, restoreWindows } = getDesktopPrefs();
   document.querySelectorAll('[data-settings-mode]').forEach((input) => {
     input.checked = input.value === mode;
   });
@@ -75,6 +82,9 @@ export function syncSettingsControls() {
   document.querySelectorAll('[data-settings-pattern]').forEach((input) => {
     input.checked = input.value === pattern;
   });
+  document.querySelectorAll('[data-settings-restore-windows]').forEach((input) => {
+    input.checked = restoreWindows;
+  });
 }
 
 export function initSettingsControls() {
@@ -83,6 +93,9 @@ export function initSettingsControls() {
     if (target?.matches?.('[data-settings-mode]')) applyDesktopPrefs({ mode: target.value });
     if (target?.matches?.('[data-settings-pack]')) applyDesktopPrefs({ pack: target.value });
     if (target?.matches?.('[data-settings-pattern]')) applyDesktopPrefs({ pattern: target.value });
+    if (target?.matches?.('[data-settings-restore-windows]')) {
+      applyDesktopPrefs({ restoreWindows: target.checked });
+    }
   });
 
   addGlobalListenerOnce(

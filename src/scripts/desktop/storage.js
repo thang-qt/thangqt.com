@@ -2,6 +2,7 @@ export const storageKeys = {
   prefsMode: 'desktop-color-mode',
   prefsPack: 'desktop-theme-pack',
   prefsPattern: 'desktop-bg-pattern',
+  prefsRestoreWindows: 'desktop-restore-windows',
   windowState: 'desktop-window-state',
   topZ: 'desktop-window-top-z',
 };
