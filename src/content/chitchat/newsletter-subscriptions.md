@@ -19,4 +19,6 @@ One straight-up sent me newsletters with no unsubscribe option. What the hell?
 
 The other technically had an unsubscribe option, but required me to call their hotline.
 
+And that one is even more upsetting because it is one of my banks. I cannot just block the sender unless I want to risk missing actual financial emails.
+
 Like. Oh my god.
