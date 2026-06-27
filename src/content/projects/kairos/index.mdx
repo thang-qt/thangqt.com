@@ -1,7 +1,7 @@
 ---
 title: Kairos
-year: "2026-03"
-description: Lightweight OSS chat client for hosted LLMs
+year: "2026-06"
+description: Lightweight OSS chat client for hosted LLMs that I use daily
 cover: ./chat-default.png
 themeColor: "#dfe9ff"
 ---
@@ -9,12 +9,13 @@ themeColor: "#dfe9ff"
 import ContentFigure from '../../../components/ContentFigure.astro';
 import ProjectLink from '../../../components/ProjectLink.astro';
 import focusedChat from './focused-chat-with-right-navigator.png';
+import searchToolsChat from './search-tools-chat.png';
 
 ## Why?
 
 Because I want one single chat app for every model and every conversation.
 
-But aren't there already thousands of apps like this out there? That's true. I used Open WebUI for a long time, but it's really heavy on both the client side and server side. It's bundled with local model support, so that makes sense. But I don't need all that. I just need a client that stores all my conversations and lets me chat with models via API.
+But aren't there already thousands of apps like this out there? That's true. I used Open WebUI for a long time, but it's really heavy on both the client side and server side. It's bundled with local model support, so that makes sense. But I don't need all that. I just need a client that stores all my conversations and lets me chat with hosted models via API.
 
 There are some that resemble this, but they are either not open source, too feature-heavy, or I just don't like the UI.
 
@@ -30,7 +31,17 @@ I came across [webclaw](https://github.com/ibelick/webclaw), which is a simple c
 
 ## Current state
 
-It supports OpenAI-compatible providers. Only chat completions are implemented right now, so there is no tool use yet, which is indeed a flaw. However, I don't have time for that yet, and the current state is already good enough for me most of the time.
+I kept working on Kairos after the first version, and it has reached a usable daily state for me. It still stays intentionally lightweight: a chat client for hosted LLM APIs, not a full local-model platform.
+
+The important change is tool calling. Kairos now has search tools and math tools, which is enough for most of the questions I ask day to day. Search covers the cases where the model needs fresh or external information, and math tools cover the small calculations and exact checks that language models are bad at doing from pure text.
+
+That combination makes it good enough that I actually use it daily now, instead of only treating it as an experiment.
+
+<ContentFigure
+  src={searchToolsChat}
+  alt="Kairos chat with search tools enabled"
+  caption="A newer Kairos chat with search tools enabled. Tool calling made the app much more useful for everyday questions."
+/>
 
 <ProjectLink
   links={[

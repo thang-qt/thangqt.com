@@ -1,0 +1,55 @@
+---
+title: Respond
+year: "2026-06"
+description: Structured, anonymous, turn-based 1v1 debates
+cover: ./homepage.png
+themeColor: "#f3efe7"
+---
+
+import ContentFigure from '../../../components/ContentFigure.astro';
+import ProjectLink from '../../../components/ProjectLink.astro';
+import homepage from './homepage.png';
+import debatePage from './debate-page.png';
+import discussionSection from './discussion-section.png';
+
+Respond is a web app for structured 1v1 debates. It tries to make online disagreement slower, fairer, and more focused: two people, one topic, equal turns, temporary anonymity, clear endings, and discussion only after the debate is over.
+
+I built it around the idea that most online argument is shaped by bad incentives. Social feeds reward speed, status, outrage, and pile-ons. Respond goes in the other direction: no crowd interruptions during an active debate, no public identity pressure while arguments are being made, and no endless threads that never resolve.
+
+## How it works
+
+- Start a debate with a topic, opening argument, tags, and time mode.
+- Someone joins or is invited to take the other side.
+- Both sides alternate turns under anonymous debate IDs.
+- The debate ends by concession, draw, resignation, expiry, or walkover.
+- After it ends, comments open for post-debate discussion.
+
+## What is implemented
+
+The core product is mostly there. Debate creation, joining, turn progress, timers, endings, exploration, user profiles, invites, notifications, comments, ratings, and basic moderation are all implemented enough for basic use.
+
+There is also an invite/challenge flow, a challenge lobby, debate and user explore pages, search, tag follows, user blocking, realtime updates, report handling, and admin moderation screens.
+
+I stopped working on it because I lost the motivation to keep improving it, but the main product shape exists and works.
+
+## Screenshots
+
+<ContentFigure
+  src={homepage}
+  alt="Respond homepage"
+  caption="Homepage introducing the idea: disagree well, with structure instead of pile-ons."
+/>
+
+<ContentFigure
+  src={debatePage}
+  alt="Respond debate page"
+  caption="The debate page keeps the active exchange focused on two sides taking turns."
+/>
+
+<ContentFigure
+  src={discussionSection}
+  alt="Respond post-debate discussion section"
+  caption="Discussion opens after the debate concludes, so spectators do not interrupt the active debate."
+/>
+
+<ProjectLink href="https://github.com/thang-qt/Respond" label="View on GitHub" />
