@@ -61,4 +61,24 @@ const links = defineCollection({
   }),
 });
 
-export const collections = { writing, projects, links };
+const chitchat = defineCollection({
+  type: 'content',
+  schema: z.object({
+    date: z.date(),
+    tags: z.array(z.string()).optional().default([]),
+    image: z.string().optional(),
+    imageAlt: z.string().optional(),
+    gallery: z
+      .array(
+        z.object({
+          src: z.string(),
+          alt: z.string().optional(),
+        }),
+      )
+      .optional()
+      .default([]),
+    draft: z.boolean().optional().default(false),
+  }),
+});
+
+export const collections = { writing, projects, links, chitchat };

@@ -1,0 +1,195 @@
+.chitchat-back {
+  display: inline-block;
+  margin: 0 0 0.85rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  color: color-mix(in srgb, var(--wm-ink) 68%, transparent);
+  text-decoration: none;
+}
+
+.chitchat-back:hover {
+  color: var(--wm-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.chitchat-feed {
+  display: grid;
+  gap: 0;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.chitchat-post {
+  container-type: inline-size;
+  scroll-margin-top: 5rem;
+  padding: 1rem 0;
+  border-bottom: 1px dotted var(--wm-border);
+}
+
+.chitchat-post:first-child {
+  padding-top: 0;
+}
+
+.chitchat-post:target {
+  background: color-mix(in srgb, var(--wm-accent-soft) 16%, transparent);
+}
+
+.chitchat-post__time,
+.chitchat-tags,
+.chitchat-actions {
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+}
+
+.chitchat-post__time {
+  display: block;
+  width: fit-content;
+  margin-bottom: 0.45rem;
+  color: color-mix(in srgb, var(--wm-ink) 58%, transparent);
+  text-decoration: none;
+}
+
+.chitchat-post__time:hover {
+  color: var(--wm-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.chitchat-post__content {
+  max-width: 66ch;
+  margin: 0 0 0.65rem;
+}
+
+.chitchat-post__content > :first-child {
+  margin-top: 0;
+}
+
+.chitchat-post__content > :last-child {
+  margin-bottom: 0;
+}
+
+.chitchat-post__media {
+  overflow: hidden;
+  margin: 0.75rem 0 !important;
+  border: 1px solid var(--wm-border);
+  background:
+    linear-gradient(45deg, color-mix(in srgb, var(--wm-border) 12%, transparent) 25%, transparent 25%),
+    linear-gradient(-45deg, color-mix(in srgb, var(--wm-border) 12%, transparent) 25%, transparent 25%),
+    var(--wm-subtle);
+  background-position:
+    0 0,
+    0 8px;
+  background-size: 16px 16px;
+}
+
+.chitchat-post__media img {
+  display: block;
+  width: 100%;
+  max-height: 22rem;
+  object-fit: contain;
+}
+
+.chitchat-gallery {
+  column-count: 1;
+  column-gap: 0.35rem;
+  margin: 0.75rem 0;
+}
+
+@container (min-width: 28rem) {
+  .chitchat-gallery {
+    column-count: 2;
+  }
+}
+
+@container (min-width: 42rem) {
+  .chitchat-gallery {
+    column-count: 3;
+  }
+}
+
+.chitchat-gallery__item {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 0 0.35rem;
+  padding: 0;
+  break-inside: avoid;
+  border: 1px solid var(--wm-border);
+  background: var(--wm-subtle);
+  cursor: zoom-in;
+}
+
+.chitchat-gallery__item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chitchat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.45rem 0 0.65rem;
+  padding: 0;
+  color: color-mix(in srgb, var(--wm-ink) 58%, transparent);
+  list-style: none;
+}
+
+.chitchat-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.chitchat-actions button,
+.chitchat-actions a {
+  display: inline-flex;
+  gap: 0.28rem;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--wm-ink) 68%, transparent);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.chitchat-actions button:hover,
+.chitchat-actions a:hover {
+  color: var(--wm-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.chitchat-actions svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.chitchat-actions [data-chitchat-like][aria-pressed='true'] {
+  color: var(--wm-accent);
+}
+
+.chitchat-actions [data-chitchat-like][aria-pressed='true'] svg {
+  fill: currentColor;
+}
+
+.chitchat-actions [data-chitchat-like].is-popping svg {
+  animation: chitchat-like-pop 260ms ease-out;
+}
+
+@keyframes chitchat-like-pop {
+  0% {
+    transform: scale(1);
+  }
+  48% {
+    transform: scale(1.38) rotate(-8deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

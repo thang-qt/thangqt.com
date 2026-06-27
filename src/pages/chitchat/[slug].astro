@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import ChitchatFeed from '../../components/ChitchatFeed.astro';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const chitchats = (await getCollection('chitchat')).filter((post) => !post.data.draft);
+
+  return chitchats.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const description = post.body.split('\n').find((line) => line.trim().length > 0)?.trim() ?? 'Chitchat';
+---
+
+<Layout title="Chitchat" description={description}>
+  <a href="/chitchat" class="chitchat-back" data-window-link data-window-title="Chitchat">
+    ← all chitchat
+  </a>
+  <ChitchatFeed posts={[post]} />
+</Layout>

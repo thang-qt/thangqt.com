@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import ChitchatFeed from '../components/ChitchatFeed.astro';
+import PaginationNav from '../components/PaginationNav.astro';
+import Layout from '../layouts/Layout.astro';
+import { paginateItems } from '../utils/pagination';
+
+const CHITCHAT_PAGE_SIZE = 20;
+const chitchats = (await getCollection('chitchat'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const paginatedChitchats = paginateItems(chitchats, 1, CHITCHAT_PAGE_SIZE);
+---
+
+<Layout title="Chitchat" description="Small posts, links, music, and what I’m making.">
+  <ChitchatFeed posts={paginatedChitchats.items} />
+  {
+    paginatedChitchats.totalPages > 1 && (
+      <PaginationNav
+        basePath="/chitchat"
+        currentPage={paginatedChitchats.currentPage}
+        totalPages={paginatedChitchats.totalPages}
+        label="Chitchat pagination"
+      />
+    )
+  }
+</Layout>

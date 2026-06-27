@@ -1,6 +1,7 @@
 import { initAppWindowControls } from './appWindowControls.js';
 import { initChatApp } from './chat.js';
 import { initDesktopChallenge } from './challenge.js';
+import { initChitchatApp } from './chitchat.js';
 import { initDesktopClock } from './clock.js';
 import { initContextMenus } from './contextMenu.js';
 import { initDisplayControls } from './displayControls.js';
@@ -38,6 +39,7 @@ function initDesktop() {
   initLauncher();
   initShortcutHelper();
   initChatApp();
+  initChitchatApp();
   initTerminalApp();
   initAppWindowControls();
   syncSettingsControls();
@@ -52,6 +54,7 @@ document.addEventListener('astro:page-load', initDesktop);
 window.addEventListener('desktop:window-state-change', saveWindowState);
 window.addEventListener('desktop:prefs-change', initWindowManager);
 window.addEventListener('desktop:content-change', initChatApp);
+window.addEventListener('desktop:content-change', initChitchatApp);
 window.addEventListener('desktop:content-change', initTerminalApp);
 window.addEventListener('desktop:content-change', () => initExternalLinks());
 window.addEventListener('desktop:content-change', initAppWindowControls);

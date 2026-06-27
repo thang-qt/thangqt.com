@@ -20,6 +20,7 @@ export const desktopAppIcons = {
   about: 'ph:info',
   resume: 'ph:file-text',
   settings: 'ph:gear',
+  chitchat: 'ph:users-three',
   chat: 'ph:chat-circle',
   terminal: 'ph:terminal',
 };
@@ -86,6 +87,21 @@ export const desktopApps = [
       minHeight: 240,
       width: 'min(54rem, calc(100vw - 5rem))',
       height: 'min(44rem, calc(100dvh - 8rem))',
+    },
+  },
+  {
+    id: 'chitchat',
+    label: 'Chitchat',
+    href: '/chitchat',
+    icon: '◍',
+    iconName: desktopAppIcons.chitchat,
+    nav: true,
+    pinned: true,
+    window: {
+      minWidth: 340,
+      minHeight: 320,
+      width: 'min(46rem, calc(100vw - 5rem))',
+      height: 'min(50rem, calc(100dvh - 8rem))',
     },
   },
   {

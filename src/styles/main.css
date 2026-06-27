@@ -2,6 +2,7 @@
 @import './desktop/windowing.css';
 @import './pages/list-legacy.css';
 @import './pages/archives.css';
+@import './pages/chitchat.css';
 @import './desktop/chat.css';
 @import './pages/settings-home.css';
 @import './desktop/terminal.css';

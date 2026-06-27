@@ -8,6 +8,9 @@ import icon from 'astro-icon';
 export default defineConfig({
   site: 'https://thangqt.com',
   output: 'static',
+  redirects: {
+    '/writing/hometown': '/chitchat/hometown',
+  },
   prefetch: {
     defaultStrategy: 'hover',
     prefetchAll: true,
@@ -25,7 +28,9 @@ export default defineConfig({
           'file-text',
           'gear',
           'chat-circle',
+          'users-three',
           'terminal',
+          'heart',
           'paper-plane-tilt',
           'broom',
         ],

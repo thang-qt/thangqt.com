@@ -1,0 +1,88 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  posts: CollectionEntry<'chitchat'>[];
+}
+
+const { posts } = Astro.props;
+const formatter = new Intl.DateTimeFormat('en', {
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+---
+
+<ol class="chitchat-feed" aria-label="Chitchat feed">
+  {
+    await Promise.all(
+      posts.map(async (post) => {
+        const { Content } = await post.render();
+        const permalink = `/chitchat/${post.slug}`;
+        const absolutePermalink = new URL(permalink, Astro.site ?? Astro.url.origin).toString();
+        const commentHref = `mailto:thang@thangqt.com?subject=${encodeURIComponent(
+          `Re: Chitchat ${post.slug}`,
+        )}&body=${encodeURIComponent(`About this Chitchat post: ${absolutePermalink}`)}`;
+
+        return (
+          <li class="chitchat-post" id={post.slug}>
+            <article>
+              <a class="chitchat-post__time" href={permalink} data-window-link>
+                <time datetime={post.data.date.toISOString()}>{formatter.format(post.data.date)}</time>
+              </a>
+
+              <div class="chitchat-post__content">
+                <Content />
+              </div>
+
+              {post.data.image && (
+                <figure class="chitchat-post__media">
+                  <img src={post.data.image} alt={post.data.imageAlt ?? ''} loading="lazy" />
+                </figure>
+              )}
+
+              {post.data.gallery.length > 0 && (
+                <div class="chitchat-gallery" data-gallery-count={post.data.gallery.length}>
+                  {post.data.gallery.map((image, index) => (
+                    <a
+                      href={image.src}
+                      class="chitchat-gallery__item"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Open gallery image ${index + 1}`}
+                    >
+                      <img src={image.src} alt={image.alt ?? ''} loading="lazy" />
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {post.data.tags.length > 0 && (
+                <ul class="chitchat-tags" aria-label="Tags">
+                  {post.data.tags.map((tag) => <li>#{tag}</li>)}
+                </ul>
+              )}
+
+              <footer class="chitchat-actions" aria-label="Post actions">
+                <button type="button" aria-pressed="false" data-chitchat-like>
+                  <Icon name="ph:heart" />
+                  <span>Like</span>
+                </button>
+                <a href={commentHref}>
+                  <Icon name="ph:chat-circle" />
+                  <span>Comment</span>
+                </a>
+                <button type="button" data-chitchat-share={permalink}>
+                  <Icon name="ph:paper-plane-tilt" />
+                  <span>Share</span>
+                </button>
+              </footer>
+            </article>
+          </li>
+        );
+      }),
+    )
+  }
+</ol>
