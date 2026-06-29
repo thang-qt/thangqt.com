@@ -5,6 +5,7 @@ import { runCommand } from './terminal/commands.js';
 import { isMobileViewport } from './viewport.js';
 
 const CHALLENGE_PROMPT_KEY = 'desktop-challenge-prompted';
+const CHALLENGE_PROMPT_SEEN_KEY = 'desktop-challenge-prompt-seen';
 const CHALLENGE_ACTIVE_KEY = 'desktop-challenge-active';
 const CHALLENGE_COMPLETE_KEY = 'desktop-challenge-complete';
 const CHALLENGE_ENDS_AT_KEY = 'desktop-challenge-ends-at';
@@ -201,10 +202,12 @@ function isPromptEligible() {
 function maybeShowChallengePrompt() {
   if (!canExposeChallenge()) return;
   if (safeGet(localStorage, CHALLENGE_COMPLETE_KEY) === 'true') return;
+  if (safeGet(localStorage, CHALLENGE_PROMPT_SEEN_KEY) === 'true') return;
   if (isChallengeActive()) return;
   if (safeGet(sessionStorage, CHALLENGE_PROMPT_KEY) === 'true') return;
   if (!isPromptEligible()) return;
   safeSet(sessionStorage, CHALLENGE_PROMPT_KEY, 'true');
+  safeSet(localStorage, CHALLENGE_PROMPT_SEEN_KEY, 'true');
 
   showDesktopNotification({
     title: 'Are you down for some fun?',
