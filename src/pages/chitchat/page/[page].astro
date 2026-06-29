@@ -1,20 +1,16 @@
 ---
-import { getCollection } from 'astro:content';
 import ChitchatFeed from '../../../components/ChitchatFeed.astro';
 import PaginationNav from '../../../components/PaginationNav.astro';
 import Layout from '../../../layouts/Layout.astro';
+import { CHITCHAT_PAGE_SIZE, getMergedChitchatPosts } from '../../../utils/chitchat';
 import { getPaginationStaticPaths, paginateItems, parsePageParam } from '../../../utils/pagination';
 
-const CHITCHAT_PAGE_SIZE = 20;
-
 export async function getStaticPaths() {
-  const chitchats = (await getCollection('chitchat')).filter((post) => !post.data.draft);
-  return getPaginationStaticPaths(chitchats.length, 20);
+  const chitchats = await getMergedChitchatPosts();
+  return getPaginationStaticPaths(chitchats.length, CHITCHAT_PAGE_SIZE);
 }
 
-const chitchats = (await getCollection('chitchat'))
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const chitchats = await getMergedChitchatPosts();
 const currentPage = parsePageParam(Astro.params.page);
 const paginatedChitchats = paginateItems(chitchats, currentPage, CHITCHAT_PAGE_SIZE);
 ---

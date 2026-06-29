@@ -1,9 +1,9 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import { Icon } from 'astro-icon/components';
+import type { ChitchatFeedItem } from '../utils/chitchat';
 
 interface Props {
-  posts: CollectionEntry<'chitchat'>[];
+  posts: ChitchatFeedItem[];
 }
 
 const { posts } = Astro.props;
@@ -13,76 +13,147 @@ const formatter = new Intl.DateTimeFormat('en', {
   hour: '2-digit',
   minute: '2-digit',
 });
+
+const renderedPosts = await Promise.all(
+  posts.map(async (post) => {
+    const isLocalPost = post.source === 'local';
+    const Content = isLocalPost ? (await post.post.render()).Content : undefined;
+    const postId = isLocalPost ? post.slug : post.id;
+    const absolutePermalink = new URL(post.permalink, Astro.site ?? Astro.url.origin).toString();
+    const commentHref = `mailto:thang@thangqt.com?subject=${encodeURIComponent(
+      `Re: Chitchat ${postId}`,
+    )}&body=${encodeURIComponent(`About this Chitchat post: ${absolutePermalink}`)}`;
+    const blueskyParagraphs = isLocalPost ? [] : post.text.split(/\n{2,}/).filter(Boolean);
+    const localImage = isLocalPost ? post.post.data.image : undefined;
+    const localImageAlt = isLocalPost ? post.post.data.imageAlt : undefined;
+    const gallery = isLocalPost ? post.post.data.gallery : post.images;
+    const external = isLocalPost ? undefined : post.external;
+    const externalTitle = external?.title || external?.uri;
+    const blueskyUrl = isLocalPost ? undefined : post.blueskyUrl;
+
+    return {
+      Content,
+      blueskyParagraphs,
+      blueskyUrl,
+      commentHref,
+      external,
+      externalTitle,
+      gallery,
+      isLocalPost,
+      localImage,
+      localImageAlt,
+      permalink: post.permalink,
+      postId,
+      tags: post.tags,
+      date: post.date,
+    };
+  }),
+);
 ---
 
 <ol class="chitchat-feed" aria-label="Chitchat feed">
   {
-    await Promise.all(
-      posts.map(async (post) => {
-        const { Content } = await post.render();
-        const permalink = `/chitchat/${post.slug}`;
-        const absolutePermalink = new URL(permalink, Astro.site ?? Astro.url.origin).toString();
-        const commentHref = `mailto:thang@thangqt.com?subject=${encodeURIComponent(
-          `Re: Chitchat ${post.slug}`,
-        )}&body=${encodeURIComponent(`About this Chitchat post: ${absolutePermalink}`)}`;
+    renderedPosts.map((post) => {
+      const Content = post.Content;
 
-        return (
-          <li class="chitchat-post" id={post.slug}>
-            <article>
-              <a class="chitchat-post__time" href={permalink} data-window-link>
-                <time datetime={post.data.date.toISOString()}>{formatter.format(post.data.date)}</time>
-              </a>
+      return (
+        <li class="chitchat-post" id={post.postId}>
+          <article>
+            <a
+              class="chitchat-post__time"
+              href={post.permalink}
+              data-window-link
+              data-window-title="Chitchat"
+            >
+              <time datetime={post.date.toISOString()}>{formatter.format(post.date)}</time>
+            </a>
 
-              <div class="chitchat-post__content">
-                <Content />
+            <div class="chitchat-post__content">
+              {Content && <Content />}
+              {!post.isLocalPost &&
+                (post.blueskyParagraphs.length > 0 ? (
+                  post.blueskyParagraphs.map((paragraph) => <p>{paragraph}</p>)
+                ) : (
+                  <p class="chitchat-post__empty">Posted on Bluesky.</p>
+                ))}
+            </div>
+
+            {post.localImage && (
+              <figure class="chitchat-post__media">
+                <img src={post.localImage} alt={post.localImageAlt || ''} loading="lazy" />
+              </figure>
+            )}
+
+            {post.gallery.length > 0 && (
+              <div class="chitchat-gallery" data-gallery-count={post.gallery.length}>
+                {post.gallery.map((image, index) => (
+                  <a
+                    href={image.src}
+                    class="chitchat-gallery__item"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${post.isLocalPost ? 'gallery' : 'Bluesky'} image ${index + 1}`}
+                  >
+                    <img src={image.src} alt={image.alt ?? ''} loading="lazy" />
+                  </a>
+                ))}
               </div>
+            )}
 
-              {post.data.image && (
-                <figure class="chitchat-post__media">
-                  <img src={post.data.image} alt={post.data.imageAlt ?? ''} loading="lazy" />
-                </figure>
-              )}
+            {post.external && (
+              <a class="chitchat-card" href={post.external.uri} target="_blank" rel="noreferrer">
+                {post.external.thumb && <img src={post.external.thumb} alt="" loading="lazy" />}
+                <span>
+                  <strong>{post.externalTitle}</strong>
+                  {post.external.description && <small>{post.external.description}</small>}
+                </span>
+              </a>
+            )}
 
-              {post.data.gallery.length > 0 && (
-                <div class="chitchat-gallery" data-gallery-count={post.data.gallery.length}>
-                  {post.data.gallery.map((image, index) => (
-                    <a
-                      href={image.src}
-                      class="chitchat-gallery__item"
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Open gallery image ${index + 1}`}
-                    >
-                      <img src={image.src} alt={image.alt ?? ''} loading="lazy" />
-                    </a>
-                  ))}
-                </div>
-              )}
+            {post.tags.length > 0 && (
+              <ul class="chitchat-tags" aria-label="Tags">
+                {post.tags.map((tag) => (
+                  <li>#{tag}</li>
+                ))}
+              </ul>
+            )}
 
-              {post.data.tags.length > 0 && (
-                <ul class="chitchat-tags" aria-label="Tags">
-                  {post.data.tags.map((tag) => <li>#{tag}</li>)}
-                </ul>
-              )}
-
-              <footer class="chitchat-actions" aria-label="Post actions">
-                <button type="button" aria-pressed="false" data-chitchat-like>
-                  <Icon name="ph:heart" />
-                  <span>Like</span>
-                </button>
-                <a href={commentHref}>
-                  <Icon name="ph:chat-circle" />
-                  <span>Comment</span>
+            <footer class="chitchat-actions" aria-label="Post actions">
+              <button type="button" aria-pressed="false" data-chitchat-like>
+                <Icon name="ph:heart" />
+                <span>Like</span>
+              </button>
+              <a href={post.commentHref}>
+                <Icon name="ph:chat-circle" />
+                <span>Comment</span>
+              </a>
+              {!post.isLocalPost && post.blueskyUrl && (
+                <a href={post.blueskyUrl} target="_blank" rel="noreferrer">
+                  <svg
+                    class="chitchat-actions__bluesky"
+                    role="img"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M5.202 2.857C7.954 4.922 10.913 9.11 12 11.358c1.087-2.247 4.046-6.436 6.798-8.501C20.783 1.366 24 .213 24 3.883c0 .732-.42 6.156-.667 7.037-.856 3.061-3.978 3.842-6.755 3.37 4.854.826 6.089 3.562 3.422 6.299-5.065 5.196-7.28-1.304-7.847-2.97-.104-.305-.152-.448-.153-.327 0-.121-.05.022-.153.327-.568 1.666-2.782 8.166-7.847 2.97-2.667-2.737-1.432-5.473 3.422-6.3-2.777.473-5.899-.308-6.755-3.369C.42 10.04 0 4.615 0 3.883c0-3.67 3.217-2.517 5.202-1.026"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linejoin="round"
+                      stroke-width="1.7"
+                    />
+                  </svg>
+                  <span>Bluesky</span>
                 </a>
-                <button type="button" data-chitchat-share={permalink}>
-                  <Icon name="ph:paper-plane-tilt" />
-                  <span>Share</span>
-                </button>
-              </footer>
-            </article>
-          </li>
-        );
-      }),
-    )
+              )}
+              <button type="button" data-chitchat-share={post.permalink}>
+                <Icon name="ph:paper-plane-tilt" />
+                <span>Share</span>
+              </button>
+            </footer>
+          </article>
+        </li>
+      );
+    })
   }
 </ol>

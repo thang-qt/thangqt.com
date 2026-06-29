@@ -45,7 +45,7 @@
 }
 
 .chitchat-post__time {
-  display: block;
+  display: inline-block;
   width: fit-content;
   margin-bottom: 0.45rem;
   color: color-mix(in srgb, var(--wm-ink) 58%, transparent);
@@ -63,6 +63,11 @@
   margin: 0 0 0.65rem;
 }
 
+.chitchat-post__empty {
+  color: color-mix(in srgb, var(--wm-ink) 62%, transparent);
+  font-style: italic;
+}
+
 .chitchat-post__content > :first-child {
   margin-top: 0;
 }
@@ -76,8 +81,16 @@
   margin: 0.75rem 0 !important;
   border: 1px solid var(--wm-border);
   background:
-    linear-gradient(45deg, color-mix(in srgb, var(--wm-border) 12%, transparent) 25%, transparent 25%),
-    linear-gradient(-45deg, color-mix(in srgb, var(--wm-border) 12%, transparent) 25%, transparent 25%),
+    linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--wm-border) 12%, transparent) 25%,
+      transparent 25%
+    ),
+    linear-gradient(
+      -45deg,
+      color-mix(in srgb, var(--wm-border) 12%, transparent) 25%,
+      transparent 25%
+    ),
     var(--wm-subtle);
   background-position:
     0 0,
@@ -126,6 +139,54 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+.chitchat-card {
+  display: grid;
+  grid-template-columns: minmax(0, 5rem) minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: center;
+  margin: 0.75rem 0;
+  padding: 0.55rem;
+  border: 1px solid var(--wm-border);
+  background: var(--wm-surface);
+  color: inherit;
+  text-decoration: none;
+}
+
+.chitchat-card:hover {
+  border-color: color-mix(in srgb, var(--wm-accent) 45%, var(--wm-border));
+}
+
+.chitchat-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--wm-border);
+}
+
+.chitchat-card span {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.chitchat-card strong,
+.chitchat-card small {
+  overflow-wrap: anywhere;
+}
+
+.chitchat-card strong {
+  font-size: var(--fs-body);
+}
+
+.chitchat-card small {
+  color: color-mix(in srgb, var(--wm-ink) 62%, transparent);
+}
+
+.chitchat-card:not(:has(img)) {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .chitchat-tags {

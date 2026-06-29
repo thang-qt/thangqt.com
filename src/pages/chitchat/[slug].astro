@@ -1,19 +1,25 @@
 ---
-import { getCollection } from 'astro:content';
 import ChitchatFeed from '../../components/ChitchatFeed.astro';
 import Layout from '../../layouts/Layout.astro';
+import { getMergedChitchatPosts } from '../../utils/chitchat';
 
 export async function getStaticPaths() {
-  const chitchats = (await getCollection('chitchat')).filter((post) => !post.data.draft);
+  const chitchats = await getMergedChitchatPosts();
 
   return chitchats.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.source === 'local' ? post.slug : post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const description = post.body.split('\n').find((line) => line.trim().length > 0)?.trim() ?? 'Chitchat';
+const description =
+  post.source === 'local'
+    ? (post.post.body
+        .split('\n')
+        .find((line) => line.trim().length > 0)
+        ?.trim() ?? 'Chitchat')
+    : post.text || 'Bluesky chitchat post';
 ---
 
 <Layout title="Chitchat" description={description}>
