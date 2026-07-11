@@ -1,0 +1,46 @@
+---
+title: Threadline
+year: "2026-07"
+description: Static-first community news reader for Hacker News and Lobsters
+themeColor: "#f3eee5"
+cover: ./frontpage-grid-sepia.png
+seoImage: ./frontpage-grid-sepia.png
+---
+
+import ContentFigure from '../../../components/ContentFigure.astro';
+import listView from './frontpage-list.png';
+import gridView from './frontpage-grid-sepia.png';
+import readHere from './read-here.png';
+
+Threadline is a compact reader for community news. It combines Hacker News and Lobsters into one fast front page, with local preferences for source weighting, feed modes, ranking, domain filters, Lobsters tags, layout, density, and theme.
+
+This is another side project, and I figured I did not want to host and maintain a running server for it. The functionality could mostly be built as a static site anyway, with a few small edge functions for feed aggregation and the Lobsters proxy, so I kept it static-first.
+
+If you have explored my projects, you might have come across Readn, which is a fork of Yarr. It already has built-in discussion fetching for Lobsters and Hacker News, so why build this? RSS is good, and it intentionally removes a lot of noise: points, comment counts, ranking, and the urge to keep checking the same front page. But sometimes I still want that front-page feeling. I want to see which links are active, whether new discussion has appeared, and what is happening across both sites without opening each one separately.
+
+<ContentFigure
+  src={listView}
+  alt="Threadline front page in list layout"
+  caption="The default list layout: compact, source-aware, and tuned for scanning headlines quickly."
+/>
+
+The problem with a normal RSS reader is that once I read or archive an item, it is gone from the current flow. That is usually a feature, but it also means I lose the habit of checking whether a link picked up an interesting discussion later. Threadline is my attempt to keep the useful parts of the HN/Lobsters front pages while making the browsing experience quieter and more personalized.
+
+<ContentFigure
+  src={gridView}
+  alt="Threadline front page in sepia grid layout"
+  caption="A newspaper-style grid layout with sepia theme for a slower, more editorial browsing mode."
+/>
+
+Another thing I wanted was to read the discussion while checking the original article. That became the “read here” mode: on larger screens, the article opens beside the comments, so I can move between the source and the conversation without losing my place. A lot of sites block embedded viewing, but it is still useful often enough to keep.
+
+<ContentFigure
+  src={readHere}
+  alt="Threadline inline article reader beside discussion comments"
+  caption="The desktop read-here view keeps the article and discussion side by side without leaving the front page."
+/>
+
+Under the hood, Hacker News comments come from Algolia, Lobsters comments come from the Lobsters JSON endpoint through a small proxy, and both are normalized into nested comment trees with collapse controls and previous/next navigation. The feed is cached locally so the page can show something immediately and refresh in the background.
+
+- Live site: [threadline.thangqt.com](https://threadline.thangqt.com/)
+- Source: [github.com/thang-qt/ThreadLine](https://github.com/thang-qt/ThreadLine)
