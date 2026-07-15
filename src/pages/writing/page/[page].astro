@@ -24,34 +24,33 @@ const paginatedPosts = paginateItems(posts, currentPage, WRITING_PAGE_SIZE);
   title={`Writing - Page ${paginatedPosts.currentPage} - ThangQT`}
   description="My various thoughts on life, tech, and everything in between"
 >
-  <section class="col-content list-app list-app--writing" data-window-title="Writing">
-    <div class="list-mobile-header">
-      <div>
-        <p class="list-kicker">Journal index</p>
-        <h1 class="list-page-title">Writing</h1>
-      </div>
-      <div class="list-toolbar" aria-label="Writing display options">
-        <span>View</span>
-        <button type="button" data-list-view="list">List</button>
-        <button type="button" data-list-view="grid">Grid</button>
-        <button type="button" data-list-view="compact">Compact</button>
-      </div>
-    </div>
-    <p class="list-status">{paginatedPosts.totalItems} posts sorted by newest first.</p>
+  <section class="col-content archive-page archive-page--writing" data-window-title="Writing">
+    <header class="archive-hero">
+      <h1>Writing</h1>
+    </header>
 
-    {
-      paginatedPosts.items.map((post) => (
-        <article class="post-item">
-          <a href={`/writing/${post.slug}`} class="list-link" data-window-title={post.data.title}>
-            <span class="list-row-main">
-              <h2 class="post-title">{post.data.title}</h2>
-              {post.data.description && <p class="list-description">{post.data.description}</p>}
-            </span>
-            <span class="post-meta">{formatShortDate(post.data.date)}</span>
-          </a>
-        </article>
-      ))
-    }
+    <div class="writing-ledger" aria-label="Writing archive">
+      {
+        paginatedPosts.items.map((post) => (
+          <article class="ledger-row">
+            <a
+              href={`/writing/${post.slug}`}
+              class="ledger-row__link"
+              data-window-title={post.data.title}
+            >
+              <div class="ledger-row__meta">
+                <time datetime={post.data.date.toISOString()}>
+                  {formatShortDate(post.data.date)}
+                </time>
+              </div>
+              <div class="ledger-row__body">
+                <h2>{post.data.title}</h2>
+              </div>
+            </a>
+          </article>
+        ))
+      }
+    </div>
 
     <PaginationNav
       basePath="/writing"
@@ -60,10 +59,4 @@ const paginatedPosts = paginateItems(posts, currentPage, WRITING_PAGE_SIZE);
       label="Writing pagination"
     />
   </section>
-
-  <aside class="col-detail">
-    <div class="is-visible">
-      <h2>Writing</h2>
-    </div>
-  </aside>
 </Layout>

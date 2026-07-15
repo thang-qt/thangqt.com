@@ -2,13 +2,10 @@
 import Layout from '../../../layouts/Layout.astro';
 import PaginationNav from '../../../components/PaginationNav.astro';
 import {
-  formatLinkDate,
-  formatLinkKind,
   getHostnameLabel,
   getLinkHref,
   getLinkTitle,
   getPublishedLinks,
-  resolveVia,
 } from '../../../utils/links';
 import {
   getPaginationStaticPaths,
@@ -23,12 +20,9 @@ export async function getStaticPaths() {
 }
 
 const currentPage = parsePageParam(Astro.params.page);
-const { links, slugMap } = await getPublishedLinks();
+const { links } = await getPublishedLinks();
 
-const linksWithVia = links.map((link) => ({
-  link,
-  via: resolveVia(link.data.via, slugMap),
-}));
+const linksWithVia = links.map((link) => ({ link }));
 
 const paginatedLinks = paginateItems(linksWithVia, currentPage, LINKS_PAGE_SIZE);
 ---
@@ -37,77 +31,33 @@ const paginatedLinks = paginateItems(linksWithVia, currentPage, LINKS_PAGE_SIZE)
   title={`Links - Page ${paginatedLinks.currentPage} - ThangQT`}
   description="A public bookmark archive of things I want to remember."
 >
-  <section class="col-content links-list-column">
-    <div class="list-mobile-header">
-      <h1 class="list-page-title">Links</h1>
-    </div>
+  <section class="col-content archive-page archive-page--links" data-window-title="Links">
+    <header class="archive-hero">
+      <h1>Links</h1>
+    </header>
 
-    <div class="links-list">
+    <div class="bookmark-stack">
       {
-        paginatedLinks.items.map(({ link, via }) => (
-          <article class="link-item" data-preview-trigger={link.slug}>
-            <div class="link-item-main">
-              <h2 class="link-title">
-                <a href={link.data.url} class="link-title-link" target="_blank" rel="noreferrer">
-                  {getLinkTitle(link)}
-                </a>
-              </h2>
-
-              <p class="link-meta">
-                <span>{getHostnameLabel(link.data.url)}</span>
-                {formatLinkKind(link.data.kind) && <span>{formatLinkKind(link.data.kind)}</span>}
-                {formatLinkDate(link.data.date) && <span>{formatLinkDate(link.data.date)}</span>}
-              </p>
-
-              {link.data.note && <p class="link-note">{link.data.note}</p>}
-
-              {via.length > 0 && (
-                <p class="link-via">
-                  <span>via</span>
-                  {via.map((item) => (
-                    <span class="link-via-item">
-                      <a
-                        href={item.href}
-                        class="link-inline"
-                        target={item.type === 'external' ? '_blank' : undefined}
-                        rel={item.type === 'external' ? 'noreferrer' : undefined}
-                      >
-                        {item.label}
-                      </a>
-                    </span>
-                  ))}
-                </p>
-              )}
-
-              {link.data.tags && link.data.tags.length > 0 && (
-                <ul class="link-tags" aria-label="Tags">
-                  {link.data.tags.map((tag) => (
-                    <li>{tag}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
+        paginatedLinks.items.map(({ link }) => (
+          <article class="bookmark-card" data-preview-trigger={link.slug}>
+            <a href={link.data.url} target="_blank" rel="noreferrer" class="bookmark-card__main">
+              <span class="bookmark-card__domain">{getHostnameLabel(link.data.url)}</span>
+              <span class="bookmark-card__content">
+                <h2>{getLinkTitle(link)}</h2>
+                {link.data.note && <span class="bookmark-card__note">{link.data.note}</span>}
+              </span>
+              <span class="bookmark-card__external" aria-hidden="true">
+                ↗
+              </span>
+            </a>
 
             <a
               href={getLinkHref(link)}
-              class="link-permalink link-permalink-icon"
+              class="bookmark-card__permalink"
               aria-label={`Open permalink for ${getLinkTitle(link)}`}
               data-window-title={getLinkTitle(link)}
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.75"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.2 4.72" />
-                <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 1 0 7.07 7.07L12.8 19.28" />
-              </svg>
+              <span aria-hidden="true">#</span>
             </a>
           </article>
         ))
@@ -121,12 +71,4 @@ const paginatedLinks = paginateItems(linksWithVia, currentPage, LINKS_PAGE_SIZE)
       label="Links pagination"
     />
   </section>
-
-  <aside class="col-detail link-preview-detail">
-    <div class="is-visible links-preview-shell">
-      <div class="link-preview-panel is-active">
-        <p class="link-preview-stamp">Stay curious.</p>
-      </div>
-    </div>
-  </aside>
 </Layout>

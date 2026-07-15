@@ -1,7 +1,9 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import PaginationNav from '../../../components/PaginationNav.astro';
+import { Image } from 'astro:assets';
 import { getPublishedProjects } from '../../../utils/collections';
+import { getFirstContentImage } from '../../../utils/contentImages';
 import {
   getPaginationStaticPaths,
   paginateItems,
@@ -17,46 +19,105 @@ export async function getStaticPaths() {
 const currentPage = parsePageParam(Astro.params.page);
 const projects = await getPublishedProjects();
 const paginatedProjects = paginateItems(projects, currentPage, PROJECTS_PAGE_SIZE);
+
+const projectPalettes: Record<string, { bg: string; ink: string; accent: string }> = {
+  tilia: { bg: '#edf7f4', ink: '#10231f', accent: '#2f7f6f' },
+  kairos: { bg: '#eef3ff', ink: '#111827', accent: '#3b5bcc' },
+  davplay: { bg: '#f3f0ea', ink: '#22180f', accent: '#8a5a25' },
+  spanboard: { bg: '#f1eefb', ink: '#1f1833', accent: '#6d55b7' },
+  nganla: { bg: '#eef8e9', ink: '#172411', accent: '#4c8a35' },
+  vocaxis: { bg: '#f4fce3', ink: '#172018', accent: '#689f38' },
+  mindform: { bg: '#fff0ea', ink: '#291710', accent: '#c46a43' },
+};
+
+function readableInk(hex: string | undefined) {
+  if (!hex?.startsWith('#')) return 'var(--wm-ink)';
+  const value = hex.slice(1);
+  const full =
+    value.length === 3
+      ? value
+          .split('')
+          .map((char) => `${char}${char}`)
+          .join('')
+      : value;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.62 ? '#101010' : '#fffaf0';
+}
+
+function getProjectPalette(project: (typeof projects)[number]) {
+  const themeColor = project.data.themeColor;
+  if (themeColor) {
+    return {
+      bg: themeColor,
+      ink: readableInk(themeColor),
+      accent: readableInk(themeColor),
+    };
+  }
+
+  return (
+    projectPalettes[project.slug] ?? {
+      bg: 'var(--wm-subtle)',
+      ink: 'var(--wm-ink)',
+      accent: 'var(--wm-accent)',
+    }
+  );
+}
 ---
 
 <Layout
   title={`Projects - Page ${paginatedProjects.currentPage} - ThangQT`}
   description="Selected works and projects"
+  windowBleed={true}
 >
-  <section class="col-content list-app list-app--projects" data-window-title="Projects">
-    <div class="list-mobile-header">
-      <div>
-        <p class="list-kicker">Build archive</p>
-        <h1 class="list-page-title">Projects</h1>
-      </div>
-      <div class="list-toolbar" aria-label="Project display options">
-        <span>View</span>
-        <button type="button" data-list-view="list">List</button>
-        <button type="button" data-list-view="grid">Grid</button>
-        <button type="button" data-list-view="compact">Compact</button>
-      </div>
-    </div>
-    <p class="list-status">{paginatedProjects.totalItems} projects sorted by ship date.</p>
+  <section class="col-content archive-page archive-page--projects" data-window-title="Projects">
+    <header class="archive-hero">
+      <h1>Projects</h1>
+    </header>
 
-    {
-      paginatedProjects.items.map((project) => (
-        <article class="project-item">
-          <a
-            href={`/projects/${project.slug}`}
-            class="list-link"
-            data-window-title={project.data.title}
-          >
-            <span class="list-row-main">
-              <h2 class="project-title">{project.data.title}</h2>
-              {project.data.description && (
-                <p class="list-description">{project.data.description}</p>
-              )}
-            </span>
-            <span class="project-meta">{project.data.year.slice(0, 4)}</span>
-          </a>
-        </article>
-      ))
-    }
+    <div class="project-color-stack" aria-label="Project archive">
+      {
+        paginatedProjects.items.map((project, index) => {
+          const palette = getProjectPalette(project);
+          const firstContentImage = getFirstContentImage('projects', project.id, project.body);
+          const previewImage = project.data.cover ?? firstContentImage;
+          const projectNumber = paginatedProjects.startIndex + index;
+
+          return (
+            <article
+              class="project-color-section"
+              style={`--project-bg: ${palette.bg}; --project-ink: ${palette.ink}; --project-accent: ${palette.accent};`}
+            >
+              <a
+                href={`/projects/${project.slug}`}
+                class="project-color-section__link"
+                data-window-title={project.data.title}
+              >
+                <div class="project-color-section__copy">
+                  <p class="project-color-section__meta">
+                    <span>{String(projectNumber).padStart(2, '0')}</span>
+                    <span>{project.data.year}</span>
+                  </p>
+                  <h2>{project.data.title}</h2>
+                  {project.data.description && <p>{project.data.description}</p>}
+                  <span class="project-color-section__cta">Open project →</span>
+                </div>
+
+                <div class="project-color-section__visual">
+                  {previewImage ? (
+                    <Image src={previewImage} alt="" class="project-color-section__image" />
+                  ) : (
+                    <span aria-hidden="true">▦</span>
+                  )}
+                </div>
+              </a>
+            </article>
+          );
+        })
+      }
+    </div>
 
     <PaginationNav
       basePath="/projects"
@@ -65,10 +126,4 @@ const paginatedProjects = paginateItems(projects, currentPage, PROJECTS_PAGE_SIZ
       label="Projects pagination"
     />
   </section>
-
-  <aside class="col-detail">
-    <div class="is-visible">
-      <h2>Projects</h2>
-    </div>
-  </aside>
 </Layout>
