@@ -17,7 +17,10 @@
             pkgs.nodejs_20
             pkgs.pnpm
             pkgs.git
+            pkgs.typst
+            pkgs.lato
           ];
+          TYPST_FONT_PATHS = "${pkgs.lato}/share/fonts";
         };
       });
 }

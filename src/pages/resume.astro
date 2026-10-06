@@ -10,12 +10,13 @@ import Layout from '../layouts/Layout.astro';
     <article class="resume-sheet">
       <header class="resume-hero">
         <h1>Tô Quang Thắng</h1>
-        <p>Full-stack developer · Computer science student · Hanoi, Vietnam</p>
+        <p>Hanoi, Vietnam</p>
       </header>
 
       <section class="resume-contact-line" aria-label="Resume contact links">
-        <a href="mailto:thang@thangqt.com">thang@thangqt.com</a>
         <a href="tel:0387000902">+84 387 000 902</a>
+        <a href="mailto:thang@thangqt.com">thang@thangqt.com</a>
+        <a href="https://thangqt.com">thangqt.com</a>
         <a href="https://github.com/thang-qt" target="_blank" rel="noreferrer"
           >github.com/thang-qt</a
         >
@@ -23,12 +24,29 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <main class="resume-main-flow">
-        <section class="resume-intro">
+        <section class="resume-section resume-intro">
+          <h2>About Me</h2>
           <p>
-            I build practical web products end to end: backend APIs, frontends, automation scripts,
-            auth flows, payment integrations, and deployment tooling. Comfortable in Linux-first
-            development environments, with a preference for clean architecture and small, useful
-            systems.
+            Computer Science student with hands-on experience building full-stack web applications,
+            internal tools, and coding platforms. Comfortable working in Linux and across
+            backend/frontend workflows, with a focus on clean architecture, testing, and practical
+            product delivery.
+          </p>
+        </section>
+
+        <section class="resume-section">
+          <h2>Skills</h2>
+          <p class="resume-skill-line">
+            <strong>Languages:</strong> C++, Java, Python, JavaScript, TypeScript, Go
+          </p>
+          <p class="resume-skill-line">
+            <strong>Frameworks &amp; Data:</strong> React, Next.js, NestJS, Vite, PostgreSQL, Supabase
+          </p>
+          <p class="resume-skill-line">
+            <strong>Tools &amp; Platforms:</strong> Linux, Docker, Git, Nix, Cloudflare Workers
+          </p>
+          <p class="resume-skill-line">
+            <strong>Spoken Languages:</strong> Vietnamese (Native), English (Working proficiency)
           </p>
         </section>
 
@@ -36,31 +54,50 @@ import Layout from '../layouts/Layout.astro';
           <h2>Experience</h2>
           <article class="resume-entry">
             <div class="resume-entry__meta">
-              <time>Feb 2026 — Present</time>
+              <time>Jun 2026 — Present</time>
               <span>BAP IT Co., JSC</span>
+              <span>Hanoi</span>
             </div>
             <div class="resume-entry__body">
               <h3>Full Stack Developer <span>Contract</span></h3>
               <ul>
                 <li>
-                  Contributed to an internal online coding/interview platform: dashboard workflows,
-                  authentication, question bank management, and session management.
+                  Analyzed business requirements and ERP migration workflows for an early-stage
+                  client demo; refactored the codebase, added CI, and brought the test suite to a
+                  passing state.
                 </li>
                 <li>
-                  Built JWT auth, role-based access control, candidate invite lifecycle, and
-                  execution-related backend/frontend surfaces.
+                  Implemented S3 file uploads and handling, background job queues, and vision-LLM
+                  receipt detail extraction.
                 </li>
                 <li>
-                  Integrated Judge0 multi-language code execution, prototyped Yjs/WebSocket
-                  collaboration, and set up Jest/Playwright testing.
+                  Investigated and built a Three.js feasibility demo for 3D previews and thumbnail
+                  generation across multiple file formats.
+                </li>
+              </ul>
+            </div>
+          </article>
+          <article class="resume-entry">
+            <div class="resume-entry__meta">
+              <time>Feb 2026 — Jun 2026</time>
+              <span>BAP IT Co., JSC</span>
+              <span>Hanoi</span>
+            </div>
+            <div class="resume-entry__body">
+              <h3>Full Stack Developer <span>Intern</span></h3>
+              <ul>
+                <li>
+                  Built dashboard workflows, question and session management, JWT authentication,
+                  role-based access control, and candidate invitations for an internal
+                  coding/interview platform.
                 </li>
                 <li>
-                  Built development tooling and CI workflows, including a Codeforces Parquet
-                  importer for bulk question-bank seeding.
+                  Integrated Judge0 code execution and prototyped real-time collaboration with
+                  Yjs/WebSocket.
                 </li>
                 <li>
-                  Implemented flows for client demo applications in healthcare and enterprise
-                  workflow domains.
+                  Set up Jest/Playwright testing and CI; built a Codeforces Parquet importer to
+                  bulk-seed the question bank.
                 </li>
               </ul>
             </div>
@@ -68,10 +105,10 @@ import Layout from '../layouts/Layout.astro';
         </section>
 
         <section class="resume-section">
-          <h2>Selected products</h2>
+          <h2>Projects</h2>
           <article class="resume-entry">
             <div class="resume-entry__meta">
-              <a href="https://nganla.com" target="_blank" rel="noreferrer">nganla.com</a>
+              <time>2025 — 2026</time>
             </div>
             <div class="resume-entry__body">
               <h3>Ngàn Lá</h3>
@@ -80,38 +117,42 @@ import Layout from '../layouts/Layout.astro';
                 analytics.
               </p>
               <ul>
-                <li>Next.js, Go/Chi, shadcn/ui, grade/subject/chapter content structure.</li>
-                <li>Automated crawlers and LLM-assisted bulk question generation/import.</li>
-                <li>SePay QR payment flow with API/webhook confirmation.</li>
+                <li>
+                  Built with Next.js, Go (Chi) backend, and shadcn/ui; structured content by grade,
+                  subject, and textbook chapter.
+                </li>
+                <li>
+                  Developed automated content crawlers and an LLM-assisted workflow to generate and
+                  bulk-import exam questions.
+                </li>
+                <li>
+                  Implemented SePay QR payment flow with API/webhook-based payment confirmation.
+                </li>
               </ul>
             </div>
           </article>
 
           <article class="resume-entry">
             <div class="resume-entry__meta">
-              <a href="/projects/vocaxis">Project page</a>
+              <time>2026</time>
             </div>
             <div class="resume-entry__body">
-              <h3>Vocaxis</h3>
+              <h3>Respond</h3>
               <p>
-                Vocabulary platform with AI-generated entries, translations, and FSRS spaced
-                repetition.
+                Structured 1v1 debate platform with temporary anonymity and turn-based exchanges.
               </p>
               <ul>
-                <li>StarDict-compatible dictionary served through Cloudflare Workers/D1.</li>
-                <li>Plasmo browser extension for context-aware vocabulary capture.</li>
-                <li>Next.js/Supabase public launch with ~400 organic signups.</li>
+                <li>
+                  Built the full-stack product end to end, from debate creation and invites to user
+                  profiles, post-debate discussion, and admin moderation.
+                </li>
+                <li>
+                  Designed the timed debate lifecycle with alternating turns, temporary anonymity,
+                  multiple ending conditions, and realtime updates and notifications.
+                </li>
               </ul>
             </div>
           </article>
-        </section>
-
-        <section class="resume-section">
-          <h2>Skills</h2>
-          <p class="resume-skill-line">
-            C++ · Java · Python · JavaScript · TypeScript · Go · React · Next.js · NestJS ·
-            PostgreSQL · Supabase · Linux · Docker · Git · Nix · Cloudflare Workers
-          </p>
         </section>
 
         <section class="resume-section">
@@ -122,14 +163,9 @@ import Layout from '../layouts/Layout.astro';
             </div>
             <div class="resume-entry__body">
               <h3>VNU University of Engineering and Technology</h3>
-              <p>Computer Science Degree · Hanoi, Vietnam</p>
+              <p>Computer Science · Hanoi</p>
             </div>
           </article>
-        </section>
-
-        <section class="resume-section">
-          <h2>Languages</h2>
-          <p class="resume-skill-line">Vietnamese — Native · English — Working proficiency</p>
         </section>
       </main>
     </article>

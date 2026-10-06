@@ -632,8 +632,7 @@
 .resume-hero {
   display: grid;
   gap: clamp(1.1rem, 3vw, 1.8rem);
-  padding: 0.4rem 0 1.65rem;
-  border-bottom: 2px solid color-mix(in srgb, var(--wm-border) 58%, transparent);
+  padding: 0.4rem 0 0;
   background: transparent;
 }
 .resume-hero h1 {
@@ -681,6 +680,12 @@
   font-size: clamp(1.05rem, 2vw, 1.25rem) !important;
   line-height: 1.55 !important;
   color: color-mix(in srgb, var(--wm-ink) 78%, transparent);
+}
+.resume-section.resume-intro {
+  border-top: 0;
+}
+.resume-intro > h2 {
+  padding-top: 0;
 }
 .resume-section {
   display: grid;

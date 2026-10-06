@@ -38,6 +38,7 @@ const projects = defineCollection({
       year: z.string(),
       description: z.string().optional(),
       cover: image().optional(),
+      hideCover: z.boolean().optional().default(false),
       seoImage: image().optional(),
       themeColor: z.string().optional(),
       themeColorDark: z.string().optional(),

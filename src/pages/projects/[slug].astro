@@ -55,7 +55,7 @@ const ogImageUrl = seoImage ? (await getImage({ src: seoImage, width: 1200 })).s
       <p class="post-page-title">{project.data.title}</p>
     </div>
     {
-      project.data.cover && (
+      project.data.cover && !project.data.hideCover && (
         <figure class="post-cover">
           <Image src={project.data.cover} alt={project.data.title} />
         </figure>

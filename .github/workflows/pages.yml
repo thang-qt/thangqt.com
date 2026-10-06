@@ -1,0 +1,62 @@
+name: Build and deploy Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.28.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: typst-community/setup-typst@v5
+        with:
+          typst-version: 0.14.2
+          cache-dependency-path: resume.typ
+      - name: Install resume font
+        run: sudo apt-get update && sudo apt-get install -y fonts-lato
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Validate and build site
+        run: pnpm validate
+      - name: Check files, dependencies, and imports
+        run: pnpm knip
+      - uses: actions/upload-artifact@v7
+        with:
+          name: site
+          path: dist/
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    if: >-
+      github.event_name != 'pull_request' &&
+      github.ref == 'refs/heads/main' &&
+      vars.CLOUDFLARE_PAGES_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: dist/
+      - uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT_NAME }} --branch=${{ github.ref_name }}

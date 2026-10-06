@@ -1,5 +1,7 @@
 # build output
 dist/
+# generated resume
+/public/resume.pdf
 # generated types
 .astro/
 

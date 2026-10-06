@@ -1,0 +1,35 @@
+---
+title: Treatise
+year: '2026-09'
+description: A new topic to explore every morning, researched and written by a daily LLM automation
+cover: ./reader.png
+hideCover: true
+themeColor: '#f7f5ef'
+---
+
+import ContentFigure from '../../../components/ContentFigure.astro';
+import ProjectLink from '../../../components/ProjectLink.astro';
+import reader from './reader.png';
+import readingPreferences from './reading-preferences.png';
+
+Treatise started when I was scrolling the internet and came across an interesting paradox. Reading about it was enjoyable enough to make my day. It made me wonder: what if I could discover a new topic like that every day?
+
+The content was the crucial part. Finding the topics and writing the essays myself would take away the surprise: I would already know the story before sitting down to read it. I wanted to stay the reader, and I could hardly ask someone else to research and write something for me every day.
+
+But we have LLMs. The first version was an automation that ran at a set time each day, researched an interesting topic, wrote and formatted an essay, and emailed it to me in the morning. Something new waiting in my inbox, without having to spoil the story by preparing it myself.
+
+Email turned out to be limiting. I have it on my personal devices, of course, but what if I wanted to read on another device, like a work computer? (Just catching up on some reading during a break, don’t tell my boss.) I wanted to open a link and read without needing access to my personal inbox.
+
+More importantly, email gave me little control over the reading experience. An essay inside an email client's interface never felt particularly comfortable, and there was only so much I could customize. So I built another static site. That became Treatise: a place for the daily essays, with citations at the end and an archive to revisit earlier discoveries.
+
+<ContentFigure
+  src={reader}
+  alt="Treatise issue 019, The Color That Failed at Medicine, in the paper-themed reader"
+/>
+
+<ContentFigure
+  src={readingPreferences}
+  alt="Treatise reading preferences panel with typography, paper theme, and word lookup settings"
+/>
+
+<ProjectLink href="https://treatise.thangqt.com/" label="Read Treatise" />
